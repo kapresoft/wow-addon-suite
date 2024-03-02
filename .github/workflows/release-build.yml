@@ -9,7 +9,7 @@ on:
 
 env:
   addonName: AddonSuite
-  curseForgeProjectId: 782096
+  curseForgeProjectId: 785236
   uploadBuildArtifacts: true
   createDraftRelease: true
   artifact_retentionDays: 7

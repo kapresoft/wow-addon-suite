@@ -11,7 +11,7 @@ on:
 
 env:
   addonName: AddonSuite
-  curseForgeProjectId: 782096
+  curseForgeProjectId: 785236
   releaseDir: ./.release
 
 jobs:
