@@ -6,12 +6,10 @@ local sformat = string.format
 --[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
-local ns = ADT_Namespace(...)
-local O, LibStub, M = ns.O, ns.LibStub, ns.M
-
-local GC, ACE = O.GlobalConstants, O.AceLibrary
+local ns = addonsuite_ns(...)
+local O, GC, M, LibStub = ns.O, ns.O.GlobalConstants, ns.M, ns.O.LibStub
+local ACE = O.AceLibrary
 local AceConfig, AceConfigDialog = ACE.AceConfig, ACE.AceConfigDialog
-local IsEmptyTable = O.LU.Table.isEmpty
 
 
 --[[-----------------------------------------------------------------------------
@@ -32,7 +30,7 @@ local function Methods(o)
     --- Usage:  local instance = OptionsMixin:New(addon)
     --- @param addon AddonSuite
     --- @return OptionsMixin
-    function o:New(addon) return K_CreateAndInitFromMixin(o, addon) end
+    function o:New(addon) return ns:K():CreateAndInitFromMixin(o, addon) end
 
     function o:CreateOptions()
         local options = {

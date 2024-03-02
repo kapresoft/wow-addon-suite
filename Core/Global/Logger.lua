@@ -10,9 +10,10 @@ local LibStub = LibStub
 local C = LibStub('AceConsole-3.0')
 
 local ns = ADT_Namespace(...)
+local LO = ns:K().Objects
 local O, _, M = ns:LibPack()
 local sformat, pformat = string.format, ns.pformat
-local tableUnpack = O.Table.tableUnpack
+local tableUnpack = LO.Table.tableUnpack
 
 ---Colors are in hex
 local consoleColors = {
@@ -115,7 +116,7 @@ end
 ---@param level number The level configured by the log function call
 local function ShouldLog(level)
     assert(type(level) == 'number', 'Level should be a number between 1 and 100')
-    local function GetLogLevel() return ADT_LOG_LEVEL end
+    local function GetLogLevel() return ADT_LOG_LEVEL or 0 end
     if GetLogLevel() >= level then return true end
     return false
 end

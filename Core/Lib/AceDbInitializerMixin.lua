@@ -1,8 +1,9 @@
 --[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
-local O, LibStub, M = ADT_LibPack(...)
-local GC, AceDB = O.GlobalConstants, O.AceLibrary.AceDB
+local ns = addonsuite_ns(...)
+local O, GC, M, LibStub = ns.O, ns.O.GlobalConstants, ns.M, ns.O.LibStub
+local AceDB = O.AceLibrary.AceDB
 local IsEmptyTable = O.LU.Table.isEmpty
 --[[-----------------------------------------------------------------------------
 New Instance
@@ -42,7 +43,7 @@ local function Methods(o)
     --- Usage:  local instance = AceDbInitializerMixin:New(addon)
     --- @param addon AddonSuite
     --- @return AceDbInitializerMixin
-    function o:New(addon) return K_CreateAndInitFromMixin(o, addon) end
+    function o:New(addon) return ns:K():CreateAndInitFromMixin(o, addon) end
 
     ---@return AceDB
     function o:GetDB() return self.addon.db end

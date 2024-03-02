@@ -112,7 +112,8 @@ local function Constructor()
     p:log('Namespace keys: %s', ns:ToStringNamespaceKeys())
     p:log('Namespace Object keys: %s', ns:ToStringObjectKeys())
 
-    ADT = A
+    --- AddonSuite Global Var
+    ADDON_SUITE = A
 end
 
 Constructor()

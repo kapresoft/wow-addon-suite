@@ -1,26 +1,22 @@
 --[[-----------------------------------------------------------------------------
 Lua Vars
 -------------------------------------------------------------------------------]]
-local sformat = string.format
+local date, sformat = date,string.format
 
 --[[-----------------------------------------------------------------------------
 Blizzard Vars
 -------------------------------------------------------------------------------]]
-local GetAddOnMetadata = GetAddOnMetadata
-local date = date
 
 --[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
+--- @type AddOnName
+local addon
+--- @type Kapresoft_Base_Namespace
+local ns; addon, ns = ...
+--- @type LibStub
 local LibStub = LibStub
 
----@type string
-local addon
----@type Namespace
-local ns
-addon, ns = ...
-
-local pformat = Kapresoft_LibUtil.PrettyPrint.pformat
 local addonShortName = 'AddonSuite'
 local consoleCommand = "adt"
 local globalVarName = "AST"
