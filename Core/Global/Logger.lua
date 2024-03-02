@@ -9,7 +9,7 @@ Local Vars
 local LibStub = LibStub
 local C = LibStub('AceConsole-3.0')
 
-local ns = ADT_Namespace(...)
+local ns = AddonSuite_Namespace(...)
 local LO = ns:K().Objects
 local O, _, M = ns:LibPack()
 local sformat, pformat = string.format, ns.pformat

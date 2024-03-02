@@ -7,9 +7,9 @@ local sformat, unpack = string.format, unpack
 Local Vars
 -------------------------------------------------------------------------------]]
 local LibStub = LibStub
-local ns = ADT_Namespace(...)
+local ns = AddonSuite_Namespace(...)
 local O, LibStubLocal, M = ns:LibPack()
-local GC, ACE, Table, String = O.GlobalConstants, O.AceLibrary, O.LU.Table, O.LU.String
+local GC, ACE, Table, String = ns.GC, O.AceLibrary, O.LU.Table, O.LU.String
 local AceConfigDialog = ACE.AceConfigDialog
 local toStringSorted, pformat = Table.toStringSorted, O.pformat
 local IsBlank, IsAnyOf, IsEmptyTable = String.IsBlank, String.IsAnyOf, Table.isEmpty

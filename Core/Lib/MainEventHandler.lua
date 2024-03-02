@@ -12,9 +12,9 @@ local RegisterFrameForEvents, RegisterFrameForUnitEvents = FrameUtil.RegisterFra
 --[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
-local ns = ADT_Namespace(...)
+local ns = AddonSuite_Namespace(...)
 local O, LibStub, M = ns:LibPack()
-local AceEvent, GC = O.AceLibrary.AceEvent, O.GlobalConstants
+local AceEvent, GC = O.AceLibrary.AceEvent, ns.GC
 local E, MSG = GC.E, GC.M
 --TODO next localize
 local commandTextFormat = 'Type %s on the console for available commands.'
@@ -39,9 +39,9 @@ local EventFrameWidgetInterface = {
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
----@class MainEventHandler : BaseLibraryObject
-local L = LibStub:NewLibrary(M.MainEventHandler, 1)
-AceEvent:Embed(L)
+---@class MainEventHandler : BaseLibraryObject_WithAceEvent
+local L = LibStub:NewLibrary(M.MainEventHandler, 1); if not L then return end; ns:AceEvent(L)
+
 local p = L.logger
 
 --[[-----------------------------------------------------------------------------

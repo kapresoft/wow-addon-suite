@@ -2,7 +2,7 @@
 Local Vars
 -------------------------------------------------------------------------------]]
 local ns = addonsuite_ns(...)
-local O, GC, M, LibStub = ns.O, ns.O.GlobalConstants, ns.M, ns.O.LibStub
+local O, GC, M, LibStub = ns.O, ns.GC, ns.M, ns.LibStub
 local AceDB = O.AceLibrary.AceDB
 local IsEmptyTable = O.LU.Table.isEmpty
 --[[-----------------------------------------------------------------------------

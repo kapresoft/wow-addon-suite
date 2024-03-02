@@ -7,10 +7,9 @@ local sformat = string.format
 Local Vars
 -------------------------------------------------------------------------------]]
 local ns = addonsuite_ns(...)
-local O, GC, M, LibStub = ns.O, ns.O.GlobalConstants, ns.M, ns.O.LibStub
+local O, GC, M, LibStub = ns.O, ns.GC, ns.M, ns.LibStub
 local ACE = O.AceLibrary
 local AceConfig, AceConfigDialog = ACE.AceConfig, ACE.AceConfigDialog
-
 
 --[[-----------------------------------------------------------------------------
 New Instance
@@ -67,7 +66,8 @@ local function Methods(o)
     end
 
     function o:InitOptions()
-        AceConfig:RegisterOptionsTable(ns.name, self:CreateOptions(), { "adt_options" })
+        local slashCommandOptions = GC.C.CONSOLE_COMMAND_NAME .. "_options"
+        AceConfig:RegisterOptionsTable(ns.name, self:CreateOptions(), { slashCommandOptions })
         AceConfigDialog:AddToBlizOptions(ns.name, ns.nameShort)
     end
 
