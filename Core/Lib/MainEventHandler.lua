@@ -32,7 +32,7 @@ local MainEventHandlerFrame = {
 local EventFrameWidgetInterface = {
     ---@type MainEventHandlerFrame
     frame = {},
-    ---@type AddonTemplate
+    ---@type AddonSuite
     addon = {},
 }
 
@@ -52,7 +52,7 @@ Support Functions
 ---```Usage:
 ---AceEvent:RegisterMessage(MSG.OnAddonReady, function(evt, ...) end
 ---```
----@param addon AddonTemplate
+---@param addon AddonSuite
 local function SendAddonReadyMessage(addon)
     L:SendMessage(MSG.OnAddonReady, addon)
 end
@@ -78,7 +78,7 @@ local function InstanceMethods(o)
     ---```
     ---local newInstance = Mixin:MixinAndInit(O.MainEventHandlerMixin, addon)
     ---```
-    ---@param addon AddonTemplate
+    ---@param addon AddonSuite
     function o:Init(addon)
         self.addon = addon
         self:RegisterMessage(MSG.OnAfterInitialize, function(evt, ...) self:OnAfterInitialize() end)

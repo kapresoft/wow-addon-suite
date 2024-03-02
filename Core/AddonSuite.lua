@@ -14,7 +14,7 @@ local AceConfigDialog = ACE.AceConfigDialog
 local toStringSorted, pformat = Table.toStringSorted, O.pformat
 local IsBlank, IsAnyOf, IsEmptyTable = String.IsBlank, String.IsAnyOf, Table.isEmpty
 
----@class AddonTemplate
+---@class AddonSuite
 local A = LibStub("AceAddon-3.0"):NewAddon(ns.name, "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0")
 local mt = getmetatable(A) or {}
 mt.__tostring = ns.ToStringFunction()
@@ -27,7 +27,7 @@ ns['addon'] = A
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
----@param o AddonTemplate
+---@param o AddonSuite
 local function Methods(o)
     O.MainEventHandler:Init(o)
 
@@ -99,7 +99,7 @@ local function Methods(o)
     function o:BINDING_ADT_OPTIONS_DLG() self:OpenConfig() end
 end
 
----@param o AddonTemplate
+---@param o AddonSuite
 local function RegisterEvents(o)
 
 end

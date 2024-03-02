@@ -21,9 +21,9 @@ local ns
 addon, ns = ...
 
 local pformat = Kapresoft_LibUtil.PrettyPrint.pformat
-local addonShortName = 'AddonTemplate'
+local addonShortName = 'AddonSuite'
 local consoleCommand = "adt"
-local globalVarName = "ADT"
+local globalVarName = "AST"
 local useShortName = true
 
 local globalVarPrefix = globalVarName .. "_"
