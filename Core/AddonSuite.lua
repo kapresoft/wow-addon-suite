@@ -101,4 +101,6 @@ local function MethodsAndProps(o)
             AceConfigDialog:SelectGroup(ns.name, "general")
         end)
     end
-end; MethodsAndProps(A); ADT = A
+    --- @see Bindings.xml
+    function o.BINDING_ADDON_SUITE_OPTIONS_DLG() o:OpenConfig() end
+end; MethodsAndProps(A); ADDON_SUITE = A

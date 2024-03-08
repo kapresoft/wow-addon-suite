@@ -7,7 +7,7 @@
 local addonName = ...
 local L = LibStub("AceLocale-3.0"):NewLocale(addonName, "enUS", true);
 
-L["BINDING_NAME_ADT_OPTIONS_DLG"]                  = 'Options Dialog'
+L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG"]                  = 'Options Dialog'
 
 L['General']                  = true
 L['General::Desc']            = "General Settings"

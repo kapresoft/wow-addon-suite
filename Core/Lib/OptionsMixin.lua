@@ -132,7 +132,7 @@ local function MethodsAndProps(o)
         options.args.profiles = AceDBOptions:GetOptionsTable(ns:db())
 
         --AceConfigDialog:SetDefaultSize(ns.name, 950, 600)
-        AceConfig:RegisterOptionsTable(ns.name, options, { "adt_options" })
+        AceConfig:RegisterOptionsTable(ns.name, options, { "addon_suite_options" })
         AceConfigDialog:AddToBlizOptions(ns.name, ns.nameShort)
     end
 

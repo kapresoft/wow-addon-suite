@@ -1,0 +1,5 @@
+<Bindings>
+    <Binding name="ADDON_SUITE_OPTIONS_DLG" category="Addons/AddonSuite" header="ADDON_SUITE_OPTIONS">
+        ADDON_SUITE.BINDING_ADDON_SUITE_OPTIONS_DLG();
+    </Binding>
+</Bindings>
