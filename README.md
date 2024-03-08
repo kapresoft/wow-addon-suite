@@ -10,4 +10,4 @@
 
 
 ### Github
-- {{GithubProjectUrl}}
+- https://github.com/kapresoft/wow-addon-suite

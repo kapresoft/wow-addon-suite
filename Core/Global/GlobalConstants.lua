@@ -1,28 +1,31 @@
 --[[-----------------------------------------------------------------------------
 Lua Vars
 -------------------------------------------------------------------------------]]
-local date, sformat = date,string.format
+local sformat = string.format
 
 --[[-----------------------------------------------------------------------------
 Blizzard Vars
 -------------------------------------------------------------------------------]]
+local GetAddOnMetadata = GetAddOnMetadata
+local date = date
 
 --[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
---- @type AddOnName
-local addon
---- @type Kapresoft_Base_Namespace
-local ns; addon, ns = ...
---- @type LibStub
 local LibStub = LibStub
 
-local KC = ns.Kapresoft_LibUtil.Objects.Constants
+--- @type string
+local addon
+--- @type Kapresoft_Base_Namespace
+local ns
+addon, ns = ...
+local kch = ns.Kapresoft_LibUtil.CH
 
 local addonShortName = 'AddonSuite'
-local consoleCommand = "addon_suite"
+local consoleCommand = "addon-suite"
+local consoleCommandShort = "ads"
 local globalVarName = "ADDON_SUITE"
-local useShortName = true
+local useShortName = false
 
 local globalVarPrefix = globalVarName .. "_"
 local dbName = globalVarPrefix .. 'DB'
@@ -33,13 +36,19 @@ local ADDON_INFO_FMT = '%s|cfdeab676: %s|r'
 local TOSTRING_ADDON_FMT = '|cfdfefefe{{|r|cfdeab676%s|r|cfdfefefe}}|r'
 local TOSTRING_SUBMODULE_FMT = '|cfdfefefe{{|r|cfdeab676%s|r|cfdfefefe::|r|cfdfbeb2d%s|r|cfdfefefe}}|r'
 
+--[[-----------------------------------------------------------------------------
+Console Colors
+-------------------------------------------------------------------------------]]
 --- @type Kapresoft_LibUtil_ColorDefinition
 local consoleColors = {
-    primary   = '2db9fb',
+    primary   = '7ACFFB',
     secondary = 'fbeb2d',
     tertiary  = 'ffffff',
 }
-local consoleHelper = KC:NewConsoleHelper(consoleColors)
+
+local command = kch:FormatColor(consoleColors.primary, '/' .. consoleCommand)
+local commandShort = kch:FormatColor(consoleColors.primary, '/' .. consoleCommandShort)
+
 
 --[[-----------------------------------------------------------------------------
 Support Functions
@@ -67,63 +76,25 @@ local function InitGlobalVars(varPrefix)
 end
 InitGlobalVars(globalVarPrefix)
 
---[[--- @class LocalLibStub : LibStub
-local S = {}
-
---- @param moduleName string
---- @param optionalMinorVersion number
-function S:NewLibrary(moduleName, optionalMinorVersion)
-    assert('string' == type(moduleName),
-            "Module name is required for GlobalConstants::NewLibrary(moduleName)")
-    ---use Ace3 LibStub here
-    --- @type BaseLibraryObject
-    local o = LibStub:NewLibrary(LibName(moduleName), optionalMinorVersion or 1)
-    assert(o, sformat("Module not found: %s", tostring(moduleName)))
-    o.mt = getmetatable(o) or {}
-    o.mt.__tostring = ns.ToStringFunction(moduleName)
-    setmetatable(o, o.mt)
-    ns:Register(moduleName, o)
-    --- @type Logger
-    local loggerLib = LibStub(LibName(ns.M.Logger), 1)
-    o.logger = loggerLib:NewLogger(moduleName)
-    return o
-end
-
---- @param moduleName string
---- @param optionalMinorVersion number
-function S:GetLibrary(moduleName, optionalMinorVersion) return LibStub(LibName(moduleName), optionalMinorVersion or 1) end
-
-S.mt = { __call = function (_, ...) return S:GetLibrary(...) end }
-setmetatable(S, S.mt)]]
-
 --[[-----------------------------------------------------------------------------
 GlobalConstants
 -------------------------------------------------------------------------------]]
 --- @class GlobalConstants
-local L = LibStub:NewLibrary(LibName('GlobalConstants'), 1); if not L then return end
+local L = LibStub:NewLibrary(LibName('GlobalConstants'), 1)
 
 --- @param o GlobalConstants
 local function GlobalConstantProperties(o)
-
-    local consoleCommandTextFormat = '|cfd2db9fb%s|r'
-    local consoleKeyValueTextFormat = '|cfdfbeb2d%s|r: %s'
-    local command = sformat("/%s", consoleCommand)
-
     --- @class GlobalAttributes
     local C = {
         VAR_NAME = globalVarName,
         CONSOLE_COMMAND_NAME = consoleCommand,
+        CONSOLE_COMMAND_SHORT = consoleCommandShort,
+        CONSOLE_COLORS = consoleColors,
         DB_NAME = dbName,
-        CHECK_VAR_SYNTAX_FORMAT = '|cfdeab676%s ::|r %s',
         CONSOLE_HEADER_FORMAT = '|cfdeab676### %s ###|r',
         CONSOLE_OPTIONS_FORMAT = '  - %-8s|cfdeab676:: %s|r',
 
-        CONSOLE_COMMAND_TEXT_FORMAT = consoleCommandTextFormat,
-        CONSOLE_KEY_VALUE_TEXT_FORMAT = consoleKeyValueTextFormat,
-
         CONSOLE_PLAIN = command,
-        COMMAND      = sformat(consoleCommandTextFormat, command),
-        HELP_COMMAND = sformat(consoleCommandTextFormat, command .. ' help'),
     }
 
     --- @class EventNames
@@ -150,14 +121,11 @@ local function GlobalConstantProperties(o)
     o.C = C
     o.E = E
     o.M = M
-    o.CH = consoleHelper
 
 end
 
 --- @param o GlobalConstants
 local function Methods(o)
-    --  TODO
-
     function o:GetLogName()
         local logName = addon
         if useShortName then logName = addonShortName end
@@ -182,9 +150,9 @@ local function Methods(o)
         local wowInterfaceVersion = select(4, GetBuildInfo())
 
         return versionText, GetAddOnMetadata(ns.name, 'X-CurseForge'),
-            GetAddOnMetadata(ns.name, 'X-Github-Issues'),
-            GetAddOnMetadata(ns.name, 'X-Github-Repo'),
-            lastUpdate, wowInterfaceVersion
+        GetAddOnMetadata(ns.name, 'X-Github-Issues'),
+        GetAddOnMetadata(ns.name, 'X-Github-Repo'),
+        lastUpdate, wowInterfaceVersion
     end
 
     function o:GetAddonInfoFormatted()
@@ -201,11 +169,17 @@ local function Methods(o)
         )
     end
 
+    function o:GetMessageLoadedText()
+        local consoleCommandMessageFormat = sformat('Type %s or %s for available commands.',
+                command, commandShort)
+        return sformat("%s version %s by %s is loaded. %s",
+                kch:P(addon) , self:GetAddonInfo(), kch:FormatColor(consoleColors.primary, 'kapresoft'),
+                consoleCommandMessageFormat)
+    end
+
+    o.LibName = LibName
+    o.ToStringFunction = ToStringFunction
 end
 
 GlobalConstantProperties(L)
 Methods(L)
-
-ns.LibName = LibName
-ns.ToStringFunction = ToStringFunction
-ns.GC = L

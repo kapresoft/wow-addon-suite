@@ -1,11 +1,11 @@
 ## Interface: 30400
 ## Version: @project-version@
-## Title: AddonSuite|cff1784d1 WOTLK|r
-## Notes: {{Addon-Short-Description}}
+## Title: Addon Suite|cff1784d1 WOTLK|r
+## Notes: Addon Suite Addon Manager
 ## Author: kapresoft@gmail.com
 ## DefaultState: enabled
-## SavedVariables: ADT_DB, ADT_LOG_LEVEL, ADT_DEBUG_MODE
-## SavedVariablesPerCharacter: ADT_CHARACTER_DB
+## SavedVariables: ADDON_SUITE_DB, ADDON_SUITE_LOG_LEVEL, ADDON_SUITE_DEBUG_MODE, ADDON_SUITE_DEBUG_ENABLED_CATEGORIES
+## SavedVariablesPerCharacter: ADDON_SUITE_CHARACTER_DB
 ## LoadManagers: AddonLoader
 
 ## X-LoadOn-Always: delayed
@@ -15,8 +15,8 @@
 
 ## X-Github-Repo: https://github.com/kapresoft/wow-addon-template
 ## X-Github-Issues: https://github.com/kapresoft/wow-addon-template
-## X-CurseForge: https://www.curseforge.com/wow/addons/{{curse-project-name}}
-## X-Curse-Project-ID: {{curse-project-id}}
+## X-CurseForge: https://www.curseforge.com/wow/addons/addon-suite
+## X-Curse-Project-ID: 785236
 ## X-Github-Project-Author: @project-author@
 ## X-Github-Project-Hash: @project-hash@
 ## X-Github-Project-Last-Changed-Date: @project-date-iso@
