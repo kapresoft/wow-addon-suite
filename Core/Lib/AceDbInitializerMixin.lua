@@ -62,7 +62,16 @@ local function PropsAndMethods(o)
 
     function o:InitDbDefaults()
         local profileName = self.addon.db:GetCurrentProfile()
-        local defaultProfile = { hello = 'there'}
+        --- @type Profile_Config
+        local defaultProfile = {
+            enable = true,
+            characterSpecific = false,
+            enabledAddons = {
+                ['Questie'] = true,
+                ['VuhDo'] = true,
+                ['TomTom'] = true,
+            }
+        }
         local defaults = { profile = defaultProfile }
         self.db:RegisterDefaults(defaults)
         self.addon.profile = self.db.profile

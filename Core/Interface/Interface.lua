@@ -1,4 +1,9 @@
 --[[-----------------------------------------------------------------------------
+Callback Functions
+-------------------------------------------------------------------------------]]
+--- @alias AddOnCallbackFn fun(addOn:AddOnInfo) | "function(addOn) print('addOn:', pformat(addOn)) end"
+
+--[[-----------------------------------------------------------------------------
 BaseLibraryObject
 -------------------------------------------------------------------------------]]
 --- @class BaseLibraryObject A base library object class definition.
@@ -23,7 +28,8 @@ AddOn_DB
 
 --- @class Profile_Config : AceDB_Profile
 --- @field enable boolean This is reserved AceConfig property, don't use.
---- @field enableSomething boolean An example config field
+--- @field characterSpecific boolean The addons being enabled or disabled are character-specific or global
+--- @field enabledAddons table<string,boolean> Enabled Addons
 
 --- @class Profile_Global_Config : AceDB_Global
 --- @field enableSomething string An example global config field
@@ -33,3 +39,15 @@ AddOn_DB
 --- @field profile Profile_Config
 --- @field profileKeys Profile_DB_ProfileKeys
 --- @field profiles table<string, Profile_Config>
+
+--[[-----------------------------------------------------------------------------
+Type: AddOnInfo
+-------------------------------------------------------------------------------]]
+--- @class AddOnInfo
+--- @field name AddOnName
+--- @field title AddOnTitle
+--- @field notes Notes
+--- @field loadable Boolean
+--- @field reason AddOnIsNotLoadableReason
+--- @field security AddOnSecurity
+--- @field newVersion Boolean Unused

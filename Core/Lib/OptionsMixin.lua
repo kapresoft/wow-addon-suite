@@ -9,75 +9,17 @@ Local Vars
 --- @type Namespace
 local ns = select(2, ...)
 local O, GC, M, LibStub = ns.O, ns.GC, ns.M, ns.LibStub
-local ACE = O.AceLibrary
+local ACE, API = O.AceLibrary, O.API
 local AceConfig, AceConfigDialog, AceDBOptions = ACE.AceConfig, ACE.AceConfigDialog, ACE.AceDBOptions
 local DebugSettings = O.DebuggingSettingsGroup
-local AceEvent = ns:AceEvent()
 local libName = M.OptionsMixin
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
 --- @class OptionsMixin : BaseLibraryObject
+--- @field util OptionsUtil
 local S = LibStub:NewLibrary(libName)
 local p = ns:LC().OPTIONS:NewLogger(libName)
-
---[[-----------------------------------------------------------------------------
-Support Functions
--------------------------------------------------------------------------------]]
---- @see GlobalConstants#M for Message names
----@param optionalVal any|nil
-local function SendMessage(addOnMessage, optionalVal)
-    AceEvent:SendMessage(addOnMessage, libName, optionalVal)
-end
-
---- @param propKey string
---- @param defVal any
-local function _GetGlobalValue(propKey, defVal) return ns:db().global[propKey] or defVal end
-
---- @param propKey string
---- @param val any
-local function _SetGlobalValue(propKey, val) ns:db().global[propKey] = val end
-
---- @param propKey string
---- @param defVal any
-local function _GetValue(propKey, defVal) return ns:db().profile[propKey] or defVal end
-
---- @param propKey string
---- @param val any
-local function _SetValue(propKey, val) ns:db().profile[propKey] = val end
-
---- @param fallback any The fallback value
---- @param key string The key value
-local function ProfileGet(key, fallback)
-    return function(_)
-        return _GetValue(key, fallback)
-    end
-end
---- @param key string The key value
-local function ProfileSet(key, eventMessageToFire)
-    return function(_, v)
-        _SetValue(key, v)
-        if 'string' == type(eventMessageToFire) then
-            SendMessage(eventMessageToFire, v)
-        end
-    end
-end
---- @param fallback any The fallback value
---- @param key string The key value
-local function GlobalGet(key, fallback)
-    return function(_)
-        return _GetGlobalValue(key, fallback)
-    end
-end
---- @param key string The key value
-local function GlobalSet(key, eventMessageToFire)
-    return function(_, v)
-        _SetGlobalValue(key, v)
-        if 'string' == type(eventMessageToFire) then
-            SendMessage(eventMessageToFire, v)
-        end
-    end
-end
 
 --[[-----------------------------------------------------------------------------
 Method and Properties
@@ -85,11 +27,14 @@ Method and Properties
 --- @param o OptionsMixin
 local function MethodsAndProps(o)
     local L = ns:AceLocale()
+    local util = O.OptionsUtil:New(o)
 
     --- Called automatically by CreateAndInitFromMixin(..)
     --- @param addon AddonSuite
     function o:Init(addon)
         self.addon = addon
+        self.util = util
+        self.locale = L
     end
 
     --- Usage:  local instance = OptionsMixin:New(addon)
@@ -98,28 +43,15 @@ local function MethodsAndProps(o)
     function o:New(addon) return ns:K():CreateAndInitFromMixin(o, addon) end
 
     function o:CreateOptions()
+        local order = ns:CreateSequence()
+
+        --- @type AceConfigOption
         local options = {
             name = ns.name,
             handler = self,
             type = "group",
             args = {
-                general = {
-                    type = "group",
-                    name = L['General'],
-                    desc = L['General::Desc'],
-                    order = 2,
-                    args = {
-                        desc = { name = " " .. L['General Configuration'] .. " ", type = "header", order = 0 },
-                        enable = {
-                            type = "toggle",
-                            name = "Enable",
-                            desc = "Enable Addon",
-                            order = 1,
-                            get =  ProfileGet('enableSomething'),
-                            set = ProfileSet('enableSomething')
-                        }
-                    },
-                },
+                general = O.OptionsAddonsMixin:New(self):CreateAddOnsGroup(order),
                 debugging = DebugSettings:CreateDebuggingGroup(),
             }
         }
@@ -131,9 +63,11 @@ local function MethodsAndProps(o)
         -- This creates the Profiles Tab/Section in Settings UI
         options.args.profiles = AceDBOptions:GetOptionsTable(ns:db())
 
-        --AceConfigDialog:SetDefaultSize(ns.name, 950, 600)
         AceConfig:RegisterOptionsTable(ns.name, options, { "addon_suite_options" })
         AceConfigDialog:AddToBlizOptions(ns.name, ns.nameShort)
+        if API:GetUIScale() > 1.0 then return end
+
+        AceConfigDialog:SetDefaultSize(ns.name, 950, 600)
     end
 
 end; MethodsAndProps(S)

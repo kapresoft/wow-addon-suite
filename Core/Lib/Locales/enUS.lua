@@ -13,13 +13,25 @@ L['General']                  = true
 L['General::Desc']            = "General Settings"
 L['General Configuration']    = true
 
+L['General::Enable All::Button']           = 'All'
+L['General::Enable All::Button::Desc']     = 'Checks all add-ons below.'
+L['General::Disable All::Button']          = 'None'
+L['General::Disable All::Button::Desc']    = 'Unchecks all add-ons below.'
+
+L['Add-Ons::Desc']            = 'To activate or deactivate an Add-On, check or uncheck its corresponding box. After making your selections, click on "Apply and ReloadUI" to implement the changes to your configuration.'
+L['Apply and ReloadUI']       = true
+L['Apply and ReloadUI::Desc'] = 'To activate or deactivate an Add-On, check or uncheck its corresponding box. After making your selections, click on this button to implement the changes to your configuration.'
+L['Select Profile']           = true
+L['Select Profile::Desc']     = 'Select a profile to activate.  You will be prompted to reload the UI.  Note that these profiles are managed on the Profiles tab.'
+
+
 L['Debugging']                = true
 L['Debugging::Desc']          = 'Debug Settings for troubleshooting'
 L['Debugging Configuration']  = true
 L['Log Level']                = true
 L['Log Level::Desc']          = 'Higher log levels generate more logs:\nLog Levels: ERROR(5), WARN(10), INFO(15), DEBUG(20), FINE(25), FINER(30), FINEST(35), TRACE(50)'
 L['Categories']               = true
-L['Debugging::Category::Enable All::Button']           = 'Enable All'
-L['Debugging::Category::Enable All::Button::Desc']     = 'Enables all log categories below. Note that the default category (not shown here) will always be active.'
-L['Debugging::Category::Disable All::Button']          = 'Disable All'
-L['Debugging::Category::Disable All::Button::Desc']    = 'Disables all log categories below. Note that the default category (not shown here) will always be active.'
+L['Debugging::Category::Enable All::Button']           = 'All'
+L['Debugging::Category::Enable All::Button::Desc']     = 'Checks all log categories below. Note that the default category (not shown here) will always be active.'
+L['Debugging::Category::Disable All::Button']          = 'None'
+L['Debugging::Category::Disable All::Button::Desc']    = 'Unchecks all log categories below. Note that the default category (not shown here) will always be active.'

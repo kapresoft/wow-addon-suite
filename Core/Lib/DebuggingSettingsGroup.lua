@@ -73,15 +73,16 @@ local function PropsAndMethods(o)
     function o:AddCategories(conf)
         conf.args.enable_all = {
             name = L['Debugging::Category::Enable All::Button'], desc = L['Debugging::Category::Enable All::Button::Desc'],
-            type = "execute", order = dbgSeq:next(), width = 'normal',
+            type = "execute", order = dbgSeq:next(), width = 'half',
             func = function()
                 for _, option in pairs(conf.args) do
                     if option.type == 'toggle' then option.set({}, true) end
                 end
             end }
+        conf.args.spacer1a = { type="description", name='', width=0.1, order = dbgSeq:next() }
         conf.args.disable_all = {
             name = L['Debugging::Category::Disable All::Button'], desc = L['Debugging::Category::Disable All::Button::Desc'],
-            type="execute", order=dbgSeq:next(), width = 'normal',
+            type="execute", order=dbgSeq:next(), width = 'half',
             func = function()
                 for _, option in pairs(conf.args) do
                     if option.type == 'toggle' then option.set({}, false) end

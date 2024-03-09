@@ -75,25 +75,30 @@ GlobalObjects
 --- @field AceLibrary Kapresoft_LibUtil_AceLibraryObjects
 --- @field pformat fun(fmt:string, ...)|fun(val:string)
 --- @field AceDbInitializerMixin AceDbInitializerMixin
+--- @field API API
 --- @field GlobalConstants GlobalConstants
 --- @field MainController MainController
+--- @field OptionsUtil OptionsUtil
 --- @field OptionsMixin OptionsMixin
+--- @field OptionsAddonsMixin OptionsAddonsMixin
 --- @field DebuggingSettingsGroup DebuggingSettingsGroup
 --[[-----------------------------------------------------------------------------
 Modules
 -------------------------------------------------------------------------------]]
 --- @class Modules
 local M = {
-    pformat = 'pformat',
-    sformat = 'sformat',
-    AceLibrary = 'AceLibrary',
-
-    AceDbInitializerMixin = 'AceDbInitializerMixin',
-    DebuggingSettingsGroup = 'DebuggingSettingsGroup',
-    GlobalConstants = 'GlobalConstants',
-    MainController = 'MainController',
-    OptionsMixin = 'OptionsMixin',
-}
+    pformat = '',
+    sformat = '',
+    AceLibrary = '',
+    AceDbInitializerMixin = '',
+    API = '',
+    DebuggingSettingsGroup = '',
+    GlobalConstants = '',
+    MainController = '',
+    OptionsUtil = '',
+    OptionsAddonsMixin = '',
+    OptionsMixin = '',
+}; for moduleName in pairs(M) do M[moduleName] = moduleName end
 
 local InitialModuleInstances = {
     -- External Libs --
