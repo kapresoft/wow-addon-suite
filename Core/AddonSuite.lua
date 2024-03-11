@@ -81,6 +81,10 @@ local function MethodsAndProps(o)
     end
     function o:OnHide_Config_WithSound() self:OnHide_Config(true) end
     function o:OnHide_Config_WithoutSound() self:OnHide_Config() end
+    function o:CloseConfig()
+        if not AceConfigDialog.OpenFrames[ns.name] then return end
+        AceConfigDialog:Close(ns.name)
+    end
     function o:OpenConfig()
         if AceConfigDialog.OpenFrames[ns.name] then return end
         AceConfigDialog:Open(ns.name)
