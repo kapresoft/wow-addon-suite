@@ -10,7 +10,7 @@ local libName = 'ConfigDialogController'
 New Instance
 -------------------------------------------------------------------------------]]
 --- @class ConfigDialogController : BaseLibraryObject_WithAceEvent
-local L = ns:AceEvent()
+local L = ns:NewLibWithEvent(libName)
 local p = ns:CreateDefaultLogger(libName)
 
 --[[-----------------------------------------------------------------------------
