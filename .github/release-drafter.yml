@@ -1,6 +1,6 @@
 # see https://github.com/marketplace/actions/release-drafter
 # For RESOLVED_VERSION
-version-template: '$MAJOR.$MINOR.$PATCH-alpha'
+version-template: '$MAJOR.$MINOR.$PATCH'
 #
 name-template: '$RESOLVED_VERSION'
 tag-template: '$RESOLVED_VERSION'
@@ -15,4 +15,7 @@ template: |
   
   ### Contributors:
   $CONTRIBUTORS
-   
+  
+  #### Links:
+
+  - [Curse Forge](https://www.curseforge.com/wow/addons/wow-addon-suite/files) | [Curse Forge Legacy](https://legacy.curseforge.com/wow/addons/wow-addon-suite/files)
