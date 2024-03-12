@@ -201,6 +201,7 @@ local function NameSpacePropertiesAndMethods(o)
 
     --- Simple Library
     function o:NewLib(libName, ...)
+        assert(libName, "LibName is required")
         local newLib = {}
         local len = select("#", ...)
         if len > 0 then newLib = self:K():Mixin({}, ...) end
@@ -210,6 +211,7 @@ local function NameSpacePropertiesAndMethods(o)
         return newLib
     end
     function o:NewLibWithEvent(libName, ...)
+        assert(libName, "LibName is required")
         local newLib = self.O.AceLibrary.AceEvent:Embed({})
         local len = select("#", ...)
         if len > 0 then newLib = self:K():Mixin(newLib, ...) end
