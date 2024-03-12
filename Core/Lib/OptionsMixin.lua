@@ -27,13 +27,12 @@ Method and Properties
 --- @param o OptionsMixin
 local function MethodsAndProps(o)
     local L = ns:AceLocale()
-    local util = O.OptionsUtil:New(o)
 
     --- Called automatically by CreateAndInitFromMixin(..)
     --- @param addon AddonSuite
     function o:Init(addon)
         self.addon = addon
-        self.util = util
+        self.util = O.OptionsUtil:New(o)
         self.locale = L
     end
 

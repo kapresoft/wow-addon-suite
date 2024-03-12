@@ -116,6 +116,7 @@ local function GlobalConstantProperties(o)
     local M = {
         OnAfterInitialize = newMessage('OnAfterInitialize'),
         OnAddonReady = newMessage('OnAddonReady'),
+        OnApplyAndRestart = newMessage('OnApplyAndRestart'),
     }
 
     o.C = C

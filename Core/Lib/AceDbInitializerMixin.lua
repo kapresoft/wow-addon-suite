@@ -20,13 +20,13 @@ Methods
 --- @param a AddonSuite
 local function AddonCallbackMethods(a)
     function a:OnProfileChanged()
-        p:vv('OnProfileChanged called...')
+        p:d('OnProfileChanged called...')
     end
-    function a:OnProfileChanged()
-        p:vv('OnProfileReset called...')
+    function a:OnProfileCopied()
+        p:d('OnProfileCopied called...')
     end
-    function a:OnProfileChanged()
-        p:vv('OnProfileCopied called...')
+    function a:OnProfileReset()
+        p:d('OnProfileReset called...')
     end
 end
 
@@ -39,8 +39,7 @@ local function PropsAndMethods(o)
         self.addon = addon
         self.addon.db = AceDB:New(GC.C.DB_NAME)
         self.addon.dbInit = self
-        self.db = self.addon.db
-        ns:SetAddOnDB(self.db)
+        ns:SetAddOnFn(function() return self.addon.db end)
     end
 
     --- Usage:  local instance = AceDbInitializerMixin:New(addon)
@@ -54,9 +53,9 @@ local function PropsAndMethods(o)
     function o:InitDb()
         p:f1( 'Initialize called...')
         AddonCallbackMethods(self.addon)
-        self.db.RegisterCallback(self.addon, "OnProfileChanged", "OnProfileChanged")
-        self.db.RegisterCallback(self.addon, "OnProfileReset", "OnProfileChanged")
-        self.db.RegisterCallback(self.addon, "OnProfileCopied", "OnProfileChanged")
+        ns:db().RegisterCallback(self.addon, "OnProfileChanged", "OnProfileChanged")
+        ns:db().RegisterCallback(self.addon, "OnProfileCopied", "OnProfileCopied")
+        ns:db().RegisterCallback(self.addon, "OnProfileReset", "OnProfileReset")
         self:InitDbDefaults()
     end
 
@@ -65,19 +64,20 @@ local function PropsAndMethods(o)
         --- @type Profile_Config
         local defaultProfile = {
             enable = true,
-            characterSpecific = false,
             enabledAddons = {
+                ['Ace3'] = true,
                 ['Questie'] = true,
                 ['VuhDo'] = true,
+                ['VuhDoOptions'] = true,
                 ['TomTom'] = true,
             }
         }
         local defaults = { profile = defaultProfile }
-        self.db:RegisterDefaults(defaults)
-        self.addon.profile = self.db.profile
+        ns:db():RegisterDefaults(defaults)
+        self.addon.profile = ns:db().profile
         local wowDB = _G[GC.C.DB_NAME]
         if IsEmptyTable(wowDB.profiles[profileName]) then wowDB.profiles[profileName] = defaultProfile end
         self.addon.profile.enable = true
-        p:i(function() return 'Profile: %s', self.db:GetCurrentProfile() end)
+        p:i(function() return 'Profile: %s', ns:db():GetCurrentProfile() end)
     end
 end; PropsAndMethods(L)

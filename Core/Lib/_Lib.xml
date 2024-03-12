@@ -5,8 +5,9 @@
     <Include file="Locales\_Locales.xml"/>
     <Include file="API\_API.xml"/>
 
-    <Script file="MainController.lua" />
+    <Script file="AddonsController.lua" />
     <Script file="ConfigDialogController.lua" />
+    <Script file="MainController.lua" />
 
     <Script file="AceDbInitializerMixin.lua" />
     <Script file="DebuggingSettingsGroup.lua" />

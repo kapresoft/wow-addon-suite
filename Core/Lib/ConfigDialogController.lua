@@ -12,7 +12,6 @@ New Instance
 --- @class ConfigDialogController : BaseLibraryObject_WithAceEvent
 local L = ns:AceEvent()
 local p = ns:CreateDefaultLogger(libName)
-p:v(function() return "Loaded: %s", L.name or tostring(L) end)
 
 --[[-----------------------------------------------------------------------------
 Methods

@@ -31,17 +31,16 @@ local sp = '                                                                   '
 --- @param fallback boolean The fallback value
 --- @param addonName string The key value
 local function AutoLoadAddOnsGet(addonName, fallback)
-    return function(_) return ns:db().profile.enabledAddons[addonName] or fallback end
+    return function(_) return ns:profile().enabledAddons[addonName] or fallback end
 end
 --- @param addonName string The key value
 local function AutoLoadAddOnsSet(addonName)
     --- @param v boolean
-    return function(_, v) ns:db().profile.enabledAddons[addonName] = v ns.requiresReload = true end
+    return function(_, v) ns.requiresReload = true; ns:profile().enabledAddons[addonName] = v; end
 end
 
 --- @return ProfileSelect
 local function CreateProfileSelect()
-
     local function GetProfiles() return ns:db():GetProfiles() end
     local function GetCurrentProfile() return ns:db():GetCurrentProfile()  end
     --- @param info table Ignored
@@ -108,6 +107,7 @@ local function PropsAndMethods(o)
             order = order:next(),
             args = self:CreateAddOnsOptions(order)
         }
+        self.addonsOptions = group.args
         return group
     end
 
@@ -124,14 +124,6 @@ local function PropsAndMethods(o)
 
         local options = {
             header1 = { order = order:next(), type = 'header', name = h(L['General']) },
-            characterSpecific = {
-                order = order:next(),
-                width = 'full',
-                name = "Character Specific",
-                type = 'toggle',
-                get = util:ProfileGet('characterSpecific'),
-                set = util:ProfileSet('characterSpecific')
-            }
         }
 
         options.applyAll = {
@@ -183,12 +175,7 @@ local function PropsAndMethods(o)
         return {
             name = L['General::Enable All::Button'], desc = L['General::Enable All::Button::Desc'],
             type = "execute", order = order:next(), width = 'half',
-            func = function()
-                for key, option in pairs(options) do
-                    if key ~= 'characterSpecific'
-                            and option.type == 'toggle' then option.set({}, true) end
-                end
-            end
+            func = function() self:ForEachToggle(function(opt) opt.set({}, true) end) end
         }
     end
 
@@ -199,15 +186,16 @@ local function PropsAndMethods(o)
         return {
             name = L['General::Disable All::Button'], desc = L['General::Disable All::Button::Desc'],
             type="execute", order=order:next(), width = 'half',
-            func = function()
-                for key, option in pairs(options) do
-                    if key ~= 'characterSpecific'
-                            and option.type == 'toggle' then option.set({}, false) end
-                end
-            end
+            func = function() self:ForEachToggle(function(opt) opt.set({}, false) end) end
         }
     end
 
+    --- @param applyFn fun(option:AceConfigOption) | "function(option) end"
+    function o:ForEachToggle(applyFn)
+        for _, option in pairs(self.addonsOptions) do
+            if option.type == 'toggle' then applyFn(option) end
+        end
+    end
 
 end; PropsAndMethods(S)
 

@@ -109,3 +109,4 @@ local function MethodsAndProps(o)
     --- @see Bindings.xml
     function o.BINDING_ADDON_SUITE_OPTIONS_DLG() o:OpenConfig() end
 end; MethodsAndProps(A); ADDON_SUITE = A
+_G[ns.addon] = A

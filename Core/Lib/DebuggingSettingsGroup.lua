@@ -42,7 +42,7 @@ local function PropsAndMethods(o)
             name = L['Debugging'],
             desc = L['Debugging::Desc'],
             -- Place right before Profiles
-            order = 90,
+            order = 101, -- so it is after Profiles
 
             args = {
                 desc = { name = sformat(" %s ", L['Debugging Configuration']), type = "header", order = dbgSeq:next() },

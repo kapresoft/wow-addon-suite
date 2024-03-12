@@ -71,7 +71,9 @@ local function InstanceMethods(o)
     --- @param addon AddonSuite
     function o:Init(addon)
         self.addon = addon
+        self.addonsController = O.AddonsController:New()
         self:RegisterMessage(MSG.OnAfterInitialize, function(evt, ...) self:OnAfterInitialize() end)
+        self:RegisterMessage(MSG.OnApplyAndRestart, function(evt, ...) self:OnApplyAndRestart(evt, ...) end)
     end
 
     function o:OnAfterInitialize() self:RegisterEvents() end
@@ -86,6 +88,10 @@ local function InstanceMethods(o)
     --- @private
     function L:OnAddonReady()
         -- add stuff here
+    end
+
+    function L:OnApplyAndRestart()
+        self.addonsController:OnApplyAndRestart()
     end
 
     --- @private

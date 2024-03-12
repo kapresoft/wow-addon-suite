@@ -82,6 +82,7 @@ GlobalObjects
 --- @field OptionsMixin OptionsMixin
 --- @field OptionsAddonsMixin OptionsAddonsMixin
 --- @field DebuggingSettingsGroup DebuggingSettingsGroup
+--- @field AddonsController AddonsController
 --[[-----------------------------------------------------------------------------
 Modules
 -------------------------------------------------------------------------------]]
@@ -198,20 +199,47 @@ local function NameSpacePropertiesAndMethods(o)
     --- @param moduleName string The module name, i.e. MainController
     function o:ToStringFunction(moduleName) return GC.ToStringFunction(moduleName) end
 
+    --- Simple Library
+    function o:NewLib(libName, ...)
+        local newLib = {}
+        local len = select("#", ...)
+        if len > 0 then newLib = self:K():Mixin({}, ...) end
+        newLib.mt = { __tostring = GC.ToStringFunction(libName)}
+        setmetatable(newLib, newLib.mt)
+        self.O[libName] = newLib
+        return newLib
+    end
+    function o:NewLibWithEvent(libName, ...)
+        local newLib = self.O.AceLibrary.AceEvent:Embed({})
+        local len = select("#", ...)
+        if len > 0 then newLib = self:K():Mixin(newLib, ...) end
+        newLib.mt = { __tostring = GC.ToStringFunction(libName)}
+        setmetatable(newLib, newLib.mt)
+        self.O[libName] = newLib
+        return newLib
+    end
+
     --- @param obj table The library object instance
     function o:Register(libName, obj)
         if not (libName or obj) then return end
         self.O[libName] = obj
     end
 
-    --- @param db AddOn_DB
-    function o:SetAddOnDB(db) addonDb = db end
+    --- @param dbfn fun() | "function() return addon.db end"
+    function o:SetAddOnFn(dbfn) self.addonDbFn = dbfn end
 
     --- @return AddOn_DB
-    function o:db() return addonDb end
+    function o:db() return self.addonDbFn() end
 
     --- @return Profile_Config
-    function o:profile() return addonDb and addonDb.profile end
+    function o:profile()
+        local db = self.addonDbFn()
+        local profile = db and db.profile
+        if not profile.enabledAddons then
+            profile.enabledAddons = {}
+        end
+        return profile
+    end
 
     function o:ToStringNamespaceKeys() return self.pformat(getSortedKeys(self)) end
     function o:ToStringObjectKeys() return self.pformat(getSortedKeys(self.O)) end

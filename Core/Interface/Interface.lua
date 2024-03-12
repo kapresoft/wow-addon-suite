@@ -28,7 +28,6 @@ AddOn_DB
 
 --- @class Profile_Config : AceDB_Profile
 --- @field enable boolean This is reserved AceConfig property, don't use.
---- @field characterSpecific boolean The addons being enabled or disabled are character-specific or global
 --- @field enabledAddons table<string,boolean> Enabled Addons
 
 --- @class Profile_Global_Config : AceDB_Global

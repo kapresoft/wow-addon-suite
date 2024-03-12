@@ -3,22 +3,14 @@ Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
 local ns = select(2, ...)
-local O, GC, M, LibStub = ns.O, ns.O.GlobalConstants, ns.M, ns.LibStub
-
+local libName = ns.M.OptionsUtil
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
-local libName = M.OptionsUtil
---- @return OptionsUtil, Kapresoft_CategoryLogger
-local function CreateLib()
-    --- @class OptionsUtil : BaseLibraryObject_WithAceEvent
-    --- @field optionsMixin OptionsMixin
-    local newLib = LibStub:NewLibrary(libName); if not newLib then return nil end
-    ns:AceEvent(newLib)
-    local logger = ns:CreateDefaultLogger(libName)
-    return newLib, logger
-end; local L, p = CreateLib(); if not L then return end
-p:v(function() return "Loaded: %s", L.name or tostring(L) end)
+--- @class OptionsUtil : BaseLibraryObject_WithAceEvent
+--- @field optionsMixin OptionsMixin
+local L = ns:NewLibWithEvent(libName)
+local p = ns:CreateDefaultLogger(libName)
 
 --[[-----------------------------------------------------------------------------
 Methods
