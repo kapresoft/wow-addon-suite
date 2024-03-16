@@ -34,9 +34,8 @@ externals:
   Core/ExtLib/WowAce/Ace3:
     url: https://repos.wowace.com/wow/ace3/trunk
     tag: latest
-  Core/ExtLib/WowAce/LibQTip/LibQTip-1.0:
-    # https://www.wowace.com/projects/libqtip-1-0
-    url: https://repos.wowace.com/wow/libqtip-1-0
+  Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0:
+    url: https://repos.wowace.com/wow/libdbicon-1-0/trunk
     tag: latest
 
 ignore:
@@ -62,6 +61,10 @@ ignore:
   - Core/ExtLib/WowAce/Ace3/Ace3_Wrath.toc
   - Core/ExtLib/WowAce/Ace3/Bindings.xml
   - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/LibDBIcon-1.0/lib.xml
+  - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/LibDBIcon-1.0.toc
+  - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/LibDBIcon-1.0_TBC.toc
+  - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/LibDBIcon-1.0_Vanilla.toc
+  - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/LibDBIcon-1.0_Wrath.toc
   - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/LibStub
   - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/CallbackHandler-1.0
   - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/embeds.xml
