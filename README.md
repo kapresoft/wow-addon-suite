@@ -12,9 +12,10 @@
 
 ## Description
 
-AddonSuite is a powerful and flexible World of Warcraft addon that enhances your gameplay experience by providing full control over the addons loaded for various gaming scenarios. Leveraging the robust Ace3 framework and its AceConfig profiles, AddonSuite allows players to easily toggle (enable or disable) groups of addons with just a few clicks, ensuring that only the most relevant addons are active at any given time.
+AddonSuite is a powerful and flexible World of Warcraft addon that enhances your gameplay experience by providing full control over the addons loaded for various gaming scenarios. Leveraging the robust Ace3 framework and its AceConfig profiles, AddonSuite allows players to easily toggle (enable or disable) groups of addons with just a few clicks, ensuring that only the most relevant addons are active at any given time. It also features a minimap icon to quickly switch between profiles, open settings, and access the profile dialog, offering convenient and rapid adjustments to your addon setup without navigating through complex menus.
 
 AddonSuite transforms your World of Warcraft interface management into a seamless and dynamic process, perfectly aligning with your in-game activities. A prime example of AddonSuite's versatility is its ability to cater to specific gaming scenarios through customized profiles. Here’s how you can leverage this powerful feature:
+
 
 ### Example Use Cases:
 
