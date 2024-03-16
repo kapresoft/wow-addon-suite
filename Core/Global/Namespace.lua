@@ -62,6 +62,8 @@ local LogCategories = {
     --- @type Kapresoft_LogCategory
     MESSAGE = "MS",
     --- @type Kapresoft_LogCategory
+    TRACE = "TR",
+    --- @type Kapresoft_LogCategory
     PROFILE = "PR",
     --- @type Kapresoft_LogCategory
     DB = "DB",
@@ -128,7 +130,7 @@ local NamespaceLoggerMixin = {}
 local function NamespaceLoggerMethods(o)
     --categories = categories or {}
 
-    local CategoryLogger = KO.CategoryMixin
+    local CategoryLogger = KO.CategoryMixin:New()
     CategoryLogger:Configure(addonName, LogCategories, {
         consoleColors = GC.C.CONSOLE_COLORS,
         levelSupplierFn = function() return __logLevel() end,

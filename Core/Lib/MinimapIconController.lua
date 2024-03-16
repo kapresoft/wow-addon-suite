@@ -53,6 +53,8 @@ local function PropsAndMethods(o)
 
     --- @public
     function o:InitMinimapIcon()
+        if ns.AddonSuiteDropdownMenu then return end
+
         local mainSelf = self
         local A = self.addon
         local icon = "inv_cask_01"
