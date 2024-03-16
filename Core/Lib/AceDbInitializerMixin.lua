@@ -11,7 +11,7 @@ local IsEmptyTable = KO.Table.isEmpty
 New Instance
 -------------------------------------------------------------------------------]]
 --- @class AceDbInitializerMixin : BaseLibraryObject
-local L = LibStub:NewLibrary(M.AceDbInitializerMixin)
+local L = LibStub:NewLibrary(M.AceDbInitializerMixin); if not L then return end
 local p = ns:LC().DB:NewLogger(M.AceDbInitializerMixin)
 
 --[[-----------------------------------------------------------------------------
@@ -36,6 +36,7 @@ local function PropsAndMethods(o)
     --- Called by CreateAndInitFromMixin(..) Automatically
     --- @param addon AddonSuite
     function o:Init(addon)
+        assert(addon, "AddonSuite is required")
         self.addon = addon
         self.addon.db = AceDB:New(GC.C.DB_NAME)
         self.addon.dbInit = self
@@ -72,7 +73,11 @@ local function PropsAndMethods(o)
                 ['TomTom'] = true,
             }
         }
-        local defaults = { profile = defaultProfile }
+        local global = {
+            confirm_reloads = true,
+            minimap = { hide = false },
+        }
+        local defaults = { global = global, profile = defaultProfile }
         ns:db():RegisterDefaults(defaults)
         self.addon.profile = ns:db().profile
         local wowDB = _G[GC.C.DB_NAME]

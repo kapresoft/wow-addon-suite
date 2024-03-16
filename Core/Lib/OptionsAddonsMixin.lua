@@ -8,7 +8,7 @@ Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
 local ns = select(2, ...)
-local O, GC, M, KO, LibStub = ns.O, ns.O.GlobalConstants, ns.M, ns:KO(), ns.LibStub
+local O, GC, M, MSG, KO, LibStub = ns.O, ns.GC, ns.M, ns.GC.M, ns:KO(), ns.LibStub
 local Table =  KO.Table
 --[[-----------------------------------------------------------------------------
 New Instance
@@ -16,10 +16,11 @@ New Instance
 local libName = M.OptionsAddonsMixin
 --- @return OptionsAddonsMixin, Kapresoft_CategoryLogger
 local function CreateLib()
-    --- @class OptionsAddonsMixin : BaseLibraryObject
+    --- @class OptionsAddonsMixin : BaseLibraryObject_WithAceEvent
     --- @field optionsMixin OptionsMixin
     --- @field locale AceLocale
     local newLib = LibStub:NewLibrary(libName); if not newLib then return nil end
+    ns:AceEvent(newLib)
     local logger = ns:LC().OPTIONS:NewLogger(libName)
     return newLib, logger
 end; local S, p = CreateLib(); if not S then return end
@@ -124,6 +125,22 @@ local function PropsAndMethods(o)
 
         local options = {
             header1 = { order = order:next(), type = 'header', name = h(L['General']) },
+            confirm_reloads = {
+                name = L['Confirm Reloads'], desc = L['Confirm Reloads::Desc'],
+                order = order:next(), type="toggle", width='normal',
+                get = util:GlobalGet('confirm_reloads'),
+                set = util:GlobalSet('confirm_reloads')
+            },
+            hide_minimap_icon = {
+                name = L['Hide Minimap Icon'], desc = L['Hide Minimap Icon::Desc'],
+                order = order:next(), type="toggle", width='normal',
+                get = function() return ns:global().minimap.hide end,
+                set = function(_, v)
+                    ns:db().global.minimap.hide = (v == true)
+                    self:SendMessage(MSG.OnToggleMinimapIcon, libName)
+                end
+            },
+            spacer1a = { order = order:next(), type = "description", name = "", width='full' },
         }
 
         options.applyAll = {
@@ -175,6 +192,7 @@ local function PropsAndMethods(o)
         return {
             name = L['General::Enable All::Button'], desc = L['General::Enable All::Button::Desc'],
             type = "execute", order = order:next(), width = 'half',
+            -- todo: update label color?
             func = function() self:ForEachToggle(function(opt) opt.set({}, true) end) end
         }
     end

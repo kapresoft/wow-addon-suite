@@ -46,7 +46,11 @@ local function PropsAndMethods(o)
 
     --- @param propKey string
     --- @param defVal any
-    function o:GetValue(propKey, defVal) return ns:db().profile[propKey] or defVal end
+    function o:GetValue(propKey, defVal)
+        local val = ns:db().profile[propKey]
+        if val == nil then val = defVal end
+        return val
+    end
 
     --- @param propKey string
     --- @param val any

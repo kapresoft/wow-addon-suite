@@ -1,9 +1,4 @@
 --[[-----------------------------------------------------------------------------
-Lua Vars
--------------------------------------------------------------------------------]]
-local sformat = string.format
-
---[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
@@ -18,7 +13,7 @@ New Instance
 -------------------------------------------------------------------------------]]
 --- @class OptionsMixin : BaseLibraryObject
 --- @field util OptionsUtil
-local S = LibStub:NewLibrary(libName)
+local S = LibStub:NewLibrary(libName); if not S then return end;
 local p = ns:LC().OPTIONS:NewLogger(libName)
 
 --[[-----------------------------------------------------------------------------
@@ -31,6 +26,7 @@ local function MethodsAndProps(o)
     --- Called automatically by CreateAndInitFromMixin(..)
     --- @param addon AddonSuite
     function o:Init(addon)
+        assert(addon, "AddonSuite is required")
         self.addon = addon
         self.util = O.OptionsUtil:New(o)
         self.locale = L
@@ -46,7 +42,7 @@ local function MethodsAndProps(o)
 
         --- @type AceConfigOption
         local options = {
-            name = ns.name,
+            name = GC.C.FRIENDLY_NAME,
             handler = self,
             type = "group",
             args = {

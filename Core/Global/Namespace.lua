@@ -82,7 +82,8 @@ GlobalObjects
 --- @field OptionsMixin OptionsMixin
 --- @field OptionsAddonsMixin OptionsAddonsMixin
 --- @field DebuggingSettingsGroup DebuggingSettingsGroup
---- @field AddonsController AddonsController
+--- @field OptionsController OptionsController
+--- @field MinimapIconController MinimapIconController
 --[[-----------------------------------------------------------------------------
 Modules
 -------------------------------------------------------------------------------]]
@@ -96,8 +97,10 @@ local M = {
     DebuggingSettingsGroup = '',
     GlobalConstants = '',
     MainController = '',
+    MinimapIconController = '',
     OptionsUtil = '',
     OptionsAddonsMixin = '',
+    OptionsController = '',
     OptionsMixin = '',
 }; for moduleName in pairs(M) do M[moduleName] = moduleName end
 
@@ -200,6 +203,8 @@ local function NameSpacePropertiesAndMethods(o)
     function o:ToStringFunction(moduleName) return GC.ToStringFunction(moduleName) end
 
     --- Simple Library
+    ---@param libName Name
+    --- @vararg any|nil Optional Mixins
     function o:NewLib(libName, ...)
         assert(libName, "LibName is required")
         local newLib = {}
@@ -210,6 +215,9 @@ local function NameSpacePropertiesAndMethods(o)
         self.O[libName] = newLib
         return newLib
     end
+    --- Simple Library with AceEvent
+    --- @param libName Name
+    --- @vararg any|nil Optional Mixins
     function o:NewLibWithEvent(libName, ...)
         assert(libName, "LibName is required")
         local newLib = self.O.AceLibrary.AceEvent:Embed({})
@@ -227,7 +235,7 @@ local function NameSpacePropertiesAndMethods(o)
         self.O[libName] = obj
     end
 
-    --- @param dbfn fun() | "function() return addon.db end"
+    --- @param dbfn fun() : AddOn_DB | "function() return addon.db end"
     function o:SetAddOnFn(dbfn) self.addonDbFn = dbfn end
 
     --- @return AddOn_DB
@@ -243,6 +251,9 @@ local function NameSpacePropertiesAndMethods(o)
         return profile
     end
 
+    --- @return Profile_Global_Config
+    function o:global() return self.addonDbFn().global end
+
     function o:ToStringNamespaceKeys() return self.pformat(getSortedKeys(self)) end
     function o:ToStringObjectKeys() return self.pformat(getSortedKeys(self.O)) end
 
@@ -256,6 +267,7 @@ local function CreateNamespace(...)
     --- @type string
     local addon
     --- @class __Namespace
+    --- @field AddonSuiteDropdownMenu AddonSuiteDropdownMenu
     local ns; addon, ns = ...
 
     --- Place this here before ns.name because it overrides the name field
