@@ -26,12 +26,16 @@ AddOn_DB
 -------------------------------------------------------------------------------]]
 --- @class Profile_DB_ProfileKeys : table<string, string>
 
+--- @class Minimap
+--- @field hide boolean
+
 --- @class Profile_Config : AceDB_Profile
 --- @field enable boolean This is reserved AceConfig property, don't use.
 --- @field enabledAddons table<string,boolean> Enabled Addons
 
 --- @class Profile_Global_Config : AceDB_Global
---- @field enableSomething string An example global config field
+--- @field confirm_reloads boolean Enabling "Confirm Reloads" prompts for user confirmation before any UI reload, preventing unintended disruptions.
+--- @field minimap Minimap
 
 --- @class AddOn_DB : AceDB
 --- @field global Profile_Global_Config

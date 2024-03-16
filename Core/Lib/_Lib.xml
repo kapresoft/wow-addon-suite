@@ -5,7 +5,7 @@
     <Include file="Locales\_Locales.xml"/>
     <Include file="API\_API.xml"/>
 
-    <Script file="AddonsController.lua" />
+    <Script file="OptionsController.lua" />
     <Script file="ConfigDialogController.lua" />
     <Script file="MainController.lua" />
 
@@ -13,6 +13,7 @@
     <Script file="DebuggingSettingsGroup.lua" />
     <Script file="OptionsUtil.lua" />
     <Script file="OptionsAddonsMixin.lua" />
+    <Script file="MinimapIconController.lua" />
     <Script file="OptionsMixin.lua" />
 
 </Ui>

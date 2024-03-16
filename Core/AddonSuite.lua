@@ -32,7 +32,7 @@ local function MethodsAndProps(o)
         p:f1("Initialized called..")
         self:RegisterSlashCommands()
         O.AceDbInitializerMixin:New(self):InitDb()
-        O.OptionsMixin:New(self.addon):InitOptions()
+        O.OptionsMixin:New(self):InitOptions()
         self:SendMessage(GC.M.OnAfterInitialize, self)
     end
 
@@ -78,6 +78,7 @@ local function MethodsAndProps(o)
         local enable = enableSound == true
         p:d(function() return 'OnHide_Config called with enableSound=%s', tostring(enable) end)
         if true == enable then PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE) end
+        O.MainController:RefreshAutoLoadedAddons()
     end
     function o:OnHide_Config_WithSound() self:OnHide_Config(true) end
     function o:OnHide_Config_WithoutSound() self:OnHide_Config() end
@@ -92,10 +93,22 @@ local function MethodsAndProps(o)
         self.onHideHooked = self.onHideHooked or false
         PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
         self.configDialogWidget = AceConfigDialog.OpenFrames[ns.name]
+        --- @type _Frame
+        local f = self.configDialogWidget.frame
+        -- Set the frame strata so it doesn't overlap with Confirm Dialog
+        f:SetFrameStrata('DIALOG')
         if not self.onHideHooked then
             self:HookScript(self.configDialogWidget.frame, 'OnHide', 'OnHide_Config_WithSound')
             self.onHideHooked = true
         end
+    end
+    function o:OpenConfigDebugging()
+        AceConfigDialog:SelectGroup(ns.name, "debugging")
+        AceConfigDialog:Open(ns.name)
+    end
+    function o:OpenConfigProfiles()
+        AceConfigDialog:SelectGroup(ns.name, "profiles")
+        AceConfigDialog:Open(ns.name)
     end
     --- This hacks solves the range UI notch not positioning properly
     function o:DialogGlitchHack()
@@ -108,5 +121,4 @@ local function MethodsAndProps(o)
     end
     --- @see Bindings.xml
     function o.BINDING_ADDON_SUITE_OPTIONS_DLG() o:OpenConfig() end
-end; MethodsAndProps(A); ADDON_SUITE = A
-_G[ns.addon] = A
+end; MethodsAndProps(A); ADDON_SUITE = A; _G[ns.addon] = A

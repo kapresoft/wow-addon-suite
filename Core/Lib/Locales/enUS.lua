@@ -31,7 +31,23 @@ L['Debugging Configuration']  = true
 L['Log Level']                = true
 L['Log Level::Desc']          = 'Higher log levels generate more logs:\nLog Levels: ERROR(5), WARN(10), INFO(15), DEBUG(20), FINE(25), FINER(30), FINEST(35), TRACE(50)'
 L['Categories']               = true
+L['Current Profile']          = true
 L['Debugging::Category::Enable All::Button']           = 'All'
 L['Debugging::Category::Enable All::Button::Desc']     = 'Checks all log categories below. Note that the default category (not shown here) will always be active.'
 L['Debugging::Category::Disable All::Button']          = 'None'
 L['Debugging::Category::Disable All::Button::Desc']    = 'Unchecks all log categories below. Note that the default category (not shown here) will always be active.'
+
+L['REQUIRES_RELOAD_PROFILE_CHANGED'] = 'requires a reload due to a profile change.\n\nWould you like to reload now?\n\n'
+
+L['Confirm Reloads']            = true
+L['Confirm Reloads::Desc']      = "Enabling this option prompts for user confirmation before any UI reload, preventing unintended disruptions (Global Config)."
+L['Hide Minimap Icon']          = true
+L['Hide Minimap Icon::Desc']    = 'Toggles the visibility of the addon\'s minimap icon, hiding it from view when enabled (Global Config).'
+
+L['to view or switch profiles'] = true
+L['to open settings dialog']    = true
+L['to open profiles dialog']    = true
+L['to view available commands'] = true
+L['to open settings dialog']    = true
+L['Command Lines']              = true
+L['current']                    = true

@@ -22,6 +22,7 @@ addon, ns = ...
 local kch = ns.Kapresoft_LibUtil.CH
 
 local addonShortName = 'AddonSuite'
+local addonFriendlyName = 'Addon Suite'
 local consoleCommand = "addon-suite"
 local consoleCommandShort = "ads"
 local globalVarName = "ADDON_SUITE"
@@ -87,6 +88,7 @@ local function GlobalConstantProperties(o)
     --- @class GlobalAttributes
     local C = {
         VAR_NAME = globalVarName,
+        FRIENDLY_NAME = addonFriendlyName,
         CONSOLE_COMMAND_NAME = consoleCommand,
         CONSOLE_COMMAND_SHORT = consoleCommandShort,
         CONSOLE_COLORS = consoleColors,
@@ -117,6 +119,8 @@ local function GlobalConstantProperties(o)
         OnAfterInitialize = newMessage('OnAfterInitialize'),
         OnAddonReady = newMessage('OnAddonReady'),
         OnApplyAndRestart = newMessage('OnApplyAndRestart'),
+        OnSwitchProfile = newMessage('OnSwitchProfile'),
+        OnToggleMinimapIcon = newMessage('OnToggleMinimapIcon'),
     }
 
     o.C = C

@@ -4,26 +4,64 @@ Local Vars
 --- @type Namespace
 local ns = select(2, ...)
 local O, GC, MSG = ns.O, ns.GC, ns.GC.M
-local libName = 'AddonsController'
 local EnableAddOn, DisableAddOn = EnableAddOn or C_AddOns.EnableAddOn, DisableAddOn or C_AddOns.DisableAddOn
+local L = ns:AceLocale()
 
+local libName = ns.M.OptionsController
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
---- @class AddonsController : AceEvent
-local L = ns:NewLib(libName)
+--- @class OptionsController : AceEvent
+local S = ns:NewLibWithEvent(libName)
 local p = ns:CreateDefaultLogger(libName)
+
+local ADDON_CONTROLLER_RELOAD_CONFIRM = "ADDON_CONTROLLER_RELOAD_CONFIRM"
 
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
---- @param o AddonsController
+--- @param o OptionsController
 local function PropsAndMethods(o)
+    function o:Init()
+        self:InitUI()
+        self:RegisterMessage(GC.M.OnSwitchProfile, function(...) self:OnSwitchProfile(...) end)
+        self:RegisterMessage(MSG.OnApplyAndRestart, function() self:OnApplyAndRestartConditional() end)
+    end
 
-    function o:Init() end
+    function o:InitUI()
+        if StaticPopupDialogs[ADDON_CONTROLLER_RELOAD_CONFIRM] then return end
+        StaticPopupDialogs[ADDON_CONTROLLER_RELOAD_CONFIRM] = {
+            text =  ns.sformat(':: %s ::\n\n', ns.name) ..  '%s',
+            button1 = YES,
+            button2 = NO,
+            OnAccept = function() self:OnApplyAndRestart() end,
+            timeout = 0,
+            whileDead = true,
+            hideOnEscape = true,
+            showAlert = true,
+            preferredIndex = 3, -- to avoid tainting issues
+        }
 
-    --- @return AddonsController
-    function o:New() return ns:K():CreateAndInitFromMixin(o) end
+    end
+
+    ---@param msg string The message name
+    ---@param source string The libName that triggered the call
+    ---@param profileName string
+    function o:OnSwitchProfile(msg, source, profileName)
+        assert(profileName, "Profile Name is missing.")
+        p:vv(function() return "Received: %s from %s", msg, source end )
+        ns:db():SetProfile(profileName)
+        self:OnApplyAndRestartConditional()
+    end
+
+    function o:OnApplyAndRestartConditional()
+        print('hello')
+        if ns:global().confirm_reloads == true then
+            StaticPopup_Show(ADDON_CONTROLLER_RELOAD_CONFIRM, ns.name .. ' ' .. L['REQUIRES_RELOAD_PROFILE_CHANGED'])
+            return
+        end
+        self:OnApplyAndRestart()
+    end
 
     function o:OnApplyAndRestart()
         p:vv('OnApplyAndRestart called...')
@@ -69,5 +107,6 @@ local function PropsAndMethods(o)
         p:f3(function() return "Disabled: %s", pformat(disabled) end)
     end
 
-end; PropsAndMethods(L)
+    S:Init()
+end; PropsAndMethods(S)
 
