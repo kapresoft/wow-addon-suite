@@ -259,6 +259,11 @@ local function NameSpacePropertiesAndMethods(o)
     function o:ToStringNamespaceKeys() return self.pformat(getSortedKeys(self)) end
     function o:ToStringObjectKeys() return self.pformat(getSortedKeys(self.O)) end
 
+    --- @return LibDataBroker
+    function o:LibDataBroker() return LibStub("LibDataBroker-1.1") end
+    --- @return LibDBIcon
+    function o:LibDBIcon() return LibStub("LibDBIcon-1.0") end
+
     InitLocalLibStub(o)
 end
 

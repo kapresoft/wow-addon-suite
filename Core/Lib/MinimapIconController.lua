@@ -3,10 +3,11 @@ Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
 local ns = select(2, ...)
-local O, GC, MSG = ns.O, ns.GC, ns.GC.M
+local MSG = ns.GC.M
 
-local LibDBIcon = ns.LibStubAce("LibDBIcon-1.0")
-local LibDataBroker = ns.LibStubAce("LibDataBroker-1.1")
+local LibDBIcon = ns:LibDBIcon()
+local LibDataBroker = ns:LibDataBroker()
+
 local L = ns:AceLocale()
 local minimapName = ns.name .. "MinimapIcon"
 local libName = 'MinimapIconController'
@@ -17,7 +18,6 @@ New Instance
 local S = ns:NewLibWithEvent(libName)
 local p = ns:CreateDefaultLogger(libName)
 local pm = ns:LC().MESSAGE:NewLogger(libName)
-p:v(function() return "Loaded: %s", libName end)
 
 --[[-----------------------------------------------------------------------------
 Methods
@@ -53,12 +53,23 @@ local function PropsAndMethods(o)
 
     --- @public
     function o:InitMinimapIcon()
-        if ns.AddonSuiteDropdownMenu then return end
-
+        self:CreateAndRegisterMinimapDataObject()
+    end
+    --- @public
+    function o:CreateAndRegisterMinimapDataObject()
         local mainSelf = self
         local A = self.addon
         local icon = "inv_cask_01"
-        local dataObject = LibDataBroker:NewDataObject(ns.name .. "Minimap", {
+        local minimapObjectName = ns.name .. "Minimap"
+        --- @type LibDataBroker_DataObject
+        local dataObject = LibDataBroker:GetDataObjectByName(minimapObjectName)
+        if dataObject then
+            p:d(function() return 'LibDataBroker-DataObject already registered: %s',
+                    tostring(type(dataObject) ~= nil) end)
+            return
+        end
+
+        dataObject = LibDataBroker:NewDataObject(minimapObjectName, {
             type = "data source",
             text = ns.GC.C.FRIENDLY_NAME,
             icon = "Interface\\Icons\\" .. icon,
