@@ -16,6 +16,11 @@ AddonSuite is a powerful and flexible World of Warcraft addon that enhances your
 
 AddonSuite transforms your World of Warcraft interface management into a seamless and dynamic process, perfectly aligning with your in-game activities. A prime example of AddonSuite's versatility is its ability to cater to specific gaming scenarios through customized profiles. Here’s how you can leverage this powerful feature:
 
+[### Features
+
+- **Addon Management via AceConfig Profiles:** Utilize AceConfig for intuitive management of addon settings, allowing users to easily create, switch, and manage different configuration profiles.
+- **Character-Level Profile Favorites:** Enable users to mark certain profiles as favorites at the character level, enhancing the profile switch menu's usability by filtering favorites for quick access via the minimap icon.
+- **Minimap Icon for Quick Profile Switching and Configuration Access:** A minimap icon is available for quick access, allowing users to effortlessly switch between their favorite profiles and open the addon's configuration settings directly from the minimap.]()
 
 ### Example Use Cases:
 
