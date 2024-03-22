@@ -56,6 +56,18 @@ local function PropsAndMethods(o)
     --- @param val any
     function o:SetValue(propKey, val) ns:db().profile[propKey] = val end
 
+    --- @param propKey string
+    --- @param defVal any
+    function o:GetCharacterValue(propKey, defVal)
+        local val = ns:db().char[propKey]
+        -- print('charVal:', val)
+        if val == nil then val = defVal end
+        return val
+    end
+
+    --- @param propKey string
+    --- @param val any
+    function o:SetCharacterValue(propKey, val) ns:db().char[propKey] = val end
 
     --[[-------------------------------------------------------
     Get/Set: Function Handlers
@@ -82,6 +94,74 @@ local function PropsAndMethods(o)
             if 'string' == type(eventMessageToFire) then
                 self:SendEventMessage(eventMessageToFire, v)
             end
+        end
+    end
+
+    --- #### Example:
+    --- `set=this:ProfileGet('configname')`
+    --- @param fallback any The fallback value
+    --- @param key string The key value
+    --- @return function The Profile Get Function
+    function o:CharacterGet(key, fallback)
+        return function(_)
+            return self:GetCharacterValue(key, fallback)
+        end
+    end
+
+
+    --- #### Example:
+    --- `set=this:ProfileSet('configName')`
+    --- @param key string The key value
+    --- @return function The Profile Set Function
+    function o:CharacterSet(key, eventMessageToFire)
+        return function(_, v)
+            self:SetCharacterValue(key, v)
+            if 'string' == type(eventMessageToFire) then
+                self:SendEventMessage(eventMessageToFire, v)
+            end
+        end
+    end
+
+    --- @return fun(info:any) : any Return the Character showInQuickProfileMenu Get Function
+    function o:QuickProfileMenuGet()
+        return function(_)
+            local current = ns:db():GetCurrentProfile()
+            local quickProfile = ns:db().char.showInQuickProfileMenu
+            return quickProfile[current]
+        end
+    end
+
+    --- @return fun(info:any, v:any) The Character showInQuickProfileMenu  Set Function
+    function o:QuickProfileMenuSet()
+        return function(_, v)
+            local current = ns:db():GetCurrentProfile()
+            local quickProfile = ns:db().char.showInQuickProfileMenu
+            quickProfile[current] = v == true
+            self:SendEventMessage(ns.GC.M.OnToggleShowInQuickProfileMenu, v)
+        end
+    end
+
+    --- @param name string
+    --- @return fun(info:any) : any Return the Character showInQuickProfileMenu Get Function
+    function o:ProfileMenuCheckboxGetFn(name)
+        assert(name, 'Profile name is missing.')
+        return function(_)
+            local current = ns:db():GetCurrentProfile()
+            local quickProfile = ns:db().char.showInQuickProfileMenu
+            -- print(name .. ':', pformat(quickProfile[name]))
+            return quickProfile and quickProfile[name] == true
+        end
+    end
+
+    --- @param name string
+    --- @return fun(info:any, v:any) The Character showInQuickProfileMenu  Set Function
+    function o:ProfileMenuCheckboxSetFn(name)
+        assert(name, 'Profile name is missing.')
+        return function(_, v)
+            local quickProfile = ns:db().char.showInQuickProfileMenu
+            -- print('name:', name, 'qp:', pformat(quickProfile))
+            quickProfile[name] = v == true
+            self:SendEventMessage(ns.GC.M.OnToggleShowInQuickProfileMenu, v)
         end
     end
 

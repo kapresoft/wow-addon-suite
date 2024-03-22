@@ -16,6 +16,8 @@ New Instance
 local S = LibStub:NewLibrary(libName); if not S then return end;
 local p = ns:LC().OPTIONS:NewLogger(libName)
 
+-- todo: prompt user to reload if addons need to be enabled/disabled in general settings
+
 --[[-----------------------------------------------------------------------------
 Method and Properties
 -------------------------------------------------------------------------------]]
@@ -47,9 +49,17 @@ local function MethodsAndProps(o)
             type = "group",
             args = {
                 general = O.OptionsAddonsMixin:New(self):CreateAddOnsGroup(order),
+                minimap = O.OptionsMinimapMixin:New(self, order):CreateOptions(),
                 debugging = DebugSettings:CreateDebuggingGroup(),
             }
         }
+
+        --[[--- @type AceConfigOption
+        local subProfileArgs = {
+            name = "hello", type = "toggle", width = 'normal'
+        }
+        --options.args.debugging.args.generalsub = subProfileArgs]]
+
         return options
     end
 
@@ -58,7 +68,15 @@ local function MethodsAndProps(o)
         -- This creates the Profiles Tab/Section in Settings UI
         options.args.profiles = AceDBOptions:GetOptionsTable(ns:db())
 
-        AceConfig:RegisterOptionsTable(ns.name, options, { "addon_suite_options" })
+        --[[--- @type AceConfigOption
+        local subProfileArgs = {
+            name = "hello", type = "toggle", width = 'normal'
+        }
+        options.args.profiles.args.subProf = subProfileArgs
+
+        -- print('char:', ns:db().keys.char)]]
+
+        AceConfig:RegisterOptionsTable(ns.name, options, { GC.C.CONSOLE_COMMAND_OPTIONS })
         AceConfigDialog:AddToBlizOptions(ns.name, ns.nameShort)
         if API:GetUIScale() > 1.0 then return end
 

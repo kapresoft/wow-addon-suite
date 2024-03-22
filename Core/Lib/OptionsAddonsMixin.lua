@@ -117,7 +117,8 @@ local function PropsAndMethods(o)
         return sformat('      %s      ', name)
     end
 
-    ---@param order Kapresoft_LibUtil_SequenceMixin
+    --- @return AceConfigOption
+    --- @param order Kapresoft_LibUtil_SequenceMixin
     function o:CreateAddOnsOptions(order)
         local L = self.optionsMixin.locale
         local util = self.optionsMixin.util
@@ -131,14 +132,11 @@ local function PropsAndMethods(o)
                 get = util:GlobalGet('confirm_reloads'),
                 set = util:GlobalSet('confirm_reloads')
             },
-            hide_minimap_icon = {
-                name = L['Hide Minimap Icon'], desc = L['Hide Minimap Icon::Desc'],
-                order = order:next(), type="toggle", width='normal',
-                get = function() return ns:global().minimap.hide end,
-                set = function(_, v)
-                    ns:db().global.minimap.hide = (v == true)
-                    self:SendMessage(MSG.OnToggleMinimapIcon, libName)
-                end
+            showInQuickProfileSwitchMenu = {
+                name = L['Add to Favorite'], desc = L['Add to Favorite::Desc'],
+                order = order:next(), type="toggle", width=1.6,
+                get = util:QuickProfileMenuGet(),
+                set = util:QuickProfileMenuSet()
             },
             spacer1a = { order = order:next(), type = "description", name = "", width='full' },
         }
@@ -158,7 +156,7 @@ local function PropsAndMethods(o)
         options.spacer1 = { order = order:next(), type = "description", name = "", width=0.3 }
         options.enable_all = self:CreateEnableAll(options, order, L)
         options.disable_all = self:CreateDisableAll(options, order, L)
-        options.spacer3 = { order = order:next(), type = "description", name = L['Add-Ons::Desc'] .. '\n\n' }
+        options.spacer3 = { order = order:next(), type = "description", name = L['Add-Ons::Desc'] .. '\n\n', fontSize='medium' }
 
         local addOnCount = GetNumAddOns()
         if addOnCount <= 0 then

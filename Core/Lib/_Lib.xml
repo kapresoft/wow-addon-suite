@@ -13,6 +13,7 @@
     <Script file="DebuggingSettingsGroup.lua" />
     <Script file="OptionsUtil.lua" />
     <Script file="OptionsAddonsMixin.lua" />
+    <Script file="OptionsMinimapMixin.lua" />
     <Script file="MinimapIconController.lua" />
     <Script file="OptionsMixin.lua" />
 
