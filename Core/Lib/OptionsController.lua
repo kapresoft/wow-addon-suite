@@ -49,13 +49,13 @@ local function PropsAndMethods(o)
     ---@param profileName string
     function o:OnSwitchProfile(msg, source, profileName)
         assert(profileName, "Profile Name is missing.")
-        p:vv(function() return "Received: %s from %s", msg, source end )
+        p:f3(function() return "Received: %s from %s", msg, source end )
         ns:db():SetProfile(profileName)
+        ADDON_SUITE:CloseConfig()
         self:OnApplyAndRestartConditional()
     end
 
     function o:OnApplyAndRestartConditional()
-        print('hello')
         if ns:global().confirm_reloads == true then
             StaticPopup_Show(ADDON_CONTROLLER_RELOAD_CONFIRM, ns.name .. ' ' .. L['REQUIRES_RELOAD_PROFILE_CHANGED'])
             return
@@ -64,9 +64,9 @@ local function PropsAndMethods(o)
     end
 
     function o:OnApplyAndRestart()
-        p:vv('OnApplyAndRestart called...')
+        p:f3('OnApplyAndRestart called...')
         self:SyncAddOnEnabledState()
-        p:vv(function() return "L: %s (%s) %s?",
+        p:f3(function() return "L: %s (%s) %s?",
             ns:GetLogLevel(), type(ns:GetLogLevel()), tostring(ns:GetLogLevel() >= 50)
         end)
         if ns:GetLogLevel() >= 50 then

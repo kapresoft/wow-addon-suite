@@ -86,10 +86,13 @@ local function MethodsAndProps(o)
         if not AceConfigDialog.OpenFrames[ns.name] then return end
         AceConfigDialog:Close(ns.name)
     end
-    function o:OpenConfig()
+
+    ---@param group string|nil | "'debugging'" | "'profiles'" | "'minimap'"
+    function o:OpenConfig(group)
         if AceConfigDialog.OpenFrames[ns.name] then return end
         AceConfigDialog:Open(ns.name)
-        self:DialogGlitchHack();
+        self:DialogGlitchHack(group);
+
         self.onHideHooked = self.onHideHooked or false
         PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
         self.configDialogWidget = AceConfigDialog.OpenFrames[ns.name]
@@ -97,28 +100,32 @@ local function MethodsAndProps(o)
         local f = self.configDialogWidget.frame
         -- Set the frame strata so it doesn't overlap with Confirm Dialog
         f:SetFrameStrata('DIALOG')
+        f:SetFrameLevel(1)
         if not self.onHideHooked then
             self:HookScript(self.configDialogWidget.frame, 'OnHide', 'OnHide_Config_WithSound')
             self.onHideHooked = true
         end
     end
     function o:OpenConfigDebugging()
-        AceConfigDialog:SelectGroup(ns.name, "debugging")
-        AceConfigDialog:Open(ns.name)
+        self:OpenConfig('debugging')
     end
     function o:OpenConfigProfiles()
-        AceConfigDialog:SelectGroup(ns.name, "profiles")
-        AceConfigDialog:Open(ns.name)
+        self:OpenConfig('profiles')
+    end
+    function o:OpenConfigMinimapProfileMenu()
+        self:OpenConfig('minimap')
     end
     --- This hacks solves the range UI notch not positioning properly
-    function o:DialogGlitchHack()
+    ---@param group string|nil | "'debugging'" | "'profiles'" | "'minimap'"
+    function o:DialogGlitchHack(group)
         AceConfigDialog:SelectGroup(ns.name, "debugging")
         AceConfigDialog:Open(ns.name)
         C_Timer.After(0.01, function()
             AceConfigDialog:ConfigTableChanged('anyEvent', ns.name)
-            AceConfigDialog:SelectGroup(ns.name, "general")
+            AceConfigDialog:SelectGroup(ns.name, group or "general")
         end)
     end
     --- @see Bindings.xml
     function o.BINDING_ADDON_SUITE_OPTIONS_DLG() o:OpenConfig() end
 end; MethodsAndProps(A); ADDON_SUITE = A; _G[ns.addon] = A
+

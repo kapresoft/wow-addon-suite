@@ -2,6 +2,8 @@
 Callback Functions
 -------------------------------------------------------------------------------]]
 --- @alias AddOnCallbackFn fun(addOn:AddOnInfo) | "function(addOn) print('addOn:', pformat(addOn)) end"
+--- @alias ProfilePredicateFn fun(name:Name, profile:Profile_Config) : boolean
+--- @alias ProfileCallbackFn fun(name:Name, profile:Profile_Config) : void
 
 --[[-----------------------------------------------------------------------------
 BaseLibraryObject
@@ -31,7 +33,11 @@ AddOn_DB
 
 --- @class Profile_Config : AceDB_Profile
 --- @field enable boolean This is reserved AceConfig property, don't use.
+--- @field showInQuickProfileMenu boolean Enables showing of this profile in the Quick-Switch menu. Defaults to true.
 --- @field enabledAddons table<string,boolean> Enabled Addons
+
+--- @class Character_Config
+--- @field showInQuickProfileMenu table<string, boolean> A list of enabled addons, key=addonName val=boolean
 
 --- @class Profile_Global_Config : AceDB_Global
 --- @field confirm_reloads boolean Enabling "Confirm Reloads" prompts for user confirmation before any UI reload, preventing unintended disruptions.
@@ -40,6 +46,7 @@ AddOn_DB
 --- @class AddOn_DB : AceDB
 --- @field global Profile_Global_Config
 --- @field profile Profile_Config
+--- @field char Character_Config
 --- @field profileKeys Profile_DB_ProfileKeys
 --- @field profiles table<string, Profile_Config>
 

@@ -18,11 +18,16 @@ New Instance
 local S = ns:NewLibWithEvent(libName)
 local p = ns:CreateDefaultLogger(libName)
 local pm = ns:LC().MESSAGE:NewLogger(libName)
+local icon     = "Interface\\Icons\\inv_cask_01"
+local iconText = ns.sformat('|T%s:18:18:0:0|t', icon)
+
+-- todo: sync "current" in menu by check which addons are enabled
+-- todo: prompt user to reload if addons need to be enabled/disabled in general settings
 
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
----@param o MinimapIconController
+--- @param o MinimapIconController
 local function PropsAndMethods(o)
 
     --- @private
@@ -40,10 +45,11 @@ local function PropsAndMethods(o)
     --- @return MinimapIconController
     function o:New(addon) return ns:K():CreateAndInitFromMixin(o, addon) end
 
-    ---@param msg string The message name
-    ---@param source string The source library name
+    --- Toggles (Show/Hide state)
+    --- @param msg string The message name
+    --- @param source string The source library name
     function o:OnToggleMinimapIcon(msg, source)
-        pm:vv(function() return "Received[%s] from %s", tostring(msg), tostring(source) end)
+        pm:f1(function() return "Received[%s] from %s", tostring(msg), tostring(source) end)
         local hide = ns:global().minimap.hide == true
         if hide then
             LibDBIcon:Hide(minimapName); return
@@ -59,8 +65,23 @@ local function PropsAndMethods(o)
     function o:CreateAndRegisterMinimapDataObject()
         local mainSelf = self
         local A = self.addon
-        local icon = "inv_cask_01"
+
         local minimapObjectName = ns.name .. "Minimap"
+        local currentColor = L['Current Profile Color']
+
+        --- This local function is dynamic and needs to be here
+        local function GetConfirmReloadText()
+            local confirmationText = ns.ch:T('Currently configured to load %s confirmation')
+            local without      = L['without']
+            local with         = L['with']
+
+            local text = ns.sformat(confirmationText, ns.ch:S(with))
+            if ns:db().global.confirm_reloads ~= true then
+                text = ns.sformat(confirmationText, ns.ch:S(without))
+            end
+            return text
+        end
+
         --- @type LibDataBroker_DataObject
         local dataObject = LibDataBroker:GetDataObjectByName(minimapObjectName)
         if dataObject then
@@ -72,7 +93,7 @@ local function PropsAndMethods(o)
         dataObject = LibDataBroker:NewDataObject(minimapObjectName, {
             type = "data source",
             text = ns.GC.C.FRIENDLY_NAME,
-            icon = "Interface\\Icons\\" .. icon,
+            icon = icon,
             OnClick = function(self, button)
                 if button == "LeftButton" then
                     if mainSelf.tooltip then mainSelf.tooltip:Hide() end
@@ -89,31 +110,32 @@ local function PropsAndMethods(o)
                         A:OpenConfigProfiles()
                         return
                     end
-                    A:OpenConfig()
+                    --A:OpenConfig()
+                    A:OpenConfigMinimapProfileMenu()
                 end
             end,
-            ---@param tooltip _GameTooltip
+            --- @param tooltip _GameTooltip
             OnTooltipShow = function(tooltip)
                 if not tooltip or not tooltip.AddLine then return end
                 mainSelf.tooltip = tooltip
-                local line1 = ns.ch:S("Left-Click") .. ' ' .. ns.ch:T(L['to view or switch profiles'])
-                local line2 = ns.ch:S("Right-Click") .. ' ' .. ns.ch:T(L['to open settings dialog'])
-                local line3 = ns.ch:S("Shift-Right-Click") .. ' ' .. ns.ch:T(L['to open profiles dialog'])
-                local commandLines = ns.ch:P(L['Command Lines'] .. ":")
-                local line4 = ns.ch:S("/ads or /addon-suite") .. ' ' .. ns.ch:T(L['to view available commands'])
-                local line5 = ns.ch:S("/ads config") .. ' ' .. ns.ch:T(L['to open settings dialog'])
 
-                local header1 = ns.sformat('%s\n\n%s: %s\n\n', ns.ch:P(ns.GC.C.FRIENDLY_NAME),
-                        ns.ch:T(L['Current Profile']), ns.ch:S(ns:db():GetCurrentProfile()))
-                tooltip:AddLine(header1)
-                tooltip:AddLine(line1, 0.8, 0.8, 0.8)
-                tooltip:AddLine(line2, 0.8, 0.8, 0.8)
-                tooltip:AddLine(line3, 0.8, 0.8, 0.8)
+                local currentProfileText = ns.ch:T(L['Current Profile'])
+                local header1 = ns.sformat('%s %s', iconText, ns.ch:P(ns.GC.C.FRIENDLY_NAME))
+                local header3 = ns.sformat('%s: %s', currentProfileText, ns.ch:FormatColor(currentColor, ns:db():GetCurrentProfile()))
+                local confirmationLine = GetConfirmReloadText()
+                tooltip:AddDoubleLine(header1, header3)
+                tooltip:AddLine(ns.locale.lineSeparator1)
+                tooltip:AddLine(confirmationLine)
                 tooltip:AddLine(' ')
-                tooltip:AddLine(commandLines, 1, 1, 1)
-                tooltip:AddLine(line4, 0.8, 0.8, 0.8)
-                tooltip:AddLine(line5, 0.8, 0.8, 0.8)
-                -- Add more lines as needed
+
+                local commandLines = ns.ch:P(L['Command Lines'] .. ":")
+                tooltip:AddDoubleLine(ns.ch:S("Left-Click"), ns.ch:T(L['View or switch profiles']))
+                tooltip:AddDoubleLine(ns.ch:S("Right-Click"), ns.ch:T(L['Open minimap settings dialog']))
+                tooltip:AddDoubleLine(ns.ch:S("Shift-Right-Click"), ns.ch:T(L['Open profiles dialog']))
+                tooltip:AddLine(' ')
+                tooltip:AddLine(commandLines)
+                tooltip:AddDoubleLine(ns.ch:S("/ads or /addon-suite"), ns.ch:T(L['View available commands']))
+                tooltip:AddDoubleLine(ns.ch:S("/ads config"), ns.ch:T(L['Open settings dialog']))
             end,
         })
 
@@ -123,37 +145,79 @@ local function PropsAndMethods(o)
     --- TODO: On profile change listener
     --- @return table<number, MinimapIconProfilesMenuItem>
     function o:BuildProfilesMenu()
+
+        local currentColor = L['Current Profile Color']
+        local currentSymbol = L['Current::Symbol::Minimap']
+
         --- @class MinimapIconProfilesMenuItem
         --- @field text Name
         --- @field isTitle boolean
         --- @field notCheckable boolean
         --- @field checked boolean
         --- @field func fun() | "function() end" | "A function action handler"
+        --- @field _sortKey string The sort key (Custom Field)
+        --- @type table<number, MinimapIconProfilesMenuItem>
 
-        --- @class table<number, MinimapIconProfilesMenuItem>
+        local sepColor     = ns.locale.lineSeparator1
+        local selectProfileText = L['Select a profile below to activate']
+        local noConfirmation = L['No Confirmation']
+        local confirm = ''
+        if ns:db().global.confirm_reloads ~= true then
+            confirm = ns.sformat(' (%s)', noConfirmation)
+            line2 = L['Reloads UI without confirmation']
+        end
+        local line2 = selectProfileText .. confirm .. '.'
+        local sep = { text = sepColor, notClickable = true, notCheckable = true }
+
         local menu = {
-            { text = ns.ch:T('Select Profile:'), isTitle = true, notCheckable = true }
+            { text = ns.ch:T(L['Switch Profile']), isTitle = true, notCheckable = true },
+            { text = ns.ch:FormatColor('fbeb2d', line2), isTitle = true, notCheckable = true },
+            sep,
         }
-
+        --- @type table<number, MinimapIconProfilesMenuItem>
+        local menuItems = { }
         local function FnHandler(profile)
             return function() self:SendMessage(ns.GC.M.OnSwitchProfile, libName, profile) end
         end
 
-        local db = ns:db()
-        local current = db:GetCurrentProfile()
+        local current = ns:db():GetCurrentProfile()
+        local char = ns:db().char
 
-        for name, p in pairs(db.profiles) do
+        self:ForEachProfile(function(name, profile)
+            if (name == current) then return true end
+            local data = char.showInQuickProfileMenu
+            local show = data[name] and data[name] == true
+            p:d(function() return "profile[%s]: show-in-menu: %s", name, tostring(show) end)
+            return show
+        end, function(name, profile)
             --- @type MinimapIconProfilesMenuItem
-            local menuItem = { text = name, func = FnHandler(name) }
+            local menuItem = { _sortKey=name, text = name, func = FnHandler(name), notCheckable = true }
             if name == current then
-                menuItem.text = ns.ch:S(menuItem.text .. ns.sformat(" (%s)", L['current']))
+                menuItem.text = ns.ch:FormatColor(currentColor, ns.sformat("%s %s", menuItem.text, currentSymbol))
                 menuItem.checked = true
                 menuItem.func = nil
             end
-            table.insert(menu, menuItem)
+            table.insert(menuItems, menuItem)
+        end)
+        if #menuItems > 0 then
+            table.sort(menuItems, function(a, b)
+                return a._sortKey < b._sortKey
+            end)
+            for i=1, #menuItems do table.insert(menu, menuItems[i]) end
         end
+        local img = ns.locale.xSymbol
+        table.insert(menu, sep)
+        table.insert(menu, { text = "Cancel " .. img, notCheckable = true })
 
         return menu
+    end
+
+    --- @param acceptFn ProfilePredicateFn | "function(profile) return true end"
+    --- @param callbackFn ProfileCallbackFn | "function(profile) print('profile') end"
+    function o:ForEachProfile(acceptFn, callbackFn)
+        for name, profile in pairs(ns:db().profiles) do
+            if acceptFn(name, profile) == true then callbackFn(name, profile) end
+        end
     end
 
 end; PropsAndMethods(S)

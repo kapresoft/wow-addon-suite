@@ -4,10 +4,26 @@
     The contents of this file will be generated automatically.
     
 ]]--
-local addonName = ...
+local addonName, ns = ...
 local L = LibStub("AceLocale-3.0"):NewLocale(addonName, "enUS", true);
 
+ns.locale.greenIndicator   = '|TInterface\\Common\\Indicator-Green:16:16:0:-1|t'
+ns.locale.checkMark        = '|TInterface\\Buttons\\UI-CheckBox-Check:21:21:0:-1|t'
+ns.locale.xSymbol          = '|TInterface\\Glues\\Login\\Glues-CheckBox-Check:14:14:0:0|t'
+ns.locale.lineSeparator1   = '|TInterface\\RaidFrame\\Raid-HSeparator:5:320:0:0|t'
+--- This is the hex color of the current profile
+ns.locale.profileNameColor = '12E600'
+
+--[[-----------------------------------------------------------------------------
+Locale Entries
+-------------------------------------------------------------------------------]]
+
+
 L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG"]                  = 'Options Dialog'
+
+L['Current Profile Color']      = ns.locale.profileNameColor
+L['Current::Symbol::Options']   = ns.locale.greenIndicator
+L['Current::Symbol::Minimap']   = ns.locale.checkMark
 
 L['General']                  = true
 L['General::Desc']            = "General Settings"
@@ -23,7 +39,6 @@ L['Apply and ReloadUI']       = true
 L['Apply and ReloadUI::Desc'] = 'To activate or deactivate an Add-On, check or uncheck its corresponding box. After making your selections, click on this button to implement the changes to your configuration.'
 L['Select Profile']           = true
 L['Select Profile::Desc']     = 'Select a profile to activate.  You will be prompted to reload the UI.  Note that these profiles are managed on the Profiles tab.'
-
 
 L['Debugging']                = true
 L['Debugging::Desc']          = 'Debug Settings for troubleshooting'
@@ -44,10 +59,29 @@ L['Confirm Reloads::Desc']      = "Enabling this option prompts for user confirm
 L['Hide Minimap Icon']          = true
 L['Hide Minimap Icon::Desc']    = 'Toggles the visibility of the addon\'s minimap icon, hiding it from view when enabled (Global Config).'
 
-L['to view or switch profiles'] = true
-L['to open settings dialog']    = true
-L['to open profiles dialog']    = true
-L['to view available commands'] = true
-L['to open settings dialog']    = true
-L['Command Lines']              = true
-L['current']                    = true
+L['View or switch profiles']      = true
+L['Open minimap settings dialog'] = true
+L['Open profiles dialog']         = true
+L['View available commands']      = true
+L['Open settings dialog']         = true
+L['Command Lines']                = true
+
+L['Add to Favorite']       = true
+L['Add to Favorite::Desc'] = "Enable this option to display the current profile in the minimap profile switch menu accessible with a LEFT-click, allowing for easy access. Disable to hide the profile from the menu (Character-Specific)."
+L['Minimap']                         = true
+L['Minimap::Desc']                   = "Minimap Options"
+L['General Minimap Settings']        = true
+
+L['Favorite Profiles']               = 'Favorite Profiles'
+L['Favorite Profiles::Desc']         = 'Select favorite profiles for the minimap menu, accessible with a LEFT-click. This menu lets you quickly switch between profiles to easily manage your addon sets.'
+
+L['Switch Profile']                  = true
+
+L['Reloads UI with confirmation']    = true
+L['Reloads UI without confirmation'] = true
+
+L['Select a profile below to activate'] = true
+L['without']                         = true
+L['with']                            = true
+L['confirmation']                    = true
+L['No Confirmation']                 = true

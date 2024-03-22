@@ -25,6 +25,8 @@ local addonShortName = 'AddonSuite'
 local addonFriendlyName = 'Addon Suite'
 local consoleCommand = "addon-suite"
 local consoleCommandShort = "ads"
+local consoleCommandOptions = consoleCommand .. '-options'
+
 local globalVarName = "ADDON_SUITE"
 local useShortName = false
 
@@ -91,6 +93,7 @@ local function GlobalConstantProperties(o)
         FRIENDLY_NAME = addonFriendlyName,
         CONSOLE_COMMAND_NAME = consoleCommand,
         CONSOLE_COMMAND_SHORT = consoleCommandShort,
+        CONSOLE_COMMAND_OPTIONS = consoleCommandOptions,
         CONSOLE_COLORS = consoleColors,
         DB_NAME = dbName,
         CONSOLE_HEADER_FORMAT = '|cfdeab676### %s ###|r',
@@ -121,6 +124,9 @@ local function GlobalConstantProperties(o)
         OnApplyAndRestart = newMessage('OnApplyAndRestart'),
         OnSwitchProfile = newMessage('OnSwitchProfile'),
         OnToggleMinimapIcon = newMessage('OnToggleMinimapIcon'),
+        OnProfileDeleted = newMessage('OnProfileDeleted'),
+        OnProfileChanged = newMessage('OnProfileChanged'),
+        OnToggleShowInQuickProfileMenu = newMessage('OnToggleShowInQuickProfileMenu'),
     }
 
     o.C = C

@@ -79,13 +79,14 @@ GlobalObjects
 --- @field AceDbInitializerMixin AceDbInitializerMixin
 --- @field API API
 --- @field GlobalConstants GlobalConstants
---- @field MainController MainController
---- @field OptionsUtil OptionsUtil
---- @field OptionsMixin OptionsMixin
---- @field OptionsAddonsMixin OptionsAddonsMixin
 --- @field DebuggingSettingsGroup DebuggingSettingsGroup
---- @field OptionsController OptionsController
+--- @field MainController MainController
 --- @field MinimapIconController MinimapIconController
+--- @field OptionsAddonsMixin OptionsAddonsMixin
+--- @field OptionsController OptionsController
+--- @field OptionsMixin OptionsMixin
+--- @field OptionsMinimapMixin OptionsMinimapMixin
+--- @field OptionsUtil OptionsUtil
 --[[-----------------------------------------------------------------------------
 Modules
 -------------------------------------------------------------------------------]]
@@ -96,14 +97,15 @@ local M = {
     AceLibrary = '',
     AceDbInitializerMixin = '',
     API = '',
-    DebuggingSettingsGroup = '',
     GlobalConstants = '',
+    DebuggingSettingsGroup = '',
     MainController = '',
     MinimapIconController = '',
-    OptionsUtil = '',
     OptionsAddonsMixin = '',
     OptionsController = '',
     OptionsMixin = '',
+    OptionsMinimapMixin = '',
+    OptionsUtil = '',
 }; for moduleName in pairs(M) do M[moduleName] = moduleName end
 
 local InitialModuleInstances = {
@@ -196,6 +198,7 @@ local function NameSpacePropertiesAndMethods(o)
     o.sformat = o.O.sformat
     o.M = M
     o.ch = o:NewConsoleHelper(GC.C.CONSOLE_COLORS)
+    o.locale = o.locale or {}
 
     --- @param moduleName string The module name, i.e. MainController
     --- @param optionalMajorVersion number|string
@@ -274,6 +277,7 @@ local function CreateNamespace(...)
     --- @type string
     local addon
     --- @class __Namespace
+    --- @field DefaultAddOnDatabase AddOn_DB
     --- @field AddonSuiteDropdownMenu AddonSuiteDropdownMenu
     local ns; addon, ns = ...
 
