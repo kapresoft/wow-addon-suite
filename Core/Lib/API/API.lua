@@ -11,6 +11,7 @@ Blizzard Vars
 -------------------------------------------------------------------------------]]
 local GetNumAddOns = GetNumAddOns or C_AddOns.GetNumAddOns
 local GetAddOnInfo = GetAddOnInfo or C_AddOns.GetAddOnInfo
+--- We don't want to use the old global GetAddOnEnableState() because it doesn't work
 local C_AddOns_GetAddOnEnableState = C_AddOns.GetAddOnEnableState
 
 --[[-----------------------------------------------------------------------------
