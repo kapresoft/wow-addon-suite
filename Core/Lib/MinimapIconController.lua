@@ -31,19 +31,14 @@ Methods
 local function PropsAndMethods(o)
 
     --- @private
-    --- @param addon AddonSuite | MainController
-    function o:Init(addon)
-        local _addon = (addon and addon.OpenConfig and addon) or addon.addon
-        assert(_addon, "AddonSuite is required")
-        assert(_addon.OpenConfig, "AddonSuite is required in " .. libName .. ':Init(..)')
-        self.addon = _addon
+    function o:Init()
+        self.addon = ns:a()
         self:RegisterMessage(MSG.OnToggleMinimapIcon, function(...) self:OnToggleMinimapIcon(...)  end)
     end
 
     --- @public
-    --- @param addon AddonSuite | MainController
     --- @return MinimapIconController
-    function o:New(addon) return ns:K():CreateAndInitFromMixin(o, addon) end
+    function o:New() return ns:K():CreateAndInitFromMixin(o) end
 
     --- Toggles (Show/Hide state)
     --- @param msg string The message name
@@ -90,6 +85,10 @@ local function PropsAndMethods(o)
             return
         end
 
+        --- The global UIDROPDOWNMENU_OPEN_MENU is non-nil whenever a drop-down is showing
+        --- @return boolean
+        local function IsDropDownShowing() return UIDROPDOWNMENU_OPEN_MENU ~= nil end
+
         dataObject = LibDataBroker:NewDataObject(minimapObjectName, {
             type = "data source",
             text = ns.GC.C.FRIENDLY_NAME,
@@ -106,16 +105,13 @@ local function PropsAndMethods(o)
                     end
                     EasyMenu(menu, ddm, 'cursor', 0 , 0, 'MENU')
                 else
-                    if IsShiftKeyDown() then
-                        A:OpenConfigProfiles()
-                        return
-                    end
-                    --A:OpenConfig()
-                    A:OpenConfigMinimapProfileMenu()
+                    if IsShiftKeyDown() then return A:OpenConfigMinimapProfileMenu() end
+                    A:OpenConfig()
                 end
             end,
             --- @param tooltip _GameTooltip
             OnTooltipShow = function(tooltip)
+                if IsDropDownShowing() then return end
                 if not tooltip or not tooltip.AddLine then return end
                 mainSelf.tooltip = tooltip
 
@@ -130,8 +126,8 @@ local function PropsAndMethods(o)
 
                 local commandLines = ns.ch:P(L['Command Lines'] .. ":")
                 tooltip:AddDoubleLine(ns.ch:S("Left-Click"), ns.ch:T(L['View or switch profiles']))
-                tooltip:AddDoubleLine(ns.ch:S("Right-Click"), ns.ch:T(L['Open minimap settings dialog']))
-                tooltip:AddDoubleLine(ns.ch:S("Shift-Right-Click"), ns.ch:T(L['Open profiles dialog']))
+                tooltip:AddDoubleLine(ns.ch:S("Right-Click"), ns.ch:T(L['Open settings dialog']))
+                tooltip:AddDoubleLine(ns.ch:S("Shift-Right-Click"), ns.ch:T(L['Open minimap settings dialog']))
                 tooltip:AddLine(' ')
                 tooltip:AddLine(commandLines)
                 tooltip:AddDoubleLine(ns.ch:S("/ads or /addon-suite"), ns.ch:T(L['View available commands']))
@@ -161,12 +157,12 @@ local function PropsAndMethods(o)
         local sepColor     = ns.locale.lineSeparator1
         local selectProfileText = L['Select a profile below to activate']
         local noConfirmation = L['No Confirmation']
-        local confirm = ''
+        local confirm, line2 = '', ''
         if ns:db().global.confirm_reloads ~= true then
             confirm = ns.sformat(' (%s)', noConfirmation)
             line2 = L['Reloads UI without confirmation']
         end
-        local line2 = selectProfileText .. confirm .. '.'
+        line2 = selectProfileText .. confirm .. '.'
         local sep = { text = sepColor, notClickable = true, notCheckable = true }
 
         local menu = {
@@ -186,13 +182,17 @@ local function PropsAndMethods(o)
         self:ForEachProfile(function(name, profile)
             if (name == current) then return true end
             local data = char.showInQuickProfileMenu
-            local show = data[name] and data[name] == true
-            p:d(function() return "profile[%s]: show-in-menu: %s", name, tostring(show) end)
+            local show = data[name] == true
+            if show == true then
+                p:d(function() return "profile[%s]: show-in-menu: %s", name, tostring(show) end)
+            end
             return show
         end, function(name, profile)
             --- @type MinimapIconProfilesMenuItem
             local menuItem = { _sortKey=name, text = name, func = FnHandler(name), notCheckable = true }
             if name == current then
+                -- todo: sync with enabled addons
+                -- if out-of-sync, then red color and add " click to Apply Settings and Reload UI"
                 menuItem.text = ns.ch:FormatColor(currentColor, ns.sformat("%s %s", menuItem.text, currentSymbol))
                 menuItem.checked = true
                 menuItem.func = nil

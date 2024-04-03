@@ -5,9 +5,18 @@
     <Include file="Locales\_Locales.xml"/>
     <Include file="API\_API.xml"/>
 
+    <Frame name="AddonSuiteFrame" parentKey="AddonSuite" parent="UIParent" />
+
+    <Script file="EventToMessageRelay.lua" />
+    <Frame parentKey="EventToMessageRelay" parent="AddonSuiteFrame">
+        <Scripts>
+            <OnLoad>ADDON_SUITE_NS.EventToMessageRelay_OnLoad(self)</OnLoad>
+        </Scripts>
+    </Frame>
+
+    <Script file="MainController.lua" />
     <Script file="OptionsController.lua" />
     <Script file="ConfigDialogController.lua" />
-    <Script file="MainController.lua" />
 
     <Script file="AceDbInitializerMixin.lua" />
     <Script file="DebuggingSettingsGroup.lua" />
@@ -15,6 +24,7 @@
     <Script file="OptionsAddonsMixin.lua" />
     <Script file="OptionsMinimapMixin.lua" />
     <Script file="MinimapIconController.lua" />
+    <Script file="AddOnStateController.lua" />
     <Script file="OptionsMixin.lua" />
 
 </Ui>

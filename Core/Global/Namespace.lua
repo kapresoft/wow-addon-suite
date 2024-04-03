@@ -62,6 +62,8 @@ local LogCategories = {
     --- @type Kapresoft_LogCategory
     MESSAGE = "MS",
     --- @type Kapresoft_LogCategory
+    MESSAGE_TRACE = "MT",
+    --- @type Kapresoft_LogCategory
     TRACE = "TR",
     --- @type Kapresoft_LogCategory
     PROFILE = "PR",
@@ -75,6 +77,7 @@ GlobalObjects
 -------------------------------------------------------------------------------]]
 --- @class GlobalObjects
 --- @field AceLibrary Kapresoft_LibUtil_AceLibraryObjects
+--- @field AddOnStateController AddOnStateController
 --- @field pformat fun(fmt:string, ...)|fun(val:string)
 --- @field AceDbInitializerMixin AceDbInitializerMixin
 --- @field API API
@@ -87,6 +90,7 @@ GlobalObjects
 --- @field OptionsMixin OptionsMixin
 --- @field OptionsMinimapMixin OptionsMinimapMixin
 --- @field OptionsUtil OptionsUtil
+
 --[[-----------------------------------------------------------------------------
 Modules
 -------------------------------------------------------------------------------]]
@@ -96,10 +100,10 @@ local M = {
     sformat = '',
     AceLibrary = '',
     AceDbInitializerMixin = '',
+    AddOnStateController = '',
     API = '',
     GlobalConstants = '',
     DebuggingSettingsGroup = '',
-    MainController = '',
     MinimapIconController = '',
     OptionsAddonsMixin = '',
     OptionsController = '',
@@ -199,6 +203,9 @@ local function NameSpacePropertiesAndMethods(o)
     o.M = M
     o.ch = o:NewConsoleHelper(GC.C.CONSOLE_COLORS)
     o.locale = o.locale or {}
+
+    --- @return AddonSuite
+    function o:a() return _G[self.name] end
 
     --- @param moduleName string The module name, i.e. MainController
     --- @param optionalMajorVersion number|string
