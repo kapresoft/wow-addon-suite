@@ -116,22 +116,28 @@ local function GlobalConstantProperties(o)
 
         PLAYER_ENTERING_WORLD = 'PLAYER_ENTERING_WORLD',
     }
-    local function newMessage(name) return sformat('%s::' .. name, addonShortName)  end
+    local function newMsg(msg) return sformat("%s::%s", addon, msg) end
+    --- @param event EventName Blizzard Event Name
+    local function toMsg(event) return newMsg(event) end
+
     --- @class MessageNames
     local M = {
-        OnAfterInitialize = newMessage('OnAfterInitialize'),
-        OnAddonReady = newMessage('OnAddonReady'),
-        OnApplyAndRestart = newMessage('OnApplyAndRestart'),
-        OnSwitchProfile = newMessage('OnSwitchProfile'),
-        OnToggleMinimapIcon = newMessage('OnToggleMinimapIcon'),
-        OnProfileDeleted = newMessage('OnProfileDeleted'),
-        OnProfileChanged = newMessage('OnProfileChanged'),
-        OnToggleShowInQuickProfileMenu = newMessage('OnToggleShowInQuickProfileMenu'),
+        OnAfterInitialize = newMsg('OnAfterInitialize'),
+        OnAddOnReady = newMsg('OnAddonReady'),
+        OnApplyAndRestart = newMsg('OnApplyAndRestart'),
+        OnAddOnStateChanged = newMsg('OnAddOnStateChanged'),
+        OnAddOnStateChangedWithConfirmation = newMsg('OnAddOnStateChangedWithConfirmation'),
+        OnSwitchProfile = newMsg('OnSwitchProfile'),
+        OnToggleMinimapIcon = newMsg('OnToggleMinimapIcon'),
+        OnProfileDeleted = newMsg('OnProfileDeleted'),
+        OnProfileChanged = newMsg('OnProfileChanged'),
+        OnToggleShowInQuickProfileMenu = newMsg('OnToggleShowInQuickProfileMenu'),
     }
 
     o.C = C
     o.E = E
     o.M = M
+    o.toMsg = toMsg
 
 end
 

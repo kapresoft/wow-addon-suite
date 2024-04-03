@@ -15,7 +15,7 @@ local ACE, Table, String = O.AceLibrary, KO.Table, KO.String
 local AceConfigDialog = ACE.AceConfigDialog
 local IsAnyOf, IsEmptyTable = String.IsAnyOf, Table.isEmpty
 
----@class AddonSuite
+--- @class AddonSuite
 local A = LibStub("AceAddon-3.0"):NewAddon(ns.name, "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0")
 local mt = getmetatable(A) or {}
 mt.__tostring = ns:ToStringFunction()
@@ -24,9 +24,8 @@ local p = ns:CreateDefaultLogger(ns.name)
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
---- @param o AddonSuite
+--- @param o AddonSuite | AceEvent | AceHook | AceConsole
 local function MethodsAndProps(o)
-    O.MainController:Init(o)
 
     function o:OnInitialize()
         p:f1("Initialized called..")
@@ -78,7 +77,7 @@ local function MethodsAndProps(o)
         local enable = enableSound == true
         p:d(function() return 'OnHide_Config called with enableSound=%s', tostring(enable) end)
         if true == enable then PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE) end
-        O.MainController:RefreshAutoLoadedAddons()
+        self:SendMessage(GC.M.OnAddOnStateChangedWithConfirmation, ns.name)
     end
     function o:OnHide_Config_WithSound() self:OnHide_Config(true) end
     function o:OnHide_Config_WithoutSound() self:OnHide_Config() end

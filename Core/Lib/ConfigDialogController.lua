@@ -19,8 +19,8 @@ Methods
 ---@param o ConfigDialogController
 local function PropsAndMethods(o)
 
-    function o:OnAddonReady()
-        self:CreateDialogEventFrame()
+    function o.OnAddOnReady()
+        o:CreateDialogEventFrame()
     end
 
     function o:CreateDialogEventFrame()
@@ -36,7 +36,7 @@ local function PropsAndMethods(o)
         RegisterStateDriver(self.dialogEventFrame, "visibility", "[combat]hide;show")
     end
 
-    L:RegisterMessage(MS.OnAddonReady, function() o:OnAddonReady()  end)
+    L:RegisterMessage(MS.OnAddOnReady, o.OnAddOnReady)
 end; PropsAndMethods(L)
 
 

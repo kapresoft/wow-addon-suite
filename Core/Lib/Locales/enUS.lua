@@ -52,22 +52,21 @@ L['Debugging::Category::Enable All::Button::Desc']     = 'Checks all log categor
 L['Debugging::Category::Disable All::Button']          = 'None'
 L['Debugging::Category::Disable All::Button::Desc']    = 'Unchecks all log categories below. Note that the default category (not shown here) will always be active.'
 
-L['REQUIRES_RELOAD_PROFILE_CHANGED'] = 'requires a reload due to a profile change.\n\nWould you like to reload now?\n\n'
+L['REQUIRES_RELOAD_PROFILE_CHANGED'] = 'Would you like to reload now to activate these changes?'
 
-L['Confirm Reloads']            = true
-L['Confirm Reloads::Desc']      = "Enabling this option prompts for user confirmation before any UI reload, preventing unintended disruptions (Global Config)."
-L['Hide Minimap Icon']          = true
-L['Hide Minimap Icon::Desc']    = 'Toggles the visibility of the addon\'s minimap icon, hiding it from view when enabled (Global Config).'
+L['Confirm Reloads']                 = true
+L['Confirm Reloads::Desc']           = "Enabling this option prompts for user confirmation before any UI reload, preventing unintended disruptions (Global Config)."
+L['Hide Minimap Icon']               = true
+L['Hide Minimap Icon::Desc']         = 'Toggles the visibility of the addon\'s minimap icon, hiding it from view when enabled (Global Config).'
 
-L['View or switch profiles']      = true
-L['Open minimap settings dialog'] = true
-L['Open profiles dialog']         = true
-L['View available commands']      = true
-L['Open settings dialog']         = true
-L['Command Lines']                = true
+L['View or switch profiles']         = true
+L['Open minimap settings dialog']    = true
+L['View available commands']         = true
+L['Open settings dialog']            = true
+L['Command Lines']                   = true
 
-L['Add to Favorite']       = true
-L['Add to Favorite::Desc'] = "Enable this option to display the current profile in the minimap profile switch menu accessible with a LEFT-click, allowing for easy access. Disable to hide the profile from the menu (Character-Specific)."
+L['Add to Favorite']                 = true
+L['Add to Favorite::Desc']           = "Enable this option to display the current profile in the minimap profile switch menu accessible with a LEFT-click, allowing for easy access. Disable to hide the profile from the menu (Character-Specific)."
 L['Minimap']                         = true
 L['Minimap::Desc']                   = "Minimap Options"
 L['General Minimap Settings']        = true

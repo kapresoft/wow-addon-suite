@@ -13,6 +13,7 @@ local GetNumAddOns = GetNumAddOns or C_AddOns.GetNumAddOns
 local GetAddOnInfo = GetAddOnInfo or C_AddOns.GetAddOnInfo
 --- We don't want to use the old global GetAddOnEnableState() because it doesn't work
 local C_AddOns_GetAddOnEnableState = C_AddOns.GetAddOnEnableState
+local EnableAddOn, DisableAddOn = EnableAddOn or C_AddOns.EnableAddOn, DisableAddOn or C_AddOns.DisableAddOn
 
 --[[-----------------------------------------------------------------------------
 New Instance
@@ -139,6 +140,42 @@ local function PropsAndMethods(o)
             local validCandidate = ns.name ~= info.name and checked ~= true
                     and info:IsNotLoadOnDemand() and info.enabled == true
             if validCandidate == true then callbackFn(info) end
+        end
+    end
+
+    ---@param name Name The addOn name
+    function o:EnableAddOnForCharacter(charName, name)
+        assert(name, "AddOn name is required.")
+        charName = charName or UnitName("player")
+        EnableAddOn(name, charName)
+        p:d(function() return 'AddOn Enabled: %s', name end)
+    end
+
+    ---@param name Name The addOn name
+    function o:DisableAddOnForCharacter(charName, name)
+        assert(name, "AddOn name is required.")
+        charName = charName or UnitName("player")
+        DisableAddOn(name, charName)
+        p:d(function() return 'AddOn Disabled: %s', name end)
+    end
+
+    ---@param addOnNames table<number, Name> The array of addOn names
+    function o:EnableAddOnsForCharacter(addOnNames)
+        assert(type(addOnNames) == 'table', "AddOn names array are required.")
+        if #addOnNames <= 0 then return end
+        local charName = UnitName("player")
+        for i, name in ipairs(addOnNames) do
+            self:EnableAddOnForCharacter(charName, name)
+        end
+    end
+
+    ---@param addOnNames table<number, Name> The array of addOn names
+    function o:DisableAddOnsForCharacter(addOnNames)
+        assert(type(addOnNames) == 'table', "AddOn names array are required.")
+        if #addOnNames <= 0 then return end
+        local charName = UnitName("player")
+        for i, name in ipairs(addOnNames) do
+            self:DisableAddOnForCharacter(charName, name)
         end
     end
 
