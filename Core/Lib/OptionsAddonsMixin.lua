@@ -142,7 +142,7 @@ local function PropsAndMethods(o)
         }
 
         options.applyAll = {
-            name = L['Apply and ReloadUI'], desc = L['Apply and ReloadUI::Desc'],
+            name = L['Apply and Reload'], desc = L['Apply and Reload::Desc'],
             type = "execute", order = order:next(), width = 'normal',
             func = function() util:SendEventMessage(GC.M.OnApplyAndRestart, libName) end
         }
@@ -168,10 +168,11 @@ local function PropsAndMethods(o)
 
         O.API:ForEachAddOn(function(addOn)
             local name = addOn.name
+            local title = addOn.addOnInfo.title
             if name ~= ns.name then
                 options[name] = {
                     order = order:next(),
-                    name = addOn.title,
+                    name = title,
                     type = 'toggle',
                     width = 1.3,
                     get = AutoLoadAddOnsGet(name),
