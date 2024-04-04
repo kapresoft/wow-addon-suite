@@ -59,16 +59,23 @@ local function PropsAndMethods(o)
         return group
     end
 
+    function o:G(localeText)
+        return self.locale[localeText] .. '\n' .. self.locale['Global Setting']
+    end
+    function o:C(localeText)
+        return self.locale[localeText] .. '\n' .. self.locale['Character Setting']
+    end
+
     --- @param order Kapresoft_LibUtil_SequenceMixin
     --- @return AceConfigOption
     function o:CreateSubGroup(order)
-        local L = self.optionsMixin.locale
+        local L = self.optionsMixin.locale; self.locale = L;
 
         --- @type AceConfigOption
         self.options = {
             h1 = {  type = 'header', name = h1(L['General Minimap Settings']), descStyle = 'inline', order = order:next(), },
             hide_minimap_icon = {
-                name = L['Hide Minimap Icon'], desc = L['Hide Minimap Icon::Desc'],
+                name = L['Hide Minimap Icon'], desc = self:G('Hide Minimap Icon::Desc'),
                 order = self.order:next(), type="toggle", width='normal',
                 get = function() return ns:global().minimap.hide == true end,
                 set = function(_, v)
@@ -78,7 +85,7 @@ local function PropsAndMethods(o)
             },
             confirm_reloads = {
                 name = L['Confirm Reloads When Switching Profiles'],
-                desc = L['Confirm Reloads When Switching Profiles::Desc'],
+                desc = self:G('Confirm Reloads When Switching Profiles::Desc'),
                 order = order:next(), type="toggle", width=2.0,
                 get = function() return ns:global().minimap.confirm_reloads == true end,
                 set = function(_, v)
