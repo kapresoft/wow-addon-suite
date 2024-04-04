@@ -126,21 +126,20 @@ local function PropsAndMethods(o)
 
         local options = {
             header1 = { order = order:next(), type = 'header', name = h(L['General']) },
-            confirm_reloads = {
-                name = L['Confirm Reloads'], desc = L['Confirm Reloads::Desc'],
-                order = order:next(), type="toggle", width='normal',
-                get = util:GlobalGet('confirm_reloads'),
-                set = util:GlobalSet('confirm_reloads')
-            },
             showInQuickProfileSwitchMenu = {
                 name = L['Add to Favorite'], desc = L['Add to Favorite::Desc'],
-                order = order:next(), type="toggle", width=1.6,
+                order = order:next(), type="toggle", width='normal',
                 get = util:QuickProfileMenuGet(),
                 set = util:QuickProfileMenuSet()
             },
+            syncAddOnStates = {
+                name = L['Sync AddOn States'], desc = L['Sync AddOn States::Desc'],
+                order = order:next(), type="toggle", width='normal',
+                get = util:GlobalGet('sync_addon_states'),
+                set = util:GlobalSet('sync_addon_states'),
+            },
             spacer1a = { order = order:next(), type = "description", name = "", width='full' },
         }
-
         options.applyAll = {
             name = L['Apply and Reload'], desc = L['Apply and Reload::Desc'],
             type = "execute", order = order:next(), width = 'normal',

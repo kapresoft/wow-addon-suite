@@ -126,5 +126,6 @@ local function MethodsAndProps(o)
     end
     --- @see Bindings.xml
     function o.BINDING_ADDON_SUITE_OPTIONS_DLG() o:OpenConfig() end
+    function o.BINDING_ADDON_SUITE_OPTIONS_DLG_MINIMAP() o:OpenConfigMinimapProfileMenu() end
 end; MethodsAndProps(A); ADDON_SUITE = A; _G[ns.addon] = A
 

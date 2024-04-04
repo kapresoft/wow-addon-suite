@@ -114,7 +114,7 @@ local function PropsAndMethods(o)
         if state:IsEmpty() then return end
 
         --- Will call self:OnApplyAndRestart(..)
-        if ns:global().confirm_reloads == true then
+        if ns:global().minimap.confirm_reloads == true then
             ShowReloadConfirm(state:GetSummary())
             return
         end
@@ -123,10 +123,12 @@ local function PropsAndMethods(o)
 
     --- Get AddOn States and Confirm Reload
     function o.OnAddOnStateChangedWithConfirmation()
+        if ns:global().sync_addon_states ~= true then return end
+
         local state = o:GetAddOnState()
         if state:IsEmpty() then return end
-        --- Will call self:OnApplyAndRestart(..)
 
+        --- Will call self:OnApplyAndRestart(..)
         ShowReloadConfirm(state:GetSummary())
     end
 
