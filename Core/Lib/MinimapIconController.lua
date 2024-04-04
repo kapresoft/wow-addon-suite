@@ -30,6 +30,11 @@ Methods
 --- @param o MinimapIconController
 local function PropsAndMethods(o)
 
+    local function IsConfirmReload()
+        local minimap = ns:db().global.minimap
+        return minimap and minimap.confirm_reloads == true
+    end
+
     --- @private
     function o:Init()
         self.addon = ns:a()
@@ -71,7 +76,7 @@ local function PropsAndMethods(o)
             local with         = L['with']
 
             local text = ns.sformat(confirmationText, ns.ch:S(with))
-            if ns:db().global.confirm_reloads ~= true then
+            if not IsConfirmReload() then
                 text = ns.sformat(confirmationText, ns.ch:S(without))
             end
             return text
@@ -158,7 +163,8 @@ local function PropsAndMethods(o)
         local selectProfileText = L['Select a profile below to activate']
         local noConfirmation = L['No Confirmation']
         local confirm, line2 = '', ''
-        if ns:db().global.confirm_reloads ~= true then
+
+        if not IsConfirmReload() then
             confirm = ns.sformat(' (%s)', noConfirmation)
             line2 = L['Reloads UI without confirmation']
         end

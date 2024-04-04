@@ -70,10 +70,19 @@ local function PropsAndMethods(o)
             hide_minimap_icon = {
                 name = L['Hide Minimap Icon'], desc = L['Hide Minimap Icon::Desc'],
                 order = self.order:next(), type="toggle", width='normal',
-                get = function() return ns:global().minimap.hide end,
+                get = function() return ns:global().minimap.hide == true end,
                 set = function(_, v)
                     ns:db().global.minimap.hide = (v == true)
                     self:SendMessage(GC.M.OnToggleMinimapIcon, libName)
+                end
+            },
+            confirm_reloads = {
+                name = L['Confirm Reloads When Switching Profiles'],
+                desc = L['Confirm Reloads When Switching Profiles::Desc'],
+                order = order:next(), type="toggle", width=2.0,
+                get = function() return ns:global().minimap.confirm_reloads == true end,
+                set = function(_, v)
+                    ns:db().global.minimap.confirm_reloads = (v == true)
                 end
             },
             spacer1 = { type="description", name = sp, width="full", order = order:next() },
