@@ -6,10 +6,13 @@ local ns = select(2, ...)
 local O, MSG = ns.O, ns.GC.M
 local L = ns:AceLocale()
 local sformat = ns.sformat
-local libName = 'AddOnStateController'
+local DEV_RELOAD_CONFIRM_DLG = 'DEV_RELOAD_CONFIRM'
+
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
+local libName = 'AddOnStateController'
+
 --- @class AddOnStateController : AceEvent
 local S = ns:NewLibWithEvent(libName)
 local p = ns:CreateDefaultLogger(libName)
@@ -17,16 +20,12 @@ local p = ns:CreateDefaultLogger(libName)
 --[[-----------------------------------------------------------------------------
 Support Functions
 -------------------------------------------------------------------------------]]
---- @param msg string
-local function ShowReloadConfirm(msg)
-    local v = 'DEV_RELOAD_CONFIRM'
-    if not StaticPopupDialogs[v] then
 
-        local text1 = L['REQUIRES_RELOAD_PROFILE_CHANGED']
-        local baseMsg = sformat(':: %s ::\n\n\n%s\n\n', ns.name, text1)
-
-        StaticPopupDialogs[v] = {
-            text =  baseMsg .. '%s\n\n',
+---@param detailsText string
+local function ShowReloadConfirm(detailsText)
+    if not StaticPopupDialogs[DEV_RELOAD_CONFIRM_DLG] then
+        StaticPopupDialogs[DEV_RELOAD_CONFIRM_DLG] = {
+            text = ":: %s ::\n\n\n%s",
             button1 = YES,
             button2 = NO,
             OnAccept = function(self) S:OnApplyAndRestartNoConfirmation() end,
@@ -36,7 +35,10 @@ local function ShowReloadConfirm(msg)
             showAlert = true,
         }
     end
-    StaticPopup_Show(v, msg)
+    local includeOpt = ns:global().include_addon_changes_in_reload_confirmation
+    local dlgMsg = L['REQUIRES_RELOAD_PROFILE_CHANGED'] .. '\n\n'
+    if includeOpt == true then dlgMsg = dlgMsg .. '\n' .. detailsText .. '\n\n' end
+    StaticPopup_Show(DEV_RELOAD_CONFIRM_DLG, ns.name, dlgMsg)
 end
 
 --[[-----------------------------------------------------------------------------

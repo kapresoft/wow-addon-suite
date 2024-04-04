@@ -15,7 +15,7 @@ ns.locale.lineSeparator1   = '|TInterface\\RaidFrame\\Raid-HSeparator:5:320:0:0|
 ns.locale.profileNameColor = '12E600'
 
 -- red-ish: E64750 Ex: |cfdE64750 Red-ish |r
--- blue: 6A6FFF  Ex: |cdf6A6FFF Hello |r
+-- blue: 6F97FF  Ex: |cdf6F97FF Hello |r
 -- example
 --[[-----------------------------------------------------------------------------
 Locale Entries
@@ -43,6 +43,9 @@ L['Apply and Reload::Desc']   = 'Apply and Reload Immediately with |cfdE64750No 
 L['Select Profile']           = true
 L['Select Profile::Desc']     = 'Select a profile to activate.  You will be prompted to reload the UI.  Note that these profiles are managed on the Profiles tab.'
 
+L['Global Setting']           = '|cfd6F97FF(Global Setting)'
+L['Character Setting']        = '|cfd6F97FF(Character-Specific Setting)|r'
+
 L['Debugging']                = true
 L['Debugging::Desc']          = 'Debug Settings for troubleshooting'
 L['Debugging Configuration']  = true
@@ -55,15 +58,18 @@ L['Debugging::Category::Enable All::Button::Desc']     = 'Checks all log categor
 L['Debugging::Category::Disable All::Button']          = 'None'
 L['Debugging::Category::Disable All::Button::Desc']    = 'Unchecks all log categories below. Note that the default category (not shown here) will always be active.'
 
-L['REQUIRES_RELOAD_PROFILE_CHANGED'] = 'Would you like to reload now to activate these changes?'
+L['REQUIRES_RELOAD_PROFILE_CHANGED'] = 'Your selected profile\'s addon changes require a UI reload to take effect. This will enable checked addons and disable unchecked ones.\n\nReload now?'
 
-L['Sync AddOn States']               = true
-L['Sync AddOn States::Desc']         = 'Enable this for seamless addon alignment with your profile. A confirmation dialog will show before reloading, listing addons to enable or disable. Keep in mind, |cfdE64750frequent alerts|r may become a gentle nudge for your attention.\n|cfd6A6FFF(Global Setting)|r'
+L['Sync addon states']               = true
+L['Sync addon states::Desc']         = 'Enable this for seamless addon alignment with your profile. A confirmation dialog will show before reloading, listing addons to enable or disable. Keep in mind, |cfdE64750frequent alerts|r may become a gentle nudge for your attention.'
+
+L['Include Addon Changes in Reload Confirmation'] = true
+L['Include Addon Changes in Reload Confirmation::Desc'] = 'Enable to see which addons will be enabled or disabled listed within the reload confirmation dialog, giving you a clear overview before proceeding. This feature is active only when |cfd6F97FFSync addon states|r option is checked'
 
 L['Confirm Reloads When Switching Profiles']        = 'Confirm Reloads when switching profiles'
-L['Confirm Reloads When Switching Profiles::Desc']  = 'Opting for this setting adds a confirmation step before the UI reloads when you switch profiles through a left-click on the minimap menu. It\'s a safeguard to avoid accidental disruptions.\n|cfd6A6FFF(Global Setting)|r'
+L['Confirm Reloads When Switching Profiles::Desc']  = 'Opting for this setting adds a confirmation step before the UI reloads when you switch profiles through a left-click on the minimap menu. It\'s a safeguard to avoid accidental disruptions.'
 L['Hide Minimap Icon']               = true
-L['Hide Minimap Icon::Desc']         = 'Toggles the visibility of the addon\'s minimap icon, hiding it from view when enabled (Global Config).'
+L['Hide Minimap Icon::Desc']         = 'Toggles the visibility of the addon\'s minimap icon, hiding it from view when enabled.'
 
 L['View or switch profiles']         = true
 L['Open minimap settings dialog']    = true
@@ -72,7 +78,7 @@ L['Open settings dialog']            = true
 L['Command Lines']                   = true
 
 L['Add to Favorite']                 = true
-L['Add to Favorite::Desc']           = "Enable this option to display the current profile in the minimap profile switch menu accessible with a LEFT-click, allowing for easy access. Disable to hide the profile from the menu.\n|cfd6A6FFF(Character-Specific Setting)|r"
+L['Add to Favorite::Desc']           = "Enable this option to display the current profile in the minimap profile switch menu accessible with a LEFT-click, allowing for easy access. Disable to hide the profile from the menu."
 L['Minimap']                         = true
 L['Minimap::Desc']                   = "Minimap Options"
 L['General Minimap Settings']        = true

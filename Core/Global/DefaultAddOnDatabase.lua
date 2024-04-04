@@ -18,6 +18,7 @@ Type: Profile_Global_Config
 --- @field minimap Minimap
 local DefaultGlobal = {
     sync_addon_states = false,
+    include_addon_changes_in_reload_confirmation = false,
     minimap = {
         hide = false,
         confirm_reloads = true

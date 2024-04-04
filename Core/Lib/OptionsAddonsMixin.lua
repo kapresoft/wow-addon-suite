@@ -95,7 +95,6 @@ local function PropsAndMethods(o)
         self.optionsMixin = optionsMixin
     end
 
-
     --- @param order Kapresoft_LibUtil_SequenceMixin
     --- @return AceConfigOption
     function o:CreateAddOnsGroup(order)
@@ -117,26 +116,42 @@ local function PropsAndMethods(o)
         return sformat('      %s      ', name)
     end
 
+    function o:G(localeText)
+        return self.locale[localeText] .. '\n' .. self.locale['Global Setting']
+    end
+    function o:C(localeText)
+        return self.locale[localeText] .. '\n' .. self.locale['Character Setting']
+    end
+
     --- @return AceConfigOption
     --- @param order Kapresoft_LibUtil_SequenceMixin
     function o:CreateAddOnsOptions(order)
-        local L = self.optionsMixin.locale
+        local L = self.optionsMixin.locale; self.locale = L;
         local util = self.optionsMixin.util
         local ps = CreateProfileSelect()
+
+        local includeVar = 'include_addon_changes_in_reload_confirmation'
 
         local options = {
             header1 = { order = order:next(), type = 'header', name = h(L['General']) },
             showInQuickProfileSwitchMenu = {
-                name = L['Add to Favorite'], desc = L['Add to Favorite::Desc'],
+                name = L['Add to Favorite'], desc = self:C('Add to Favorite::Desc'),
                 order = order:next(), type="toggle", width='normal',
                 get = util:QuickProfileMenuGet(),
                 set = util:QuickProfileMenuSet()
             },
             syncAddOnStates = {
-                name = L['Sync AddOn States'], desc = L['Sync AddOn States::Desc'],
+                name = L['Sync addon states'], desc = self:G('Sync addon states::Desc'),
                 order = order:next(), type="toggle", width='normal',
                 get = util:GlobalGet('sync_addon_states'),
                 set = util:GlobalSet('sync_addon_states'),
+            },
+            includeAddOnChanges = {
+                name = L['Include Addon Changes in Reload Confirmation'],
+                desc = self:G('Include Addon Changes in Reload Confirmation::Desc'),
+                order = order:next(), type="toggle", width=2.0,
+                get = util:GlobalGet(includeVar),
+                set = util:GlobalSet(includeVar),
             },
             spacer1a = { order = order:next(), type = "description", name = "", width='full' },
         }
