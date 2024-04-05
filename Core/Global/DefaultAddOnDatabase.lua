@@ -21,7 +21,8 @@ local DefaultGlobal = {
     include_addon_changes_in_reload_confirmation = false,
     minimap = {
         hide = false,
-        confirm_reloads = true
+        confirm_reloads = true,
+        sync_status_indicator = true,
     },
 }
 

@@ -76,20 +76,28 @@ local function PropsAndMethods(o)
             h1 = {  type = 'header', name = h1(L['General Minimap Settings']), descStyle = 'inline', order = order:next(), },
             hide_minimap_icon = {
                 name = L['Hide Minimap Icon'], desc = self:G('Hide Minimap Icon::Desc'),
-                order = self.order:next(), type="toggle", width='normal',
+                order = self.order:next(), type="toggle", width='full',
                 get = function() return ns:global().minimap.hide == true end,
                 set = function(_, v)
                     ns:db().global.minimap.hide = (v == true)
                     self:SendMessage(GC.M.OnToggleMinimapIcon, libName)
                 end
             },
-            confirm_reloads = {
+            confirmReloads = {
                 name = L['Confirm Reloads When Switching Profiles'],
                 desc = self:G('Confirm Reloads When Switching Profiles::Desc'),
                 order = order:next(), type="toggle", width=2.0,
                 get = function() return ns:global().minimap.confirm_reloads == true end,
                 set = function(_, v)
                     ns:db().global.minimap.confirm_reloads = (v == true)
+                end
+            },
+            syncStatusIndicator = {
+                name = L['Profile Sync Status Indicator'], desc=L['Profile Sync Status Indicator::Desc'],
+                order = order:next(), type="toggle", width=2.0,
+                get = function() return ns:global().minimap.sync_status_indicator == true end,
+                set = function(_, v)
+                    ns:db().global.minimap.sync_status_indicator = (v == true)
                 end
             },
             spacer1 = { type="description", name = sp, width="full", order = order:next() },

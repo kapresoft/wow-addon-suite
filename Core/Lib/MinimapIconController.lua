@@ -183,16 +183,23 @@ local function PropsAndMethods(o)
         })
 
         LibDBIcon:Register(minimapName, dataObject, ns:global().minimap)
-        self:RegisterMessage(MSG.OnAddOnStateChangedWithConfirmation, o.OnAddOnStateChangedWithConfirmation)
-
+        self:RegisterMessage(MSG.OnUpdateMinimapIconState, o.OnOutOfSyncIndicator)
     end
 
-    function o.OnAddOnStateChangedWithConfirmation()
+    function o.OnOutOfSyncIndicator()
+        if ns:global().minimap.sync_status_indicator ~= true then
+            return o:UpdateOutOfSyncIndicator(true)
+        end
+        o:UpdateOutOfSyncIndicator(o:GetAddOnState():IsEmpty())
+    end
+
+    ---@param inSync boolean
+    function o:UpdateOutOfSyncIndicator(inSync)
         local dataObj = LibDBIcon.objects[minimapName]
         if not dataObj then return end
+
         --- @type LayeredRegion
         local iconT = dataObj.icon; if not iconT then return end
-        local inSync = o:GetAddOnState():IsEmpty()
         p:d(function() return 'inSync: %s', inSync end)
         if inSync then return iconT:SetVertexColor(1, 1, 1, 1) end
 

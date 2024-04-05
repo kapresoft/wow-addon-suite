@@ -28,11 +28,14 @@ local function ShowReloadConfirm(detailsText)
             text = ":: %s ::\n\n\n%s",
             button1 = YES,
             button2 = NO,
-            OnAccept = function(self) S:OnApplyAndRestartNoConfirmation() end,
             timeout = 0,
             whileDead = true,
             hideOnEscape = true,
             showAlert = true,
+            OnAccept = function(self) S:OnApplyAndRestartNoConfirmation() end,
+            OnCancel = function(self, data, reason)
+                S:SendMessage(MSG.OnUpdateMinimapIconState, ns.name)
+            end,
         }
     end
     local includeOpt = ns:global().include_addon_changes_in_reload_confirmation
@@ -112,6 +115,7 @@ local function PropsAndMethods(o)
 
     --- Get AddOn States and Confirm Reload
     function o.OnAddOnStateChanged()
+        o:SendMessage(MSG.OnUpdateMinimapIconState, ns.name)
         local state = o:GetAddOnState()
         if state:IsEmpty() then return end
 
@@ -125,6 +129,7 @@ local function PropsAndMethods(o)
 
     --- Get AddOn States and Confirm Reload
     function o.OnAddOnStateChangedWithConfirmation()
+        o:SendMessage(MSG.OnUpdateMinimapIconState, ns.name)
         if ns:global().sync_addon_states ~= true then return end
         o.OnShowReloadConfirm()
     end
