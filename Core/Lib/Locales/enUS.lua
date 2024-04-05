@@ -105,3 +105,5 @@ L['ALT-LEFT-Click']                  = true
 L['LEFT-Click']                      = true
 L['RIGHT-Click']                     = true
 L['SHIFT-RIGHT-Click']               = true
+L['Profile Sync Status Indicator']   = true
+L['Profile Sync Status Indicator::Desc']   = 'Enable this option to use |cfdE64750color|r coding on the minimap icon, visually indicating when your profile is synced or needs an update. This provides a quick and easy way to check your profile\'s status at a glance.'
