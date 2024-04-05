@@ -54,12 +54,6 @@ local function MethodsAndProps(o)
             }
         }
 
-        --[[--- @type AceConfigOption
-        local subProfileArgs = {
-            name = "hello", type = "toggle", width = 'normal'
-        }
-        --options.args.debugging.args.generalsub = subProfileArgs]]
-
         return options
     end
 
@@ -67,17 +61,7 @@ local function MethodsAndProps(o)
         local options = self:CreateOptions()
         -- This creates the Profiles Tab/Section in Settings UI
         options.args.profiles = AceDBOptions:GetOptionsTable(ns:db())
-
-        --[[--- @type AceConfigOption
-        local subProfileArgs = {
-            name = "hello", type = "toggle", width = 'normal'
-        }
-        options.args.profiles.args.subProf = subProfileArgs
-
-        -- print('char:', ns:db().keys.char)]]
-
         AceConfig:RegisterOptionsTable(ns.name, options, { GC.C.CONSOLE_COMMAND_OPTIONS })
-        AceConfigDialog:AddToBlizOptions(ns.name, ns.nameShort)
         if API:GetUIScale() > 1.0 then return end
 
         AceConfigDialog:SetDefaultSize(ns.name, 950, 600)

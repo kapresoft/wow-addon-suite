@@ -72,15 +72,24 @@ local function MethodsAndProps(o)
         self:SlashCommand_Help_Handler()
     end
 
+    --- Since AceConfigDialog caches the frames, we want to make sure the appName is this addOn
+    --- @param name Name The appName
+    --- @param frame Frame
+    function o:OnHide(frame, name)
+        if ns.name ~= name then return end
+        p:d(function() return 'OnHide() name=%s', name end)
+        self:OnHideSettings(true)
+    end
+
+    function o:OnHideBlizzardOptions() self:OnHideSettings(false) end
+
     --- @param enableSound BooleanOptional
-    function o:OnHide_Config(enableSound)
+    function o:OnHideSettings(enableSound)
         local enable = enableSound == true
-        p:d(function() return 'OnHide_Config called with enableSound=%s', tostring(enable) end)
+        p:d(function() return 'OnHideSettings called with enableSound=%s', tostring(enable) end)
         if true == enable then PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE) end
         self:SendMessage(GC.M.OnAddOnStateChangedWithConfirmation, ns.name)
     end
-    function o:OnHide_Config_WithSound() self:OnHide_Config(true) end
-    function o:OnHide_Config_WithoutSound() self:OnHide_Config() end
     function o:CloseConfig()
         if not AceConfigDialog.OpenFrames[ns.name] then return end
         AceConfigDialog:Close(ns.name)
@@ -92,17 +101,22 @@ local function MethodsAndProps(o)
         AceConfigDialog:Open(ns.name)
         self:DialogGlitchHack(group);
 
-        self.onHideHooked = self.onHideHooked or false
         PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
         self.configDialogWidget = AceConfigDialog.OpenFrames[ns.name]
+        if not self.configDialogWidget then return end
+
         --- @type _Frame
-        local f = self.configDialogWidget.frame
+        local frame = self.configDialogWidget.frame
         -- Set the frame strata so it doesn't overlap with Confirm Dialog
-        f:SetFrameStrata('DIALOG')
-        f:SetFrameLevel(1)
-        if not self.onHideHooked then
-            self:HookScript(self.configDialogWidget.frame, 'OnHide', 'OnHide_Config_WithSound')
-            self.onHideHooked = true
+        frame:SetFrameStrata('DIALOG')
+        frame:SetFrameLevel(1)
+        if frame then
+            local success, msg = pcall(function()
+                self:HookScript(frame, 'OnHide', function()
+                    self:OnHide(frame, self.configDialogWidget:GetUserData('appName'))
+                end)
+            end)
+            if success ~= true then p:f3(function() return "onHideHookFailed: %s", msg end) end
         end
     end
     function o:OpenConfigDebugging()

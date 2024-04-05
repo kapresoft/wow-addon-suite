@@ -193,7 +193,8 @@ local function PropsAndMethods(o)
         --- @type LayeredRegion
         local iconT = dataObj.icon; if not iconT then return end
         local inSync = o:GetAddOnState():IsEmpty()
-        if inSync then return end
+        p:d(function() return 'inSync: %s', inSync end)
+        if inSync then return iconT:SetVertexColor(1, 1, 1, 1) end
 
         iconT:SetVertexColor(iconOutOfSyncColor:GetRGBA())
     end
