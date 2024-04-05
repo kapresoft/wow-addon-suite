@@ -54,11 +54,16 @@ local function PropsAndMethods(o)
 
     function o.OnAfterInitialize()
         o:RegisterMessage(GC.toMsg(E.PLAYER_ENTERING_WORLD), OnPlayerEnteringWorld)
+        o:RegisterMessage(MSG.OnAddOnReady, o.OnAfterOnAddOnReady)
     end
 
     function o:OnAddOnReady()
         O.MinimapIconController:New(self):InitMinimapIcon()
         S:SendMessage(MSG.OnAddOnReady)
+    end
+
+    function o.OnAfterOnAddOnReady()
+        C_Timer.After(0.01, function() S:SendMessage(MSG.OnAfterOnAddOnReady) end)
     end
 
     o:RegisterMessage(MSG.OnAfterInitialize, o.OnAfterInitialize)

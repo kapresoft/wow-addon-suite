@@ -124,9 +124,11 @@ local function GlobalConstantProperties(o)
     local M = {
         OnAfterInitialize = newMsg('OnAfterInitialize'),
         OnAddOnReady = newMsg('OnAddonReady'),
+        OnAfterOnAddOnReady = newMsg('OnAfterOnAddOnReady'),
         OnApplyAndRestart = newMsg('OnApplyAndRestart'),
         OnAddOnStateChanged = newMsg('OnAddOnStateChanged'),
         OnAddOnStateChangedWithConfirmation = newMsg('OnAddOnStateChangedWithConfirmation'),
+        OnShowReloadConfirm = newMsg('OnShowReloadConfirm'),
         OnSwitchProfile = newMsg('OnSwitchProfile'),
         OnToggleMinimapIcon = newMsg('OnToggleMinimapIcon'),
         OnProfileDeleted = newMsg('OnProfileDeleted'),

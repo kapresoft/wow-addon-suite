@@ -20,20 +20,52 @@ local p = ns:CreateDefaultLogger(libName)
 local pm = ns:LC().MESSAGE:NewLogger(libName)
 local icon     = "Interface\\Icons\\inv_cask_01"
 local iconText = ns.sformat('|T%s:18:18:0:0|t', icon)
+-- red-ish color
+local iconOutOfSyncColor = CreateColor(1, 0.3, 0.3, 1)
+local textOutOfSyncColor = L['Current Profile Color::OutOfSync']
+local profileInSyncColor = L['Current Profile Color']
+local currentSymbol = L['Current::Symbol::Minimap']
 
--- todo: sync "current" in menu by check which addons are enabled
--- todo: prompt user to reload if addons need to be enabled/disabled in general settings
+--[[-----------------------------------------------------------------------------
+Support Functions
+-------------------------------------------------------------------------------]]
+local function IsConfirmReload()
+    local minimap = ns:db().global.minimap
+    return minimap and minimap.confirm_reloads == true
+end
+
+--- The global UIDROPDOWNMENU_OPEN_MENU is non-nil whenever a drop-down is showing
+--- @return boolean
+local function IsDropDownShowing() return UIDROPDOWNMENU_OPEN_MENU ~= nil end
+
+local function FC(hexColor, text) return ns.ch:FormatColor(hexColor, text) end
+local function FCOS(text) return ns.ch:FormatColor(textOutOfSyncColor, text) end
+
+---@param tooltip _GameTooltip
+---@param inSync boolean
+local function OutOfSyncMessage(tooltip, inSync)
+    if inSync == true then return end
+    local msg = FCOS(L['Profile is out of sync']) .. '. '
+    tooltip:AddLine(msg)
+    tooltip:AddLine(L['Click Key To Sync'] .. '.\n\n')
+end
+
+---@param inSync boolean
+local function CurrentProfileText(inSync)
+    local currentProfile = ns:db():GetCurrentProfile()
+    local profText = ns.ch:T(L['Current Profile'])
+    local prof = FC(profileInSyncColor, currentProfile)
+    if not inSync then prof = FCOS(currentProfile) end
+    return profText, prof
+end
 
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
---- @param o MinimapIconController
+--- @param o MinimapIconController | AceEvent
 local function PropsAndMethods(o)
 
-    local function IsConfirmReload()
-        local minimap = ns:db().global.minimap
-        return minimap and minimap.confirm_reloads == true
-    end
+    function o:GetAddOnState() return ns.O.AddOnStateController:GetAddOnState() end
 
     --- @private
     function o:Init()
@@ -61,13 +93,13 @@ local function PropsAndMethods(o)
     function o:InitMinimapIcon()
         self:CreateAndRegisterMinimapDataObject()
     end
+
     --- @public
     function o:CreateAndRegisterMinimapDataObject()
         local mainSelf = self
         local A = self.addon
 
         local minimapObjectName = ns.name .. "Minimap"
-        local currentColor = L['Current Profile Color']
 
         --- This local function is dynamic and needs to be here
         local function GetConfirmReloadText()
@@ -90,16 +122,17 @@ local function PropsAndMethods(o)
             return
         end
 
-        --- The global UIDROPDOWNMENU_OPEN_MENU is non-nil whenever a drop-down is showing
-        --- @return boolean
-        local function IsDropDownShowing() return UIDROPDOWNMENU_OPEN_MENU ~= nil end
-
-        dataObject = LibDataBroker:NewDataObject(minimapObjectName, {
+        local s = self; dataObject = LibDataBroker:NewDataObject(minimapObjectName, {
             type = "data source",
             text = ns.GC.C.FRIENDLY_NAME,
             icon = icon,
             OnClick = function(self, button)
                 if button == "LeftButton" then
+                    if IsAltKeyDown() then
+                        local inSync = s:GetAddOnState():IsEmpty()
+                        if inSync ~= true then return s:SendMessage(MSG.OnShowReloadConfirm, libName) end
+                    end
+
                     if mainSelf.tooltip then mainSelf.tooltip:Hide() end
                     local menu = mainSelf:BuildProfilesMenu()
                     --- @class AddonSuiteDropdownMenu : _Frame
@@ -120,19 +153,28 @@ local function PropsAndMethods(o)
                 if not tooltip or not tooltip.AddLine then return end
                 mainSelf.tooltip = tooltip
 
-                local currentProfileText = ns.ch:T(L['Current Profile'])
-                local header1 = ns.sformat('%s %s', iconText, ns.ch:P(ns.GC.C.FRIENDLY_NAME))
-                local header3 = ns.sformat('%s: %s', currentProfileText, ns.ch:FormatColor(currentColor, ns:db():GetCurrentProfile()))
+                local inSync = s:GetAddOnState():IsEmpty()
+                local currentProfileText, currentProfile = CurrentProfileText(inSync)
                 local confirmationLine = GetConfirmReloadText()
+
+                local header1 = ns.sformat('%s %s', iconText, ns.ch:P(ns.GC.C.FRIENDLY_NAME))
+                local header3 = ns.sformat('%s: %s', currentProfileText, currentProfile)
+
                 tooltip:AddDoubleLine(header1, header3)
                 tooltip:AddLine(ns.locale.lineSeparator1)
+                OutOfSyncMessage(tooltip, inSync)
                 tooltip:AddLine(confirmationLine)
                 tooltip:AddLine(' ')
 
                 local commandLines = ns.ch:P(L['Command Lines'] .. ":")
-                tooltip:AddDoubleLine(ns.ch:S("Left-Click"), ns.ch:T(L['View or switch profiles']))
-                tooltip:AddDoubleLine(ns.ch:S("Right-Click"), ns.ch:T(L['Open settings dialog']))
-                tooltip:AddDoubleLine(ns.ch:S("Shift-Right-Click"), ns.ch:T(L['Open minimap settings dialog']))
+                if not inSync then
+                    local syncKey = FCOS(L['ALT-LEFT-Click'])
+                    tooltip:AddDoubleLine(syncKey, ns.ch:T(L['Sync with Profile and Reload']))
+                end
+                tooltip:AddDoubleLine(ns.ch:S(L['LEFT-Click']), ns.ch:T(L['View or switch profiles']))
+                tooltip:AddDoubleLine(ns.ch:S(L['RIGHT-Click']), ns.ch:T(L['Open settings dialog']))
+
+                tooltip:AddDoubleLine(ns.ch:S(L['SHIFT-RIGHT-Click']), ns.ch:T(L['Open minimap settings dialog']))
                 tooltip:AddLine(' ')
                 tooltip:AddLine(commandLines)
                 tooltip:AddDoubleLine(ns.ch:S("/ads or /addon-suite"), ns.ch:T(L['View available commands']))
@@ -141,14 +183,23 @@ local function PropsAndMethods(o)
         })
 
         LibDBIcon:Register(minimapName, dataObject, ns:global().minimap)
+        self:RegisterMessage(MSG.OnAddOnStateChangedWithConfirmation, o.OnAddOnStateChangedWithConfirmation)
+
     end
 
-    --- TODO: On profile change listener
+    function o.OnAddOnStateChangedWithConfirmation()
+        local dataObj = LibDBIcon.objects[minimapName]
+        if not dataObj then return end
+        --- @type LayeredRegion
+        local iconT = dataObj.icon; if not iconT then return end
+        local inSync = o:GetAddOnState():IsEmpty()
+        if inSync then return end
+
+        iconT:SetVertexColor(iconOutOfSyncColor:GetRGBA())
+    end
+
     --- @return table<number, MinimapIconProfilesMenuItem>
     function o:BuildProfilesMenu()
-
-        local currentColor = L['Current Profile Color']
-        local currentSymbol = L['Current::Symbol::Minimap']
 
         --- @class MinimapIconProfilesMenuItem
         --- @field text Name
@@ -160,7 +211,7 @@ local function PropsAndMethods(o)
         --- @type table<number, MinimapIconProfilesMenuItem>
 
         local sepColor     = ns.locale.lineSeparator1
-        local selectProfileText = L['Select a profile below to activate']
+        local selectProfileText = L['Select profile to activate']
         local noConfirmation = L['No Confirmation']
         local confirm, line2 = '', ''
 
@@ -197,9 +248,7 @@ local function PropsAndMethods(o)
             --- @type MinimapIconProfilesMenuItem
             local menuItem = { _sortKey=name, text = name, func = FnHandler(name), notCheckable = true }
             if name == current then
-                -- todo: sync with enabled addons
-                -- if out-of-sync, then red color and add " click to Apply Settings and Reload UI"
-                menuItem.text = ns.ch:FormatColor(currentColor, ns.sformat("%s %s", menuItem.text, currentSymbol))
+                menuItem.text = FC(profileInSyncColor, ns.sformat("%s %s", menuItem.text, currentSymbol))
                 menuItem.checked = true
                 menuItem.func = nil
             end

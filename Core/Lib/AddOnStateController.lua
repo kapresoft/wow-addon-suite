@@ -126,12 +126,18 @@ local function PropsAndMethods(o)
     --- Get AddOn States and Confirm Reload
     function o.OnAddOnStateChangedWithConfirmation()
         if ns:global().sync_addon_states ~= true then return end
+        o.OnShowReloadConfirm()
+    end
 
+    --- Shows the Reload Confirm Dialog
+    function o.OnShowReloadConfirm()
         local state = o:GetAddOnState()
         if state:IsEmpty() then return end
 
-        --- Will call self:OnApplyAndRestart(..)
-        ShowReloadConfirm(state:GetSummary())
+        if ns:global().minimap.confirm_reloads == true then
+            return ShowReloadConfirm(state:GetSummary())
+        end
+        o.OnApplyAndRestartNoConfirmation()
     end
 
     --- @return AddOnStateDataMixin
@@ -156,13 +162,15 @@ local function PropsAndMethods(o)
         return addOnState
     end
 
+    -- Initial State
+    function o.OnAfterOnAddOnReady() o:SendMessage(MSG.OnAddOnStateChangedWithConfirmation, libName) end
+
     function o.OnAddOnReady()
         o:RegisterMessage(MSG.OnApplyAndRestart, o.OnApplyAndRestartNoConfirmation)
         o:RegisterMessage(MSG.OnAddOnStateChanged, o.OnAddOnStateChanged)
         o:RegisterMessage(MSG.OnAddOnStateChangedWithConfirmation, o.OnAddOnStateChangedWithConfirmation)
-
-        -- Initial prompt on login/reload
-        o.OnAddOnStateChangedWithConfirmation()
+        o:RegisterMessage(MSG.OnShowReloadConfirm, o.OnShowReloadConfirm)
+        o:RegisterMessage(MSG.OnAfterOnAddOnReady, o.OnAfterOnAddOnReady)
     end
 
     o:RegisterMessage(MSG.OnAddOnReady, o.OnAddOnReady)
