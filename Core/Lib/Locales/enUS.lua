@@ -63,11 +63,11 @@ L['Debugging::Category::Disable All::Button::Desc']    = 'Unchecks all log categ
 
 L['REQUIRES_RELOAD_PROFILE_CHANGED'] = 'Your selected profile\'s addon changes require a UI reload to take effect. This will enable checked addons and disable unchecked ones.\n\nReload now?'
 
-L['Sync addon states']               = true
-L['Sync addon states::Desc']         = 'Enable this for seamless addon alignment with your profile. A confirmation dialog will show before reloading, listing addons to enable or disable. Keep in mind, |cfdE64750frequent alerts|r may become a gentle nudge for your attention.'
+L['Sync addon states']               = 'Sync addon states on close'
+L['Sync addon states::Desc']         = 'Enable this to ensure your addons align with your profile after closing the settings dialog. You\'ll see a confirmation dialog before reloading, detailing which addons will be enabled or disabled. Remember, |cfdE64750frequent alerts|r might gently nudge you more often than expected.'
 
 L['Include Addon Changes in Reload Confirmation'] = true
-L['Include Addon Changes in Reload Confirmation::Desc'] = 'Enable to see which addons will be enabled or disabled listed within the reload confirmation dialog, giving you a clear overview before proceeding. This feature is active only when |cfd6F97FFSync addon states|r option is checked'
+L['Include Addon Changes in Reload Confirmation::Desc'] = 'Enable to see which addons will be enabled or disabled listed within the reload confirmation dialog, giving you a clear overview before proceeding.'
 
 L['Confirm Reloads When Switching Profiles']        = 'Confirm Reloads when switching profiles'
 L['Confirm Reloads When Switching Profiles::Desc']  = 'Opting for this setting adds a confirmation step before the UI reloads when you switch profiles through a left-click on the minimap menu. It\'s a safeguard to avoid accidental disruptions.'

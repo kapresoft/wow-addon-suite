@@ -121,28 +121,20 @@ local function PropsAndMethods(o)
 
         --- Will call self:OnApplyAndRestart(..)
         if ns:global().minimap.confirm_reloads == true then
-            ShowReloadConfirm(state:GetSummary())
-            return
-        end
-        o.OnApplyAndRestartNoConfirmation()
-    end
-
-    --- Get AddOn States and Confirm Reload
-    function o.OnAddOnStateChangedWithConfirmation()
-        o:SendMessage(MSG.OnUpdateMinimapIconState, ns.name)
-        if ns:global().sync_addon_states ~= true then return end
-        o.OnShowReloadConfirm()
-    end
-
-    --- Shows the Reload Confirm Dialog
-    function o.OnShowReloadConfirm()
-        local state = o:GetAddOnState()
-        if state:IsEmpty() then return end
-
-        if ns:global().minimap.confirm_reloads == true then
             return ShowReloadConfirm(state:GetSummary())
         end
         o.OnApplyAndRestartNoConfirmation()
+    end
+
+    --- If out of sync, always show Confirmation after closing the settings dialog
+    function o.OnHideSettings()
+        o:SendMessage(MSG.OnUpdateMinimapIconState, ns.name)
+        local state = o:GetAddOnState()
+        if state:IsEmpty() or ns:global().sync_addon_states ~= true then
+            return
+        end
+
+        return ShowReloadConfirm(state:GetSummary())
     end
 
     --- @return AddOnStateDataMixin
@@ -168,13 +160,12 @@ local function PropsAndMethods(o)
     end
 
     -- Initial State
-    function o.OnAfterOnAddOnReady() o:SendMessage(MSG.OnAddOnStateChangedWithConfirmation, libName) end
+    function o.OnAfterOnAddOnReady() o:SendMessage(MSG.OnUpdateMinimapIconState, ns.name) end
 
     function o.OnAddOnReady()
         o:RegisterMessage(MSG.OnApplyAndRestart, o.OnApplyAndRestartNoConfirmation)
+        o:RegisterMessage(MSG.OnHideSettings, o.OnHideSettings)
         o:RegisterMessage(MSG.OnAddOnStateChanged, o.OnAddOnStateChanged)
-        o:RegisterMessage(MSG.OnAddOnStateChangedWithConfirmation, o.OnAddOnStateChangedWithConfirmation)
-        o:RegisterMessage(MSG.OnShowReloadConfirm, o.OnShowReloadConfirm)
         o:RegisterMessage(MSG.OnAfterOnAddOnReady, o.OnAfterOnAddOnReady)
     end
 
