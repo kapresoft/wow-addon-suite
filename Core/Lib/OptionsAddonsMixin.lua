@@ -136,13 +136,13 @@ local function PropsAndMethods(o)
             header1 = { order = order:next(), type = 'header', name = h(L['General']) },
             showInQuickProfileSwitchMenu = {
                 name = L['Add to Favorite'], desc = self:C('Add to Favorite::Desc'),
-                order = order:next(), type="toggle", width='normal',
+                order = order:next(), type="toggle", width='full',
                 get = util:QuickProfileMenuGet(),
                 set = util:QuickProfileMenuSet()
             },
             syncAddOnStates = {
                 name = L['Sync addon states'], desc = self:G('Sync addon states::Desc'),
-                order = order:next(), type="toggle", width='normal',
+                order = order:next(), type="toggle", width=1.5,
                 get = util:GlobalGet('sync_addon_states'),
                 set = util:GlobalSet('sync_addon_states'),
             },

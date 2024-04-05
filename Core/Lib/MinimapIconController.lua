@@ -130,7 +130,7 @@ local function PropsAndMethods(o)
                 if button == "LeftButton" then
                     if IsAltKeyDown() then
                         local inSync = s:GetAddOnState():IsEmpty()
-                        if inSync ~= true then return s:SendMessage(MSG.OnShowReloadConfirm, libName) end
+                        if inSync ~= true then return s:SendMessage(MSG.OnAddOnStateChanged, libName) end
                     end
 
                     if mainSelf.tooltip then mainSelf.tooltip:Hide() end

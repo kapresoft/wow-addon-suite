@@ -88,7 +88,7 @@ local function MethodsAndProps(o)
         local enable = enableSound == true
         p:d(function() return 'OnHideSettings called with enableSound=%s', tostring(enable) end)
         if true == enable then PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE) end
-        self:SendMessage(GC.M.OnAddOnStateChangedWithConfirmation, ns.name)
+        self:SendMessage(GC.M.OnHideSettings, ns.name, 'OnHideSettings')
     end
     function o:CloseConfig()
         if not AceConfigDialog.OpenFrames[ns.name] then return end
