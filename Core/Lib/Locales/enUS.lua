@@ -13,6 +13,7 @@ ns.locale.xSymbol          = '|TInterface\\Glues\\Login\\Glues-CheckBox-Check:14
 ns.locale.lineSeparator1   = '|TInterface\\RaidFrame\\Raid-HSeparator:5:320:0:0|t'
 --- This is the hex color of the current profile
 ns.locale.profileNameColor = '12E600'
+ns.locale.profileNameColorOutOfSync = 'E64750'
 
 -- red-ish: E64750 Ex: |cfdE64750 Red-ish |r
 -- blue: 6F97FF  Ex: |cdf6F97FF Hello |r
@@ -24,7 +25,8 @@ Locale Entries
 L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG"]                  = 'Options Dialog'
 L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG_MINIMAP"]          = 'Options Dialog : Minimap'
 
-L['Current Profile Color']      = ns.locale.profileNameColor
+L['Current Profile Color']            = ns.locale.profileNameColor
+L['Current Profile Color::OutOfSync'] = ns.locale.profileNameColorOutOfSync
 L['Current::Symbol::Options']   = ns.locale.greenIndicator
 L['Current::Symbol::Minimap']   = ns.locale.checkMark
 
@@ -40,6 +42,7 @@ L['General::Disable All::Button::Desc']    = 'Unchecks all add-ons below.'
 L['Add-Ons::Desc']            = 'To activate or deactivate an Add-On, check or uncheck its corresponding box. After making your selections, click on "Apply and ReloadUI" to implement the changes to your configuration.'
 L['Apply and Reload']         = true
 L['Apply and Reload::Desc']   = 'Apply and Reload Immediately with |cfdE64750No Confirmation.|r\n\nTo activate or deactivate an Add-On, check or uncheck its corresponding box. After making your selections, click on this button to implement the changes to your configuration.'
+L['Sync with Profile and Reload'] = 'Sync with Profile and Reload'
 L['Select Profile']           = true
 L['Select Profile::Desc']     = 'Select a profile to activate.  You will be prompted to reload the UI.  Note that these profiles are managed on the Profiles tab.'
 
@@ -91,8 +94,14 @@ L['Switch Profile']                  = true
 L['Reloads UI with confirmation']    = true
 L['Reloads UI without confirmation'] = true
 
-L['Select a profile below to activate'] = true
+L['Select profile to activate']      = 'Select a profile below to activate'
 L['without']                         = true
 L['with']                            = true
 L['confirmation']                    = true
 L['No Confirmation']                 = true
+L['Profile is out of sync']          = true
+L['Click Key To Sync']               = 'Press ALT-LEFT-Click to sync profile and reload'
+L['ALT-LEFT-Click']                  = true
+L['LEFT-Click']                      = true
+L['RIGHT-Click']                     = true
+L['SHIFT-RIGHT-Click']               = true
