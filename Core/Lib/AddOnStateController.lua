@@ -237,23 +237,21 @@ local function PropsAndMethods(o)
 
     --- @return CheckedState
     function o:GetCheckedState()
+        local _m = 'GetCheckedState()'
         local addons = ns:profile().enabledAddons
         local state = CheckedState:New()
         for n, checked in pairs(addons) do
             local ai = O.AddOnManager:New(n)
-            if checked == true then
+            if checked == true and ai.loadable then
                 local loaded, onDemand = API:IsAddOnLoaded(n), API:IsAddOnLoadOnDemand(n)
                 local hasDisabledDeps = not ai.dependencyEnabled
                 if not (loaded or onDemand or hasDisabledDeps) then
-                    p:f1(function() return '[%s] checked but not loaded', n end);
+                    p:f1(function() return '%s [%s] checked but not loaded', _m, n end);
                     table.insert(state.checkedButNotLoaded, n)
                 end
-            else
-                local loaded = API:IsAddOnLoaded(n)
-                p:f1(function() return '[%s] Loaded=%s IsLoadOnDemand=%s',
-                n, loaded, ai.loadOnDemand end)
-                if loaded then
-                    p:f1(function() return '[%s] Loaded but not checked', n end);
+            elseif not checked and not ai.loadable and ai.loaded then
+                if not ai.loadOnDemand then
+                    p:f1(function() return '%s [%s] Loaded but not checked', _m, n end);
                     table.insert(state.loadedButNotChecked, n)
                 end
             end

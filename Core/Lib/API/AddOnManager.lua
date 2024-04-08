@@ -68,11 +68,28 @@ local function AddonInfoPropsAndMethods(o)
         --self.loadOnDemand = EqualsIgnoreCase(self.reason, 'DEMAND_LOADED')
         self.dependencies = { GetAddOnDependencies(self.name) }
         self.loadOnDemand = self.api:IsAddOnLoadOnDemand(self.name)
-        self.dependencyEnabled = self.api:AreAllDependencyEnabled(self.dependencies)
+        self.loaded = self.api:IsAddOnLoaded(self.name)
+        self.dependencyEnabled = self:AreDependenciesEnabled()
         self.enabled = self.api:IsAddOnEnabled(self.name)
         self.missing = EqualsIgnoreCase(self.reason, 'MISSING')
         self.canBeEnabled = self.api:IsAddOnDisabled(self.name)
+    end
 
+    --- @param recursive boolean|nil Defaults to true
+    --- @return boolean
+    function o:AreDependenciesEnabled(recursive)
+        if recursive == nil then recursive = true end
+        if not self:HasDependencies() then return true end
+
+        for _, addOnName in ipairs(self.dependencies) do
+            local ai = o:New(addOnName)
+            if not ai.enabled then return false end
+            if recursive == true then
+                -- only 1st level recursive
+                if not ai:AreDependenciesEnabled(false) then return false end
+            end
+        end
+        return true
     end
 
     --- @public
@@ -101,26 +118,53 @@ local function AddonInfoPropsAndMethods(o)
         return info
     end
 
+    ---@param callbackFn fun(parentAddOn:Name, ao:AddOnManager) | "function(parentAddOn, ao) end"
+    function o:ForEachDependency(callbackFn)
+        for _, n in ipairs(self.dependencies) do
+            local ao = o:New(n)
+            if ao then callbackFn(n, ao) end
+        end
+    end
+
     --- @private
     function o:GetDependenciesLabel()
         if not self:HasDependencies() then return '' end
         local deps = {}
-        p:f3(function() return '%s: deps=%s', self.name, self.dependencies end)
-        for _, n in ipairs(self.dependencies) do
-            p:f3(function() return '%s: enabled-deps[%s]=%s',
-                        self.name, n, self.api:IsAddOnEnabled(n) end)
-            if self.api:IsAddOnDisabled(n) then
-                table.insert(deps, c_dep:WrapTextInColorCode(n))
-            else table.insert(deps, n) end
-        end
+        self:ForEachDependency(function(parentAddOn, ao)
+            local n = ao.name
+            p:f1(function()
+                return '%s: enabled-deps[%s]=%s', parentAddOn, n, ao:AreDependenciesEnabled()
+            end)
 
-        return c_label:WrapTextInColorCode(ADDON_DEPENDENCIES) .. table.concat(deps, ", ")
+            if not ao.enabled then
+                table.insert(deps, c_dep:WrapTextInColorCode(n))
+            elseif not ao:AreDependenciesEnabled() then
+                table.insert(deps, c_dep:WrapTextInColorCode(n))
+            else
+                table.insert(deps, n)
+            end
+        end)
+        p:f1(function() return '%s: deps(before)=%s deps(after): %s',
+                                self.name, self.dependencies, deps end)
+        local text = ''
+        if #deps > 0 then
+            text = c_label:WrapTextInColorCode(ADDON_DEPENDENCIES)
+            if #deps == 1 then
+                text = text .. deps[1]
+            else
+                text = text .. '\n'
+                for i, dn in ipairs(deps) do
+                    text = text .. '  • ' .. dn .. '\n'
+                end
+            end
+        end
+        return text
     end
 
     --- @return Name, Description The name and description for the addon
     function o:GetNameAndDesc()
         local name = self.name
-        local desc = self.notes
+        local desc = string.gsub(self.notes or '', "[\|n]+$", "")
         local label = ''
         local bullets = {}
 
@@ -129,13 +173,13 @@ local function AddonInfoPropsAndMethods(o)
         if self.loadOnDemand then table.insert(bullets, ADDON_DEMAND_LOADED) end
 
         local isChecked = self:IsEnabledInProfile()
-        if isChecked and not self.dependencyEnabled then
+        if isChecked and not self:AreDependenciesEnabled() then
             name = RED_FONT_COLOR:WrapTextInColorCode(self.name)
             table.insert(bullets, ORANGE_FONT_COLOR:WrapTextInColorCode(ADDON_DEP_DISABLED))
         end
 
         if #bullets > 0 then
-            for _, txt in ipairs(bullets) do label = label .. '\n  • ' .. txt end
+            for _, txt in ipairs(bullets) do label = label .. '\n' .. txt end
         end
 
         desc = desc .. label

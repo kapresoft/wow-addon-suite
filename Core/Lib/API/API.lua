@@ -75,7 +75,7 @@ end
         elseif GetAddOnEnableState then
             intVal = GetAddOnEnableState(charName, indexOrName)
         end
-        p:f3(function() return 'AddOn[%s] is enabled: %s', indexOrName, tostring(intVal == 2) end)
+        p:f1(function() return 'AddOn[%s] is enabled: %s', indexOrName, tostring(intVal == 2) end)
         return intVal == 2
     end
 
@@ -86,20 +86,6 @@ end
     --- @param indexOrName Name|IndexOrName
     --- @return boolean
     function o:IsAddOnLoadOnDemand(indexOrName) return AddonList_IsAddOnLoadOnDemand(indexOrName) == true end
-
-    --- @param dependencies table<number, Name>
-    --- @return boolean
-    function o:AreAllDependencyEnabled(dependencies)
-        if not dependencies or #dependencies <= 0 then return true end
-
-        for _, addOnName in ipairs(dependencies) do
-            local ai = m().GetAddOnInfo(addOnName)
-            if ai and not self:IsAddOnEnabled(addOnName) then
-                return false
-            end
-        end
-        return true
-    end
 
     --- @param indexOrName IndexOrName
     --- @boolean
