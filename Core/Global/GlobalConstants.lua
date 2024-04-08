@@ -23,7 +23,7 @@ local kch = ns.Kapresoft_LibUtil.CH
 
 local addonShortName = 'AddonSuite'
 local addonFriendlyName = 'Addon Suite'
-local consoleCommand = "addon-suite"
+local consoleCommand = "addonsuite"
 local consoleCommandShort = "ads"
 local consoleCommandOptions = consoleCommand .. '-options'
 

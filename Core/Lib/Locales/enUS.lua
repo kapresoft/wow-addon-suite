@@ -40,8 +40,8 @@ L['General::Disable All::Button']          = 'None'
 L['General::Disable All::Button::Desc']    = 'Unchecks all add-ons below.'
 
 L['Add-Ons::Desc']            = 'To activate or deactivate an Add-On, check or uncheck its corresponding box. After making your selections, click on "Apply and ReloadUI" to implement the changes to your configuration.'
-L['Apply and Reload']         = true
-L['Apply and Reload::Desc']   = 'Apply and Reload Immediately with |cfdE64750No Confirmation.|r\n\nTo activate or deactivate an Add-On, check or uncheck its corresponding box. After making your selections, click on this button to implement the changes to your configuration.'
+L['Reload UI']         = true
+L['Reload UI::Desc']   = 'Apply and Reload Immediately with |cfdE64750No Confirmation.|r\n\nTo activate or deactivate an Add-On, check or uncheck its corresponding box. After making your selections, click on this button to implement the changes to your configuration.'
 L['Sync with Profile and Reload'] = 'Sync with Profile and Reload'
 L['Select Profile']           = true
 L['Select Profile::Desc']     = 'Select a profile to activate.  You will be prompted to reload the UI.  Note that these profiles are managed on the Profiles tab.'
@@ -63,8 +63,8 @@ L['Debugging::Category::Disable All::Button::Desc']    = 'Unchecks all log categ
 
 L['REQUIRES_RELOAD_PROFILE_CHANGED'] = 'Your selected profile\'s addon changes require a UI reload to take effect. This will enable checked addons and disable unchecked ones.\n\nReload now?'
 
-L['Sync addon states']               = 'Sync addon states on close'
-L['Sync addon states::Desc']         = 'Enable this to ensure your addons align with your profile after closing the settings dialog. You\'ll see a confirmation dialog before reloading, detailing which addons will be enabled or disabled. Remember, |cfdE64750frequent alerts|r might gently nudge you more often than expected.'
+L['Prompt me to Reload UI::Desc'] = 'Enable this option to receive a prompt asking to reload the UI when closing the settings dialog, if changes requiring activation or deactivation of addons were made.'
+L['Prompt me to Reload UI'] = 'Prompt me to Reload UI on close as needed'
 
 L['Include Addon Changes in Reload Confirmation'] = true
 L['Include Addon Changes in Reload Confirmation::Desc'] = 'Enable to see which addons will be enabled or disabled listed within the reload confirmation dialog, giving you a clear overview before proceeding.'

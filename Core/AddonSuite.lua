@@ -20,6 +20,7 @@ local A = LibStub("AceAddon-3.0"):NewAddon(ns.name, "AceConsole-3.0", "AceEvent-
 local mt = getmetatable(A) or {}
 mt.__tostring = ns:ToStringFunction()
 local p = ns:CreateDefaultLogger(ns.name)
+local pa = ns:LC().ADDON:NewLogger(ns.name)
 
 --[[-----------------------------------------------------------------------------
 Methods
@@ -77,7 +78,7 @@ local function MethodsAndProps(o)
     --- @param frame Frame
     function o:OnHide(frame, name)
         if ns.name ~= name then return end
-        p:d(function() return 'OnHide() name=%s', name end)
+        pa:d(function() return 'OnHide() name=%s', name end)
         self:OnHideSettings(true)
     end
 
@@ -86,7 +87,7 @@ local function MethodsAndProps(o)
     --- @param enableSound BooleanOptional
     function o:OnHideSettings(enableSound)
         local enable = enableSound == true
-        p:d(function() return 'OnHideSettings called with enableSound=%s', tostring(enable) end)
+        pa:d(function() return 'OnHideSettings called with enableSound=%s', tostring(enable) end)
         if true == enable then PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE) end
         self:SendMessage(GC.M.OnHideSettings, ns.name, 'OnHideSettings')
     end

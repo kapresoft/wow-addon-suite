@@ -15,7 +15,6 @@
     </Frame>
 
     <Script file="MainController.lua" />
-    <Script file="OptionsController.lua" />
     <Script file="ConfigDialogController.lua" />
 
     <Script file="AceDbInitializerMixin.lua" />

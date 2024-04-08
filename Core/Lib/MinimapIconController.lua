@@ -3,7 +3,7 @@ Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
 local ns = select(2, ...)
-local MSG = ns.GC.M
+local MSG, C = ns.GC.M, ns.GC.C
 
 local LibDBIcon = ns:LibDBIcon()
 local LibDataBroker = ns:LibDataBroker()
@@ -16,7 +16,7 @@ New Instance
 -------------------------------------------------------------------------------]]
 --- @class MinimapIconController : BaseLibraryObject_WithAceEvent
 local S = ns:NewLibWithEvent(libName)
-local p = ns:CreateDefaultLogger(libName)
+local p = ns:LC().MINIMAP:NewLogger(libName)
 local pm = ns:LC().MESSAGE:NewLogger(libName)
 local icon     = "Interface\\Icons\\inv_cask_01"
 local iconText = ns.sformat('|T%s:18:18:0:0|t', icon)
@@ -62,10 +62,10 @@ end
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
---- @param o MinimapIconController | AceEvent
+--- @param o MinimapIconController
 local function PropsAndMethods(o)
 
-    function o:GetAddOnState() return ns.O.AddOnStateController:GetAddOnState() end
+    function o:IsInSync() return ns.O.AddOnStateController:IsInSync() end
 
     --- @private
     function o:Init()
@@ -128,9 +128,8 @@ local function PropsAndMethods(o)
             icon = icon,
             OnClick = function(self, button)
                 if button == "LeftButton" then
-                    if IsAltKeyDown() then
-                        local inSync = s:GetAddOnState():IsEmpty()
-                        if inSync ~= true then return s:SendMessage(MSG.OnAddOnStateChanged, libName) end
+                    if not s:IsInSync() and IsAltKeyDown() then
+                        return s:SendMessage(MSG.OnAddOnStateChanged, libName)
                     end
 
                     if mainSelf.tooltip then mainSelf.tooltip:Hide() end
@@ -153,7 +152,8 @@ local function PropsAndMethods(o)
                 if not tooltip or not tooltip.AddLine then return end
                 mainSelf.tooltip = tooltip
 
-                local inSync = s:GetAddOnState():IsEmpty()
+                s.OnOutOfSyncIndicator()
+                local inSync = s:IsInSync()
                 local currentProfileText, currentProfile = CurrentProfileText(inSync)
                 local confirmationLine = GetConfirmReloadText()
 
@@ -177,8 +177,10 @@ local function PropsAndMethods(o)
                 tooltip:AddDoubleLine(ns.ch:S(L['SHIFT-RIGHT-Click']), ns.ch:T(L['Open minimap settings dialog']))
                 tooltip:AddLine(' ')
                 tooltip:AddLine(commandLines)
-                tooltip:AddDoubleLine(ns.ch:S("/ads or /addon-suite"), ns.ch:T(L['View available commands']))
-                tooltip:AddDoubleLine(ns.ch:S("/ads config"), ns.ch:T(L['Open settings dialog']))
+                local cmdLine = ns.sformat("/%s or /%s", C.CONSOLE_COMMAND_NAME, C.CONSOLE_COMMAND_SHORT)
+                local cmdLineCfg = ns.sformat("/%s config", C.CONSOLE_COMMAND_SHORT)
+                tooltip:AddDoubleLine(ns.ch:S(cmdLine), ns.ch:T(L['View available commands']))
+                tooltip:AddDoubleLine(ns.ch:S(cmdLineCfg), ns.ch:T(L['Open settings dialog']))
             end,
         })
 
@@ -190,17 +192,31 @@ local function PropsAndMethods(o)
         if ns:global().minimap.sync_status_indicator ~= true then
             return o:UpdateOutOfSyncIndicator(true)
         end
-        o:UpdateOutOfSyncIndicator(o:GetAddOnState():IsEmpty())
+        local inSync, details = o:IsInSync()
+        o:UpdateOutOfSyncIndicator(inSync, details)
     end
 
-    ---@param inSync boolean
-    function o:UpdateOutOfSyncIndicator(inSync)
+    --- @param profileName string
+    function o.OnSwitchProfile(profileName)
+        assert(profileName, "Profile Name is missing.")
+        p:f1(function() return "OnSwitchProfile: %s", profileName end )
+        ns:db():SetProfile(profileName)
+        ns:a():CloseConfig()
+        o:SendMessage(MSG.OnAddOnStateChanged, libName)
+    end
+
+    --- @param inSync boolean
+    --- @param details CheckedState|nil
+    function o:UpdateOutOfSyncIndicator(inSync, details)
         local dataObj = LibDBIcon.objects[minimapName]
         if not dataObj then return end
 
         --- @type LayeredRegion
         local iconT = dataObj.icon; if not iconT then return end
-        p:d(function() return 'inSync: %s', inSync end)
+        p:d(function()
+            if inSync then return 'inSync=%s', inSync end
+            return 'inSync=%s details=%s', inSync, details:summary()
+        end)
         if inSync then return iconT:SetVertexColor(1, 1, 1, 1) end
 
         iconT:SetVertexColor(iconOutOfSyncColor:GetRGBA())
@@ -217,6 +233,8 @@ local function PropsAndMethods(o)
         --- @field func fun() | "function() end" | "A function action handler"
         --- @field _sortKey string The sort key (Custom Field)
         --- @type table<number, MinimapIconProfilesMenuItem>
+
+        local s = self
 
         local sepColor     = ns.locale.lineSeparator1
         local selectProfileText = L['Select profile to activate']
@@ -237,9 +255,9 @@ local function PropsAndMethods(o)
         }
         --- @type table<number, MinimapIconProfilesMenuItem>
         local menuItems = { }
-        local function FnHandler(profile)
-            return function() self:SendMessage(ns.GC.M.OnSwitchProfile, libName, profile) end
-        end
+
+        --- @param profileName Name
+        local function FnHandler(profileName) return function() s.OnSwitchProfile(profileName) end end
 
         local current = ns:db():GetCurrentProfile()
         local char = ns:db().char

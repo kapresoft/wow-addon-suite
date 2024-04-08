@@ -1,10 +1,11 @@
 --[[-----------------------------------------------------------------------------
 Callback Functions
 -------------------------------------------------------------------------------]]
---- @alias AddOnCallbackFn fun(addOn:AddOnInfoMixin) | "function(addOn) print('addOn:', pformat(addOn)) end"
+--- @alias AddOnCallbackFn fun(addOn:AddOnManager) | "function(addOn) print('addOn:', pformat(addOn)) end"
 --- @alias ProfilePredicateFn fun(name:Name, profile:Profile_Config) : boolean
 --- @alias ProfileCallbackFn fun(name:Name, profile:Profile_Config) : void
-
+--- @alias WithAceEvent AceEvent
+--- @alias WithAceEventAndAceHook AceEvent | AceHook
 --[[-----------------------------------------------------------------------------
 BaseLibraryObject
 -------------------------------------------------------------------------------]]
@@ -23,14 +24,3 @@ BaseLibraryObject_WithAceEvent
 --- @field major string Retrieves the major version of the module. i.e., <LibName>-1.0
 --- @field minor string Retrieves the minor version of the module. i.e., <LibName>-1.0
 
---[[-----------------------------------------------------------------------------
-Type: AddOnInfo
--------------------------------------------------------------------------------]]
---- @class AddOnInfo
---- @field name AddOnName
---- @field title AddOnTitle
---- @field notes Notes
---- @field loadable Boolean
---- @field reason AddOnIsNotLoadableReason
---- @field security AddOnSecurity
---- @field newVersion Boolean Unused

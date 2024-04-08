@@ -52,6 +52,8 @@ local LogCategories = {
     --- @type Kapresoft_LogCategory
     DEFAULT = 'DEFAULT',
     --- @type Kapresoft_LogCategory
+    ADDON = 'AD',
+    --- @type Kapresoft_LogCategory
     API = "AP",
     --- @type Kapresoft_LogCategory
     OPTIONS = "OP",
@@ -59,6 +61,8 @@ local LogCategories = {
     EVENT = "EV",
     --- @type Kapresoft_LogCategory
     FRAME = "FR",
+    --- @type Kapresoft_LogCategory
+    MINIMAP = "MM",
     --- @type Kapresoft_LogCategory
     MESSAGE = "MS",
     --- @type Kapresoft_LogCategory
@@ -76,10 +80,11 @@ local LogCategories = {
 GlobalObjects
 -------------------------------------------------------------------------------]]
 --- @class GlobalObjects
---- @field AceLibrary Kapresoft_LibUtil_AceLibraryObjects
---- @field AddOnStateController AddOnStateController
 --- @field pformat fun(fmt:string, ...)|fun(val:string)
+--- @field AceLibrary Kapresoft_LibUtil_AceLibraryObjects
 --- @field AceDbInitializerMixin AceDbInitializerMixin
+--- @field AddOnManager AddOnManager
+--- @field AddOnStateController AddOnStateController
 --- @field API API
 --- @field GlobalConstants GlobalConstants
 --- @field DebuggingSettingsGroup DebuggingSettingsGroup
