@@ -9,7 +9,7 @@ Local Vars
 --- @type Namespace
 local ns = select(2, ...)
 local O, GC, M, MSG, KO, LibStub = ns.O, ns.GC, ns.M, ns.GC.M, ns:KO(), ns.LibStub
-local Table =  KO.Table
+local Table, String =  KO.Table, KO.String
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
@@ -27,6 +27,7 @@ end; local S, p = CreateLib(); if not S then return end
 --[[-----------------------------------------------------------------------------
 Support Functions
 -------------------------------------------------------------------------------]]
+local function m() return O.AddOnManager  end
 local sp = '                                                                   '
 
 --- @param fallback boolean The fallback value
@@ -107,7 +108,6 @@ local function PropsAndMethods(o)
             order = order:next(),
             args = self:CreateAddOnsOptions(order)
         }
-        self.addonsOptions = group.args
         return group
     end
 
@@ -130,34 +130,26 @@ local function PropsAndMethods(o)
         local util = self.optionsMixin.util
         local ps = CreateProfileSelect()
 
-        local includeVar = 'include_addon_changes_in_reload_confirmation'
-
+        --- @type table<string, AceConfigOption>
         local options = {
             header1 = { order = order:next(), type = 'header', name = h(L['General']) },
             showInQuickProfileSwitchMenu = {
                 name = L['Add to Favorite'], desc = self:C('Add to Favorite::Desc'),
-                order = order:next(), type="toggle", width='full',
+                order = order:next(), type="toggle", width='normal',
                 get = util:QuickProfileMenuGet(),
                 set = util:QuickProfileMenuSet()
             },
             syncAddOnStates = {
-                name = L['Sync addon states'], desc = self:G('Sync addon states::Desc'),
-                order = order:next(), type="toggle", width=1.5,
+                name = L['Prompt me to Reload UI'], desc = self:G('Prompt me to Reload UI::Desc'),
+                order = order:next(), type="toggle", width=2.0,
                 get = util:GlobalGet('sync_addon_states'),
                 set = util:GlobalSet('sync_addon_states'),
             },
-            includeAddOnChanges = {
-                name = L['Include Addon Changes in Reload Confirmation'],
-                desc = self:G('Include Addon Changes in Reload Confirmation::Desc'),
-                order = order:next(), type="toggle", width=2.0,
-                get = util:GlobalGet(includeVar),
-                set = util:GlobalSet(includeVar),
-            },
             spacer1a = { order = order:next(), type = "description", name = "", width='full' },
         }
-        options.applyAll = {
-            name = L['Apply and Reload'], desc = L['Apply and Reload::Desc'],
-            type = "execute", order = order:next(), width = 'normal',
+        options.reloadUI = {
+            name = L['Reload UI'], desc = L['Reload UI::Desc'],
+            type = "execute", order = order:next(), width = 0.7,
             func = function() util:SendEventMessage(GC.M.OnApplyAndRestart, libName) end
         }
         options.profileSelection = {
@@ -179,23 +171,83 @@ local function PropsAndMethods(o)
             }
             return options
         end
+        self.addonsOptions = options
 
-        O.API:ForEachAddOn(function(addOn)
-            local name = addOn.name
-            local title = addOn.addOnInfo.title
-            if name ~= ns.name then
-                options[name] = {
-                    order = order:next(),
-                    name = title,
-                    type = 'toggle',
-                    width = 1.3,
-                    get = AutoLoadAddOnsGet(name),
-                    set = AutoLoadAddOnsSet(name)
-                }
-            end
-        end)
+        self:CreateAddOnCheckList(order)
 
         return options
+    end
+
+    --- @param addOnName Name
+    --- @param state boolean
+    local function UpdateEnabledState(addOnName, state)
+        local currentlyEnabled = O.API:IsAddOnEnabled(addOnName)
+        if state == true and not currentlyEnabled then
+            return O.API:EnableAddOnForCharacter(addOnName)
+        end
+        if state == false and currentlyEnabled then
+            O.API:DisableAddOnForCharacter(addOnName)
+        end
+    end
+
+    function o.CreateGetFn(addOnName)
+        --- @return boolean
+        return function()
+            local v = ns:profile().enabledAddons[addOnName] == true
+            p:f3(function() return 'Handle Get[%s]: val=%s', addOnName, v end)
+            UpdateEnabledState(addOnName, v)
+            return v
+        end
+    end
+
+    --- @param addOnName Name
+    function o.CreateSetFn(addOnName)
+        return function(_, v)
+            --@non-debug@
+            ns:profile().enabledAddons[addOnName] = v
+            --@end-non-debug@
+
+            --@debug@
+            if String.IsAnyOf(addOnName, 'Ace3', 'BugSack', '!BugGrabber') then
+                ns:profile().enabledAddons[addOnName] = true
+            end
+            --@end-debug@
+
+            UpdateEnabledState(addOnName, v)
+            p:f3(function() return 'Handle Set[%s]: val=%s', addOnName, v end)
+        end
+    end
+
+    ---@param self AceConfigOption
+    function o.GetAddOnName(self, name)
+        return function()
+            local ai = m():New(name)
+            p:f1(function() return "[%s]: reason: %s enabled: %s", ai.name, ai.reason, ai.enabled end)
+            return ai:GetNameAndDesc(self.get())
+        end
+    end
+    ---@param self AceConfigOption
+    function o.GetAddOnDesc(self, name)
+        return function() return select(2, m():New(name):GetNameAndDesc()) end
+    end
+
+    function o:CreateAddOnCheckList(order)
+        local options = self.addonsOptions
+        local A = O.API
+
+        A:ForEachAddOn(function(info)
+            local name = info.name
+            options[name] = {
+                order = order:next(),
+                type = 'toggle',
+                width = 1.3,
+                get = o.CreateGetFn(name),
+                set = o.CreateSetFn(name),
+            }
+            local opt = options[name];
+            opt.name = o.GetAddOnName(opt, name)
+            opt.desc = o.GetAddOnDesc(opt, name)
+        end)
     end
 
     --- @param options AceConfigOption

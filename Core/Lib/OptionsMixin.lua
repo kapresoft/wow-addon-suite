@@ -39,6 +39,18 @@ local function MethodsAndProps(o)
     --- @return OptionsMixin
     function o:New(addon) return ns:K():CreateAndInitFromMixin(o, addon) end
 
+    local function ConfigureDebugLevel()
+        local logLevel = ADDON_SUITE_LOG_LEVEL
+
+        --@non-debug@
+        ADDON_SUITE_LOG_LEVEL = 0
+        --@end-non-debug@
+
+        --@debug@
+        ADDON_SUITE_LOG_LEVEL = logLevel
+        --@end-debug@
+    end
+
     function o:CreateOptions()
         local order = ns:CreateSequence()
 
@@ -50,9 +62,11 @@ local function MethodsAndProps(o)
             args = {
                 general = O.OptionsAddonsMixin:New(self):CreateAddOnsGroup(order),
                 minimap = O.OptionsMinimapMixin:New(self, order):CreateOptions(),
+                --@debug@
                 debugging = DebugSettings:CreateDebuggingGroup(),
-            }
-        }
+                --@end-debug@
+            },
+        }; ConfigureDebugLevel()
 
         return options
     end

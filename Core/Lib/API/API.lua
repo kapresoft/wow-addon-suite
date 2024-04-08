@@ -3,10 +3,9 @@ Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
 local ns = select(2, ...)
-local M, LibStub = ns.M, ns.LibStub
+local O, M, LibStub = ns.O, ns.M, ns.LibStub
 local String = ns:KO().String
 local IsAnyOf = String.IsAnyOf
-local EqualsIgnoreCase = String.EqualsIgnoreCase
 
 --[[-----------------------------------------------------------------------------
 Blizzard Vars
@@ -16,6 +15,7 @@ local GetAddOnInfo = GetAddOnInfo or C_AddOns.GetAddOnInfo
 --- We don't want to use the old global GetAddOnEnableState() because it doesn't work
 local C_AddOns_GetAddOnEnableState = C_AddOns.GetAddOnEnableState
 local EnableAddOn, DisableAddOn = EnableAddOn or C_AddOns.EnableAddOn, DisableAddOn or C_AddOns.DisableAddOn
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded or IsAddOnLoaded
 
 --[[-----------------------------------------------------------------------------
 New Instance
@@ -29,51 +29,13 @@ local function CreateLib()
     return newLib, logger
 end; local L, p = CreateLib(); if not L then return end
 
---[[-----------------------------------------------------------------------------
-Support Functions
--------------------------------------------------------------------------------]]
---- @class AddOnInfoMixin
-local AddOnInfoMixin = {}
-
---- @param o AddOnInfoMixin
-local function AddonInfoPropsAndMethods(o)
-
-    --- @public
-    --- @param addOnInfo AddOnInfo
-    --- @return AddOnInfoMixin
-    function o:New(addOnInfo)
-        return ns:K():CreateAndInitFromMixin(o, addOnInfo)
-    end
-
-    --- @param addOnInfo AddOnInfo
-    --- @private
-    function o:Init(addOnInfo)
-        assert(addOnInfo, "AddOnInfo is missing.")
-        self.addOnInfo = addOnInfo
-        self.name = addOnInfo.name
-        self.reason = self.addOnInfo.reason or ''
-        self.loadOnDemand = EqualsIgnoreCase(self.reason, 'DEMAND_LOADED')
-        self.enabled = L:IsAddOnEnabled(self.name, self.addOnInfo.loadable)
-        self.missing = EqualsIgnoreCase(self.reason, 'MISSING')
-        self.canBeEnabled = L:IsAddOnDisabled(self.addOnInfo.name)
-    end
-
-    function o:IsNotLoadOnDemand() return not self.loadOnDemand end
-    function o:IsEnabled() return self.enabled end
-    function o:CanBeEnabled() return not (self.missing or self.loadOnDemand or self.enabled) end
-
-    --reason = info.reason or ''
-    --info.loadOnDemand = EqualsIgnoreCase(reason, 'DEMAND_LOADED')
-    --info.missing = info.reason and EqualsIgnoreCase(reason, 'MISSING')
-    --info.enabled = self:IsAddOnEnabled(info.name, loadable)
-end; AddonInfoPropsAndMethods(AddOnInfoMixin)
+local function m() return O.AddOnManager  end
 
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
 --- @param o API
 local function PropsAndMethods(o)
-
     function o:GetUIScale()
         local useUiScale = GetCVar("useUiScale") -- This returns "1" if UI scaling is enabled, "0" otherwise.
         if useUiScale == "1" then
@@ -91,11 +53,8 @@ local function PropsAndMethods(o)
     function o:GetEnabledAndInstalledAddOns()
         local toRemove = {}
         for name in pairs(ns:profile().enabledAddons) do
-            local a = self:GetAddOnInfo(name)
-            if a.missing then
-                table.insert(toRemove, name)
-                --p:vv(function() return 'Missing addon removed: %s', a.name end)
-            end
+            local a = m():New(name)
+            if a.missing then table.insert(toRemove, name) end
         end
         for _, name in ipairs(toRemove) do
             ns:profile().enabledAddons[name] = nil
@@ -106,72 +65,94 @@ end
 
     function o:GetEnabledAddOns() return self:GetEnabledAndInstalledAddOns() end
 
-    --- @param indexOrName IndexOrName The index from 1 to GetNumAddOns() or The name of the addon (as in TOC/folder filename), case insensitive.
-    --- @return AddOnInfoMixin
-    function o:GetAddOnInfo(indexOrName)
-        assert(indexOrName, "The index parameter is required.")
-        local name, title, notes, loadable, reason, security = GetAddOnInfo(indexOrName)
-        --- @type AddOnInfo
-        local info = {
-            name = name, title = title, loadable = loadable, notes = notes,
-            reason = reason, security = security,
-        }
-        return AddOnInfoMixin:New(info)
-    end
-
-    --- @private
     --- @param indexOrName IndexOrName
     --- @return Enabled
-    --- @param loadable boolean
-    function o:IsAddOnEnabled(indexOrName, loadable)
+    function o:IsAddOnEnabled(indexOrName)
+        local charName = self:GetCurrentPlayer()
+        local intVal = -1
         if C_AddOns_GetAddOnEnableState then
-            local charName = self:GetCurrentPlayer()
-            local intVal = C_AddOns_GetAddOnEnableState(indexOrName, charName)
-            p:f3(function() return 'AddOn[%s] is enabled: %s', indexOrName, tostring(intVal == 2) end)
-            return intVal == 2
+            intVal = C_AddOns_GetAddOnEnableState(indexOrName, charName)
+        elseif GetAddOnEnableState then
+            intVal = GetAddOnEnableState(charName, indexOrName)
         end
-        local enabled = loadable == true
-        p:f3(function() return 'WOTLK addon[%s] is enabled: %s',
-        tostring(indexOrName), tostring(enabled) end)
-        return enabled
+        p:f3(function() return 'AddOn[%s] is enabled: %s', indexOrName, tostring(intVal == 2) end)
+        return intVal == 2
     end
 
     --- @param indexOrName IndexOrName
     --- @return Enabled
     function o:IsAddOnDisabled(indexOrName) return self:IsAddOnEnabled(indexOrName) ~= true end
 
+    --- @param indexOrName Name|IndexOrName
+    --- @return boolean
+    function o:IsAddOnLoadOnDemand(indexOrName) return AddonList_IsAddOnLoadOnDemand(indexOrName) == true end
+
+    --- @param dependencies table<number, Name>
+    --- @return boolean
+    function o:AreAllDependencyEnabled(dependencies)
+        if not dependencies or #dependencies <= 0 then return true end
+
+        for _, addOnName in ipairs(dependencies) do
+            local ai = m().GetAddOnInfo(addOnName)
+            if ai and not self:IsAddOnEnabled(addOnName) then
+                return false
+            end
+        end
+        return true
+    end
+
+    --- @param indexOrName IndexOrName
+    --- @boolean
+    function o:IsAddOnLoaded(indexOrName) return IsAddOnLoaded(indexOrName) end
+
+    --  TODO: New Option to "Sort By Index", checked by default, else sort by name
     --- @param callbackFn AddOnCallbackFn
     function o:ForEachAddOn(callbackFn)
         return self:ForAllAddOns(callbackFn, function(info)
             return IsAnyOf(info.name, ns.name) ~= true
-        end)
+        end, true)
     end
 
     --- @param callbackFn AddOnCallbackFn
-    --- @param predicateFn fun(info:AddOnInfoMixin) | "function(info) return true end" | "A function that returns true to accept the element"
-    function o:ForAllAddOns(callbackFn, predicateFn)
+    --- @param predicateFn fun(info:AddOnInfo) | "function(info) return true end" | "A function that returns true to accept the element"
+    ---@param sortByName boolean|nil Defaults to true
+    function o:ForAllAddOns(callbackFn, predicateFn, sortByName)
+        sortByName = sortByName == nil and true
+
         local addOnCount = GetNumAddOns()
         if addOnCount <= 0 then return end
 
+        local addOns = {}
         for i = 1, addOnCount do
-            local info = self:GetAddOnInfo(i)
+            local info = m().GetAddOnInfo(i)
+            table.insert(addOns, info)
+            if not sortByName and predicateFn and predicateFn(info) then
+                callbackFn(info)
+            end
+        end
+        if not sortByName then return end
+
+        --- @param a AddOnInfo
+        --- @param b AddOnInfo
+        table.sort(addOns, function(a,b) return a.name < b.name end)
+        for _, info in pairs(addOns) do
             if predicateFn and predicateFn(info) then callbackFn(info) end
         end
     end
 
-    --- @param callbackFn fun(info:AddOnInfoMixin) | "function(info) end"
+    --- @param callbackFn fun(info:AddOnManager) | "function(info) end"
     function o:ForEachCheckedAndLoadableAddon(callbackFn)
         local addons = self:GetEnabledAddOns()
         if not addons then return end
         for name, checked in pairs(addons) do
             if checked == true then
-                local info = self:GetAddOnInfo(name)
-                if info:CanBeEnabled() then callbackFn(info) end
+                local info =  m():New(name)
+                if info then callbackFn(info) end
             end
         end
     end
 
-    --- @param callbackFn fun(info:AddOnInfoMixin) | "function(info) end"
+    --- @param callbackFn fun(info:AddOnManager) | "function(info) end"
     function o:ForEachAddOnThatCanBeDisabled(callbackFn)
         local addons = self:GetEnabledAddOns()
         if not addons then return end
@@ -180,16 +161,17 @@ end
         if addOnCount <= 0 then return end
 
         for i = 1, addOnCount do
-            local info = self:GetAddOnInfo(i)
+            local info = m():New(i)
             local checked = addons[info.name] == true
             local validCandidate = ns.name ~= info.name and checked ~= true
-                    and info:IsNotLoadOnDemand() and info.enabled == true
+                    and not info.loadOnDemand and info.enabled == true
             if validCandidate == true then callbackFn(info) end
         end
     end
 
     --- @param name Name The addOn name
-    function o:EnableAddOnForCharacter(charName, name)
+    --- @param charName Name|nil The character name. Defaults to current
+    function o:EnableAddOnForCharacter(name, charName)
         assert(name, "AddOn name is required.")
         charName = charName or UnitName("player")
         EnableAddOn(name, charName)
@@ -197,7 +179,8 @@ end
     end
 
     --- @param name Name The addOn name
-    function o:DisableAddOnForCharacter(charName, name)
+    --- @param charName Name|nil The character name. Defaults to current
+    function o:DisableAddOnForCharacter(name, charName)
         assert(name, "AddOn name is required.")
         charName = charName or UnitName("player")
         DisableAddOn(name, charName)
@@ -209,8 +192,8 @@ end
         assert(type(addOnNames) == 'table', "AddOn names array are required.")
         if #addOnNames <= 0 then return end
         local charName = UnitName("player")
-        for i, name in ipairs(addOnNames) do
-            self:EnableAddOnForCharacter(charName, name)
+        for _, name in ipairs(addOnNames) do
+            self:EnableAddOnForCharacter(name, charName)
         end
     end
 
@@ -219,8 +202,8 @@ end
         assert(type(addOnNames) == 'table', "AddOn names array are required.")
         if #addOnNames <= 0 then return end
         local charName = UnitName("player")
-        for i, name in ipairs(addOnNames) do
-            self:DisableAddOnForCharacter(charName, name)
+        for _, name in ipairs(addOnNames) do
+            self:DisableAddOnForCharacter(name, charName)
         end
     end
 
