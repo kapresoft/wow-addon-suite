@@ -276,7 +276,7 @@ local function PropsAndMethods(o)
         if not success then
             -- can be ignored
             p:d(function()
-                return ORANGE_THREAT_COLOR:WrapTextInColorCode("OnAddOnReady::SecureHook")
+                return ORANGE_THREAT_COLOR:WrapTextInColorCode("OnAddOnReady::SecureHook(This can be ignored):")
                         .. " failed: %s", res end)
         end
     end
