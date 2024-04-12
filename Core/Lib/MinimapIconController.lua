@@ -9,7 +9,7 @@ local LibDBIcon = ns:LibDBIcon()
 local LibDataBroker = ns:LibDataBroker()
 
 local L = ns:AceLocale()
-local minimapName = ns.name .. "MinimapIcon"
+local minimapName = ns.name
 local libName = 'MinimapIconController'
 --[[-----------------------------------------------------------------------------
 New Instance
@@ -18,7 +18,8 @@ New Instance
 local S = ns:NewLibWithEvent(libName)
 local p = ns:LC().MINIMAP:NewLogger(libName)
 local pm = ns:LC().MESSAGE:NewLogger(libName)
-local icon     = "Interface\\Icons\\inv_cask_01"
+local icon     = "Interface/AddOns/AddonSuite/Core/Assets/addon-icon.tga"
+local iconRed     = "Interface/AddOns/AddonSuite/Core/Assets/addon-icon-red.tga"
 local iconText = ns.sformat('|T%s:18:18:0:0|t', icon)
 -- red-ish color
 local iconOutOfSyncColor = CreateColor(1, 0.3, 0.3, 1)
@@ -186,6 +187,27 @@ local function PropsAndMethods(o)
 
         LibDBIcon:Register(minimapName, dataObject, ns:global().minimap)
         self:RegisterMessage(MSG.OnUpdateMinimapIconState, o.OnOutOfSyncIndicator)
+        o.dataObject = dataObject
+    end
+
+    function o:ChangeIconColor(r, g, b)
+        local button = LibDBIcon:GetMinimapButton(minimapName)
+        if button and button.icon then
+            button.icon:SetVertexColor(r, g, b)
+        end
+        -- Fire events for each change
+        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconR", r)
+        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconG", g)
+        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconB", b)
+
+    end
+
+    function o:ChangeIcon(newIconPath)
+        o.dataObject.icon = newIconPath
+        local button = LibDBIcon:GetMinimapButton(minimapName)
+        if button and button.icon then button.icon:SetTexture(newIconPath) end
+        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName,
+                "icon", newIconPath)
     end
 
     function o.OnOutOfSyncIndicator()
@@ -208,18 +230,14 @@ local function PropsAndMethods(o)
     --- @param inSync boolean
     --- @param details CheckedState|nil
     function o:UpdateOutOfSyncIndicator(inSync, details)
-        local dataObj = LibDBIcon.objects[minimapName]
-        if not dataObj then return end
-
         --- @type LayeredRegion
-        local iconT = dataObj.icon; if not iconT then return end
+        local iconT = o.dataObject.icon; if not iconT then return end
         p:d(function()
             if inSync then return 'inSync=%s', inSync end
             return 'inSync=%s details=%s', inSync, details:summary()
         end)
-        if inSync then return iconT:SetVertexColor(1, 1, 1, 1) end
-
-        iconT:SetVertexColor(iconOutOfSyncColor:GetRGBA())
+        if inSync then return self:ChangeIcon(icon) end
+        self:ChangeIcon(iconRed)
     end
 
     --- @return table<number, MinimapIconProfilesMenuItem>
