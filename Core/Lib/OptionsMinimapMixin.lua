@@ -76,13 +76,31 @@ local function PropsAndMethods(o)
             h1 = {  type = 'header', name = h1(L['General Minimap Settings']), descStyle = 'inline', order = order:next(), },
             hide_minimap_icon = {
                 name = L['Hide Minimap Icon'], desc = self:G('Hide Minimap Icon::Desc'),
-                order = self.order:next(), type="toggle", width='full',
+                order = self.order:next(), type="toggle", width=1.3,
                 get = function() return ns:global().minimap.hide == true end,
                 set = function(_, v)
                     ns:db().global.minimap.hide = (v == true)
                     self:SendMessage(GC.M.OnToggleMinimapIcon, libName)
                 end
             },
+            hide_minimap_icon_titan_panel = {
+                name = L['Hide Minimap Icon TitanPanel'], desc = self:G('Hide Minimap Icon TitanPanel::Desc'),
+                order = self.order:next(), type="toggle", width=2.0,
+                get = function() return ns:global().minimap.hide_when_titan_panel_added == true end,
+                set = function(_, v)
+                    ns:db().global.minimap.hide_when_titan_panel_added = (v == true)
+                    self:SendMessage(GC.M.OnToggleMinimapIconTitanPanel, libName)
+                end
+            },
+            syncStatusIndicator = {
+                name = L['Profile Sync Status Indicator'], desc=L['Profile Sync Status Indicator::Desc'],
+                order = order:next(), type="toggle", width=1.3,
+                get = function() return ns:global().minimap.sync_status_indicator == true end,
+                set = function(_, v)
+                    ns:db().global.minimap.sync_status_indicator = (v == true)
+                end
+            },
+
             confirmReloads = {
                 name = L['Confirm Reloads When Switching Profiles'],
                 desc = self:G('Confirm Reloads When Switching Profiles::Desc'),
@@ -90,14 +108,6 @@ local function PropsAndMethods(o)
                 get = function() return ns:global().minimap.confirm_reloads == true end,
                 set = function(_, v)
                     ns:db().global.minimap.confirm_reloads = (v == true)
-                end
-            },
-            syncStatusIndicator = {
-                name = L['Profile Sync Status Indicator'], desc=L['Profile Sync Status Indicator::Desc'],
-                order = order:next(), type="toggle", width=2.0,
-                get = function() return ns:global().minimap.sync_status_indicator == true end,
-                set = function(_, v)
-                    ns:db().global.minimap.sync_status_indicator = (v == true)
                 end
             },
             spacer1 = { type="description", name = sp, width="full", order = order:next() },

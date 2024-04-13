@@ -65,6 +65,8 @@ end
 
     function o:GetEnabledAddOns() return self:GetEnabledAndInstalledAddOns() end
 
+    function o:IsTitanPanelAvailable() return type(TitanPanelButton_OnShow) == 'function' end
+
     --- @param indexOrName IndexOrName
     --- @return Enabled
     function o:IsAddOnEnabled(indexOrName)

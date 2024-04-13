@@ -8,8 +8,13 @@ local ns = select(2, ...)
 Type: Minimap
 -------------------------------------------------------------------------------]]
 --- @class Minimap
---- @field hide boolean
 --- @field minimapPos Number Position on the minimap. This is managed by EasyMenu/DataBroker
+local minimap = {
+    hide = false,
+    hide_when_titan_panel_added = true,
+    confirm_reloads = true,
+    sync_status_indicator = true,
+}
 
 --[[-----------------------------------------------------------------------------
 Type: Profile_Global_Config
@@ -18,11 +23,7 @@ Type: Profile_Global_Config
 --- @field minimap Minimap
 local DefaultGlobal = {
     sync_addon_states = false,
-    minimap = {
-        hide = false,
-        confirm_reloads = true,
-        sync_status_indicator = true,
-    },
+    minimap = minimap,
 }
 
 --[[-----------------------------------------------------------------------------
@@ -31,6 +32,7 @@ Type: Character_Config
 --- @class Character_Config
 --- @field showInQuickProfileMenu table<string, boolean> A list of enabled addons, key=addonName val=boolean
 local DefaultCharacterSettings = {
+    shownInTitanPanel = false,
     showInQuickProfileMenu = {
         ['@city'] = true,
         ['@questing'] = true,
