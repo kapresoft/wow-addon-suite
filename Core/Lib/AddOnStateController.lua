@@ -58,6 +58,16 @@ local function CheckedStateMethods(o)
         self.loadedButNotChecked = {}
     end
 
+    function o:GetCheckedButNotLoadedCount()
+        return (self.checkedButNotLoaded and #self.checkedButNotLoaded) or 0
+    end
+
+    function o:GetLoadedButNotCheckedCount()
+        return (self.loadedButNotChecked and #self.loadedButNotChecked) or 0
+    end
+
+    function o:GetCount() return self:GetCheckedButNotLoadedCount() + self:GetLoadedButNotCheckedCount() end
+
     --- @param singleLine boolean|nil
     function o:summary(singleLine)
         singleLine = singleLine or true
@@ -250,6 +260,8 @@ local function PropsAndMethods(o)
                     table.insert(state.checkedButNotLoaded, n)
                 end
             elseif not checked and not ai.loadable and ai.loaded then
+                -- TODO: Retail behavior different when disabling 'AddonUsage'
+                -- Going from enabled to disabled (unchecked), still shows as syncd.
                 if not ai.loadOnDemand then
                     p:f1(function() return '%s [%s] Loaded but not checked', _m, n end);
                     table.insert(state.loadedButNotChecked, n)

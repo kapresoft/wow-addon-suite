@@ -71,8 +71,12 @@ L['Include Addon Changes in Reload Confirmation::Desc'] = 'Enable to see which a
 
 L['Confirm Reloads When Switching Profiles']        = 'Confirm Reloads when switching profiles'
 L['Confirm Reloads When Switching Profiles::Desc']  = 'Opting for this setting adds a confirmation step before the UI reloads when you switch profiles through a left-click on the minimap menu. It\'s a safeguard to avoid accidental disruptions.'
+
 L['Hide Minimap Icon']               = true
 L['Hide Minimap Icon::Desc']         = 'Toggles the visibility of the addon\'s minimap icon, hiding it from view when enabled.'
+
+L['Hide Minimap Icon TitanPanel']       = 'Hide Minimap Icon When Added to TitanPanel'
+L['Hide Minimap Icon TitanPanel::Desc'] = 'Toggles the visibility of the addon\'s minimap icon when added to a TitanPanel, hiding it from view when enabled.'
 
 L['View or switch profiles']         = true
 L['Open minimap settings dialog']    = true

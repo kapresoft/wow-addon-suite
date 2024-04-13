@@ -122,19 +122,20 @@ local function GlobalConstantProperties(o)
 
     --- @class MessageNames
     local M = {
-        OnAfterInitialize = newMsg('OnAfterInitialize'),
-        OnAddOnReady = newMsg('OnAddonReady'),
-        OnAfterOnAddOnReady = newMsg('OnAfterOnAddOnReady'),
-        OnApplyAndRestart = newMsg('OnApplyAndRestart'),
-        OnSwitchProfile = newMsg('OnSwitchProfile'),
-        OnHideSettings = newMsg('OnHideSettings'),
-        OnUpdateMinimapIconState = newMsg('OnUpdateMinimapIconState'),
-        OnAddOnStateChanged = newMsg('OnAddOnStateChanged'),
-        OnSwitchProfile = newMsg('OnSwitchProfile'),
-        OnToggleMinimapIcon = newMsg('OnToggleMinimapIcon'),
-        OnProfileDeleted = newMsg('OnProfileDeleted'),
-        OnProfileChanged = newMsg('OnProfileChanged'),
-        OnToggleShowInQuickProfileMenu = newMsg('OnToggleShowInQuickProfileMenu'),
+        OnAfterInitialize               = newMsg('OnAfterInitialize'),
+        OnAddOnReady                    = newMsg('OnAddonReady'),
+        OnAfterOnAddOnReady             = newMsg('OnAfterOnAddOnReady'),
+        OnApplyAndRestart               = newMsg('OnApplyAndRestart'),
+        OnSwitchProfile                 = newMsg('OnSwitchProfile'),
+        OnHideSettings                  = newMsg('OnHideSettings'),
+        OnUpdateMinimapIconState        = newMsg('OnUpdateMinimapIconState'),
+        OnAddOnStateChanged             = newMsg('OnAddOnStateChanged'),
+        OnSwitchProfile                 = newMsg('OnSwitchProfile'),
+        OnToggleMinimapIcon             = newMsg('OnToggleMinimapIcon'),
+        OnToggleMinimapIconTitanPanel   = newMsg('OnToggleMinimapIconTitanPanel'),
+        OnProfileDeleted                = newMsg('OnProfileDeleted'),
+        OnProfileChanged                = newMsg('OnProfileChanged'),
+        OnToggleShowInQuickProfileMenu  = newMsg('OnToggleShowInQuickProfileMenu'),
     }
 
     o.C = C
