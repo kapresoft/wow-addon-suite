@@ -87,6 +87,21 @@ local function CheckedStateMethods(o)
 
         return summary
     end
+    
+    ---@param tooltip GameTooltip
+    function o:tooltipSummary(tooltip)
+        if #self.checkedButNotLoaded > 0 then
+            tooltip:AddLine('\n')
+            tooltip:AddLine(L['Enabled (After Reload)'] .. ':', GREEN_FONT_COLOR:GetRGB())
+            tooltip:AddLine('  • ' .. table.concat(self.checkedButNotLoaded, ", "))
+        end
+        if #self.loadedButNotChecked > 0 then
+            tooltip:AddLine('\n')
+            tooltip:AddLine(L['Disabled (After Reload)'] .. ':', RED_FONT_COLOR:GetRGB())
+            tooltip:AddLine('  • ' .. table.concat(self.loadedButNotChecked, ", "))
+        end
+        if self:GetCount() > 0 then tooltip:AddLine('\n') end
+    end
 
     function o:IsInSync() return #self.checkedButNotLoaded <= 0 and #self.loadedButNotChecked <= 0 end
 end; CheckedStateMethods(CheckedState)
