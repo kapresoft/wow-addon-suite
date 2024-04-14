@@ -1,4 +1,22 @@
 --[[-----------------------------------------------------------------------------
+Type: MinimapButton
+-------------------------------------------------------------------------------]]
+--- @class MinimapButton
+--- @field icon TextureBase
+
+--[[-----------------------------------------------------------------------------
+Type: MinimapIconProfilesMenuItem
+-------------------------------------------------------------------------------]]
+--- @class MinimapIconProfilesMenuItem
+--- @field text Name
+--- @field isTitle boolean
+--- @field notCheckable boolean
+--- @field checked boolean
+--- @field func fun() | "function() end" | "A function action handler"
+--- @field _sortKey string The sort key (Custom Field)
+--- @type table<number, MinimapIconProfilesMenuItem>
+
+--[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
@@ -35,12 +53,29 @@ local function IsConfirmReload()
     return minimap and minimap.confirm_reloads == true
 end
 
+--- This local function is dynamic and needs to be here
+local function GetConfirmReloadText()
+    local confirmationText = ns.ch:T('Currently configured to load %s confirmation')
+    local without      = L['without']
+    local with         = L['with']
+
+    local text = ns.sformat(confirmationText, ns.ch:S(with))
+    if not IsConfirmReload() then
+        text = ns.sformat(confirmationText, ns.ch:S(without))
+    end
+    return text
+end
+
+local function FC(hexColor, text) return ns.ch:FormatColor(hexColor, text) end
+local function FCOS(text) return ns.ch:FormatColor(textOutOfSyncColor, text) end
+
 --- The global UIDROPDOWNMENU_OPEN_MENU is non-nil whenever a drop-down is showing
 --- @return boolean
 local function IsDropDownShowing() return UIDROPDOWNMENU_OPEN_MENU ~= nil end
 
-local function FC(hexColor, text) return ns.ch:FormatColor(hexColor, text) end
-local function FCOS(text) return ns.ch:FormatColor(textOutOfSyncColor, text) end
+local function IsHide() return ns:global().minimap.hide == true end
+local function IsShownInTP() return ns:db().char.shownInTitanPanel == true end
+local function IsHideWhenInTP() return ns:global().minimap.hide_when_titan_panel_added == true end
 
 ---@param tooltip _GameTooltip
 ---@param inSync boolean
@@ -51,13 +86,139 @@ local function OutOfSyncMessage(tooltip, inSync)
     tooltip:AddLine(L['Click Key To Sync'] .. '.\n\n')
 end
 
----@param inSync boolean
+--- @param inSync boolean
 local function CurrentProfileText(inSync)
     local currentProfile = ns:db():GetCurrentProfile()
     local profText = ns.ch:T(L['Current Profile'])
     local prof = FC(profileInSyncColor, currentProfile)
     if not inSync then prof = FCOS(currentProfile) end
     return profText, prof
+end
+
+--- @param self MinimapIconController
+local function OnOutOfSyncIndicator(self)
+    if ns:global().minimap.sync_status_indicator ~= true then
+        return self:UpdateOutOfSyncIndicator(true)
+    end
+    local inSync, details = self:IsInSync()
+    self:UpdateOutOfSyncIndicator(inSync, details)
+end
+
+--- Toggles (Show/Hide state)
+--- @param self MinimapIconController
+local function OnToggleMinimapIcon(self) self:SetShowOnMinimap(not IsHide()) end
+
+--- @param self MinimapIconController
+local function OnToggleMinimapIconTitanPanel(self)
+    if IsHide() or (IsShownInTP() and IsHideWhenInTP()) then
+        return self:SetShowOnMinimap(false)
+    end
+    self:SetShowOnMinimap(true)
+end
+
+--- @param self MinimapIconController
+--- @param profileName string
+local function OnSwitchProfile(self, profileName)
+    assert(profileName, "Profile Name is missing.")
+    p:f1(function() return "OnSwitchProfile: %s", profileName end )
+    ns:db():SetProfile(profileName)
+    ns:a():CloseConfig()
+    self:SendMessage(MSG.OnAddOnStateChanged, libName)
+end
+
+--- @param self MinimapIconController
+local function OnTitanPanelHide(self)
+    ns:db().char.shownInTitanPanel = false
+    if IsHide() then return end
+    self:SetShowOnMinimap(true)
+end
+
+--- @param self MinimapIconController
+--- @param tooltip _GameTooltip
+local function OnTooltipShow(self, tooltip)
+    if IsDropDownShowing() then return end
+    if not tooltip or not tooltip.AddLine then return end
+    self.tooltip = tooltip
+
+    OnOutOfSyncIndicator(self)
+
+    local inSync, checkedState = self:IsInSync()
+    local currentProfileText, currentProfile = CurrentProfileText(inSync)
+    local confirmationLine = GetConfirmReloadText()
+
+    local header1 = ns.sformat('%s %s', iconText, ns.ch:P(ns.GC.C.FRIENDLY_NAME))
+    local header3 = ns.sformat('%s: %s', currentProfileText, currentProfile)
+
+    tooltip:AddDoubleLine(header1, header3)
+    tooltip:AddLine(ns.locale.lineSeparator1)
+    OutOfSyncMessage(tooltip, inSync)
+    tooltip:AddLine(confirmationLine)
+    tooltip:AddLine(' ')
+
+    local commandLines = ns.ch:P(L['Command Lines'] .. ":")
+    if not inSync then
+        local syncKey = FCOS(L['ALT-LEFT-Click'])
+        tooltip:AddDoubleLine(syncKey, ns.ch:T(L['Sync with Profile and Reload']))
+    end
+    tooltip:AddDoubleLine(ns.ch:S(L['LEFT-Click']), ns.ch:T(L['View or switch profiles']))
+    tooltip:AddDoubleLine(ns.ch:S(L['RIGHT-Click']), ns.ch:T(L['Open settings dialog']))
+
+    tooltip:AddDoubleLine(ns.ch:S(L['SHIFT-RIGHT-Click']), ns.ch:T(L['Open minimap settings dialog']))
+    tooltip:AddLine(' ')
+    tooltip:AddLine(commandLines)
+    local cmdLine = ns.sformat("/%s or /%s", C.CONSOLE_COMMAND_NAME, C.CONSOLE_COMMAND_SHORT)
+    local cmdLineCfg = ns.sformat("/%s config", C.CONSOLE_COMMAND_SHORT)
+    tooltip:AddDoubleLine(ns.ch:S(cmdLine), ns.ch:T(L['View available commands']))
+    tooltip:AddDoubleLine(ns.ch:S(cmdLineCfg), ns.ch:T(L['Open settings dialog']))
+
+    if inSync then return end
+
+    tooltip:AddLine('\n\n')
+    tooltip:AddLine(ns.locale.lineSeparator1)
+    checkedState:tooltipSummary(tooltip)
+end
+
+--- @param self MinimapIconController
+--- @param buttonFrame Button
+--- @param button ButtonName i.e. 'LeftButton'
+local function OnClick(self, buttonFrame, button)
+    if button == "LeftButton" then
+        if not self:IsInSync() and IsAltKeyDown() then
+            return self:SendMessage(MSG.OnAddOnStateChanged, libName)
+        end
+        if self.tooltip then self.tooltip:Hide() end
+        local menu = self:BuildProfilesMenu()
+        --- @class AddonSuiteDropdownMenu : Frame
+        local ddm = ns.AddonSuiteDropdownMenu
+        if not ddm then
+            --- @type Frame
+            ns.AddonSuiteDropdownMenu = CreateFrame("Frame", nil, ns:pf(), "UIDropDownMenuTemplate")
+            ns.AddonSuiteDropdownMenu:SetParentKey('DropdownMenu')
+            ddm = ns.AddonSuiteDropdownMenu
+        end
+        EasyMenu(menu, ddm, 'cursor', 0 , 0, 'MENU')
+    else
+        if IsShiftKeyDown() then return A:OpenConfigMinimapProfileMenu() end
+        ns:a():OpenConfig()
+    end
+end
+
+--- @param self MinimapIconController
+local function Hook_TitanPanelButton_OnShow(self)
+    ---@param frame Frame
+    hooksecurefunc('TitanPanelButton_OnShow', function(frame)
+        local name, buttonName = frame:GetName(), ns.sformat('TitanPanel%sButton', minimapName)
+        if not ns:KO().String.EqualsIgnoreCase(name, buttonName) then return end
+
+        p:f3(function() return 'OnShow(): %s type=%s', frame:GetName(), frame:GetObjectType() end)
+        frame:SetScript('OnHide', function() OnTitanPanelHide(self) end)
+
+        ns:db().char.shownInTitanPanel = true
+        if not IsHideWhenInTP() then return end
+
+        self:SetShowOnMinimap(false)
+    end)
+
 end
 
 --[[-----------------------------------------------------------------------------
@@ -69,62 +230,19 @@ local function PropsAndMethods(o)
     --- @private
     function o:Init()
         self.addon = ns:a()
-        self:RegisterMessage(MSG.OnToggleMinimapIcon, self.OnToggleMinimapIcon)
-        self:RegisterMessage(MSG.OnToggleMinimapIconTitanPanel, o.OnToggleMinimapIconTitanPanel)
+        self:RegisterMessage(MSG.OnToggleMinimapIcon, function() OnToggleMinimapIcon(self) end)
+        self:RegisterMessage(MSG.OnToggleMinimapIconTitanPanel, function() OnToggleMinimapIconTitanPanel(self) end)
     end
 
     --- @public
     --- @return MinimapIconController
     function o:New() return ns:K():CreateAndInitFromMixin(o) end
 
-    function o:SetShowOnMinimap(state)
-        if state == true then return LibDBIcon:Show(minimapName) end
-        LibDBIcon:Hide(minimapName)
-    end
-
-    --- Toggles (Show/Hide state)
-    function o.OnToggleMinimapIcon() o:SetShowOnMinimap(ns:global().minimap.hide ~= true) end
-
-    function o.OnToggleMinimapIconTitanPanel()
-        local shownInTitanPanel = ns:db().char.shownInTitanPanel
-        local mm = ns:global().minimap
-        if mm.hide == true or (shownInTitanPanel == true and mm.hide_when_titan_panel_added == true) then
-            return o:SetShowOnMinimap(false)
-        end
-        o:SetShowOnMinimap(true)
-    end
-
-    function o.OnTitanPanelHide()
-        ns:db().char.shownInTitanPanel = false
-        if ns:global().minimap.hide == true then return end
-        o:SetShowOnMinimap(true)
-    end
-
     --- @public
-    function o:InitMinimapIcon()
-        self:CreateAndRegisterMinimapDataObject()
-    end
-
-    --- @return boolean, CheckedState
-    function o:IsInSync() return ns.O.AddOnStateController:IsInSync() end
+    function o:InitMinimapIcon() self:CreateAndRegisterMinimapDataObject() end
 
     --- @public
     function o:CreateAndRegisterMinimapDataObject()
-        local A = self.addon
-
-        --- This local function is dynamic and needs to be here
-        local function GetConfirmReloadText()
-            local confirmationText = ns.ch:T('Currently configured to load %s confirmation')
-            local without      = L['without']
-            local with         = L['with']
-
-            local text = ns.sformat(confirmationText, ns.ch:S(with))
-            if not IsConfirmReload() then
-                text = ns.sformat(confirmationText, ns.ch:S(without))
-            end
-            return text
-        end
-
         --- @type LibDataBroker_DataObject
         local dataObject = LibDataBroker:GetDataObjectByName(minimapName)
         if dataObject then
@@ -133,197 +251,25 @@ local function PropsAndMethods(o)
             return
         end
 
-        local s = self; dataObject = LibDataBroker:NewDataObject(minimapName, {
+        dataObject = LibDataBroker:NewDataObject(minimapName, {
             type = "data source",
             text = ns.GC.C.FRIENDLY_NAME,
             icon = icon,
-            OnClick = function(self, button)
-                if button == "LeftButton" then
-                    if not s:IsInSync() and IsAltKeyDown() then
-                        return s:SendMessage(MSG.OnAddOnStateChanged, libName)
-                    end
-
-                    if s.tooltip then s.tooltip:Hide() end
-                    local menu = s:BuildProfilesMenu()
-                    --- @class AddonSuiteDropdownMenu : _Frame
-                    local ddm = ns.AddonSuiteDropdownMenu
-                    if not ddm then
-                        ns.AddonSuiteDropdownMenu = CreateFrame("Frame", ns.name .. "DropdownMenu", UIParent, "UIDropDownMenuTemplate")
-                        ddm = ns.AddonSuiteDropdownMenu
-                    end
-                    EasyMenu(menu, ddm, 'cursor', 0 , 0, 'MENU')
-                else
-                    if IsShiftKeyDown() then return A:OpenConfigMinimapProfileMenu() end
-                    A:OpenConfig()
-                end
-            end,
-            --- @param tooltip _GameTooltip
-            OnTooltipShow = function(tooltip)
-                if IsDropDownShowing() then return end
-                if not tooltip or not tooltip.AddLine then return end
-                s.tooltip = tooltip
-                s.OnOutOfSyncIndicator()
-                local inSync = s:IsInSync()
-                local currentProfileText, currentProfile = CurrentProfileText(inSync)
-                local confirmationLine = GetConfirmReloadText()
-
-                local header1 = ns.sformat('%s %s', iconText, ns.ch:P(ns.GC.C.FRIENDLY_NAME))
-                local header3 = ns.sformat('%s: %s', currentProfileText, currentProfile)
-
-                tooltip:AddDoubleLine(header1, header3)
-                tooltip:AddLine(ns.locale.lineSeparator1)
-                OutOfSyncMessage(tooltip, inSync)
-                tooltip:AddLine(confirmationLine)
-                tooltip:AddLine(' ')
-
-                local commandLines = ns.ch:P(L['Command Lines'] .. ":")
-                if not inSync then
-                    local syncKey = FCOS(L['ALT-LEFT-Click'])
-                    tooltip:AddDoubleLine(syncKey, ns.ch:T(L['Sync with Profile and Reload']))
-                end
-                tooltip:AddDoubleLine(ns.ch:S(L['LEFT-Click']), ns.ch:T(L['View or switch profiles']))
-                tooltip:AddDoubleLine(ns.ch:S(L['RIGHT-Click']), ns.ch:T(L['Open settings dialog']))
-
-                tooltip:AddDoubleLine(ns.ch:S(L['SHIFT-RIGHT-Click']), ns.ch:T(L['Open minimap settings dialog']))
-                tooltip:AddLine(' ')
-                tooltip:AddLine(commandLines)
-                local cmdLine = ns.sformat("/%s or /%s", C.CONSOLE_COMMAND_NAME, C.CONSOLE_COMMAND_SHORT)
-                local cmdLineCfg = ns.sformat("/%s config", C.CONSOLE_COMMAND_SHORT)
-                tooltip:AddDoubleLine(ns.ch:S(cmdLine), ns.ch:T(L['View available commands']))
-                tooltip:AddDoubleLine(ns.ch:S(cmdLineCfg), ns.ch:T(L['Open settings dialog']))
-            end,
+            OnClick = function(...) OnClick(self, ...)  end,
+            OnTooltipShow = function(...) OnTooltipShow(self, ...)  end,
         })
 
         LibDBIcon:Register(minimapName, dataObject, ns:global().minimap)
-        self:RegisterMessage(MSG.OnUpdateMinimapIconState, o.OnOutOfSyncIndicator)
-        o.dataObject = dataObject
+        self:RegisterMessage(MSG.OnUpdateMinimapIconState, function() OnOutOfSyncIndicator(self) end)
+        self.dataObject = dataObject
 
         if not API:IsTitanPanelAvailable() then return end
 
-        ---@param frame Frame
-        hooksecurefunc('TitanPanelButton_OnShow', function(frame)
-            local name, buttonName = frame:GetName(), ns.sformat('TitanPanel%sButton', minimapName)
-            if not ns:KO().String.EqualsIgnoreCase(name, buttonName) then return end
-
-            p:f3(function() return 'OnShow(): %s type=%s', frame:GetName(), frame:GetObjectType() end)
-            frame:SetScript('OnHide', o.OnTitanPanelHide)
-            ns:db().char.shownInTitanPanel = true
-            if ns:global().minimap.hide_when_titan_panel_added ~= true then return end
-
-            s:SetShowOnMinimap(false)
-        end)
-    end
-
-    --- @param tooltip _GameTooltip
-    function o.OnTooltipShow(tooltip)
-        if IsDropDownShowing() then return end
-        if not tooltip or not tooltip.AddLine then return end
-        o.tooltip = tooltip
-
-        o.OnOutOfSyncIndicator()
-        local inSync = o:IsInSync()
-        local currentProfileText, currentProfile = CurrentProfileText(inSync)
-        local confirmationLine = GetConfirmReloadText()
-
-        local header1 = ns.sformat('%s %s', iconText, ns.ch:P(ns.GC.C.FRIENDLY_NAME))
-        local header3 = ns.sformat('%s: %s', currentProfileText, currentProfile)
-
-        tooltip:AddDoubleLine(header1, header3)
-        tooltip:AddLine(ns.locale.lineSeparator1)
-        OutOfSyncMessage(tooltip, inSync)
-        tooltip:AddLine(confirmationLine)
-        tooltip:AddLine(' ')
-
-        local commandLines = ns.ch:P(L['Command Lines'] .. ":")
-        if not inSync then
-            local syncKey = FCOS(L['ALT-LEFT-Click'])
-            tooltip:AddDoubleLine(syncKey, ns.ch:T(L['Sync with Profile and Reload']))
-        end
-        tooltip:AddDoubleLine(ns.ch:S(L['LEFT-Click']), ns.ch:T(L['View or switch profiles']))
-        tooltip:AddDoubleLine(ns.ch:S(L['RIGHT-Click']), ns.ch:T(L['Open settings dialog']))
-
-        tooltip:AddDoubleLine(ns.ch:S(L['SHIFT-RIGHT-Click']), ns.ch:T(L['Open minimap settings dialog']))
-        tooltip:AddLine(' ')
-        tooltip:AddLine(commandLines)
-        local cmdLine = ns.sformat("/%s or /%s", C.CONSOLE_COMMAND_NAME, C.CONSOLE_COMMAND_SHORT)
-        local cmdLineCfg = ns.sformat("/%s config", C.CONSOLE_COMMAND_SHORT)
-        tooltip:AddDoubleLine(ns.ch:S(cmdLine), ns.ch:T(L['View available commands']))
-        tooltip:AddDoubleLine(ns.ch:S(cmdLineCfg), ns.ch:T(L['Open settings dialog']))
-    end
-
-    function o:ChangeIconColor(r, g, b)
-        local button = LibDBIcon:GetMinimapButton(minimapName)
-        if button and button.icon then
-            button.icon:SetVertexColor(r, g, b)
-        end
-        -- Fire events for each change
-        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconR", r)
-        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconG", g)
-        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconB", b)
-
-    end
-
-    function o:ChangeIcon(newIconPath)
-        o.dataObject.icon = newIconPath
-        local button = LibDBIcon:GetMinimapButton(minimapName)
-        if button and button.icon then button.icon:SetTexture(newIconPath) end
-        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName,
-                "icon", newIconPath)
-    end
-
-    function o.OnOutOfSyncIndicator()
-        if ns:global().minimap.sync_status_indicator ~= true then
-            return o:UpdateOutOfSyncIndicator(true)
-        end
-        local inSync, details = o:IsInSync()
-        o:UpdateOutOfSyncIndicator(inSync, details)
-    end
-
-    --- @param profileName string
-    function o.OnSwitchProfile(profileName)
-        assert(profileName, "Profile Name is missing.")
-        p:f1(function() return "OnSwitchProfile: %s", profileName end )
-        ns:db():SetProfile(profileName)
-        ns:a():CloseConfig()
-        o:SendMessage(MSG.OnAddOnStateChanged, libName)
-    end
-
-    --- @param inSync boolean
-    --- @param details CheckedState|nil
-    function o:UpdateOutOfSyncIndicator(inSync, details)
-        local d = o.dataObject
-        --- @type LayeredRegion
-        local iconT = d.icon; if not iconT then return end
-        p:d(function()
-            if inSync then return 'inSync=%s', inSync end
-            return 'inSync=%s details=%s', inSync, details:summary()
-        end)
-        if inSync then
-            d.text = ' '
-            return self:ChangeIcon(icon)
-        end
-        self:ChangeIcon(iconRed)
-        d.text = self:GetOutOfSyncCount()
-    end
-
-    function o:GetOutOfSyncCount()
-        local _, state = self:IsInSync()
-        return iconOutOfSyncColor:WrapTextInColorCode(tostring(state:GetCount()))
+        Hook_TitanPanelButton_OnShow(self)
     end
 
     --- @return table<number, MinimapIconProfilesMenuItem>
     function o:BuildProfilesMenu()
-
-        --- @class MinimapIconProfilesMenuItem
-        --- @field text Name
-        --- @field isTitle boolean
-        --- @field notCheckable boolean
-        --- @field checked boolean
-        --- @field func fun() | "function() end" | "A function action handler"
-        --- @field _sortKey string The sort key (Custom Field)
-        --- @type table<number, MinimapIconProfilesMenuItem>
-
-        local s = self
 
         local sepColor     = ns.locale.lineSeparator1
         local selectProfileText = L['Select profile to activate']
@@ -346,7 +292,7 @@ local function PropsAndMethods(o)
         local menuItems = { }
 
         --- @param profileName Name
-        local function FnHandler(profileName) return function() s.OnSwitchProfile(profileName) end end
+        local function FnHandler(profileName) return function() OnSwitchProfile(self, profileName) end end
 
         local current = ns:db():GetCurrentProfile()
         local char = ns:db().char
@@ -377,9 +323,52 @@ local function PropsAndMethods(o)
         end
         local img = ns.locale.xSymbol
         table.insert(menu, sep)
-        table.insert(menu, { text = "Cancel " .. img, notCheckable = true })
+        table.insert(menu, { text = L['Hide'] .. ' ' .. img, notCheckable = true })
 
         return menu
+    end
+
+    function o:ChangeIconColor(r, g, b)
+        local button = self:GetMinimapButton()
+        if button and button.icon then
+            button.icon:SetVertexColor(r, g, b)
+        end
+        -- Fire events for each change
+        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconR", r)
+        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconG", g)
+        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconB", b)
+
+    end
+
+    function o:ChangeIcon(newIconPath)
+        self.dataObject.icon = newIconPath
+        local button = self:GetMinimapButton()
+        if button and button.icon then button.icon:SetTexture(newIconPath) end
+        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName,
+                "icon", newIconPath)
+    end
+
+    --- @param inSync boolean
+    --- @param details CheckedState|nil
+    function o:UpdateOutOfSyncIndicator(inSync, details)
+        local d = self.dataObject
+        --- @type LayeredRegion
+        local iconT = d.icon; if not iconT then return end
+        p:d(function()
+            if inSync then return 'inSync=%s', inSync end
+            return 'inSync=%s details=%s', inSync, details:summary()
+        end)
+        if inSync then
+            d.text = ' '
+            return self:ChangeIcon(icon)
+        end
+        self:ChangeIcon(iconRed)
+        d.text = self:GetOutOfSyncCount()
+    end
+
+    function o:GetOutOfSyncCount()
+        local _, state = self:IsInSync()
+        return iconOutOfSyncColor:WrapTextInColorCode(tostring(state:GetCount()))
     end
 
     --- @param acceptFn ProfilePredicateFn | "function(profile) return true end"
@@ -388,6 +377,16 @@ local function PropsAndMethods(o)
         for name, profile in pairs(ns:db().profiles) do
             if acceptFn(name, profile) == true then callbackFn(name, profile) end
         end
+    end
+
+    --- @return boolean, CheckedState
+    function o:IsInSync() return ns.O.AddOnStateController:IsInSync() end
+    --- @return MinimapButton
+    function o:GetMinimapButton() return LibDBIcon:GetMinimapButton(minimapName) end
+
+    function o:SetShowOnMinimap(state)
+        if state == true then return LibDBIcon:Show(minimapName) end
+        LibDBIcon:Hide(minimapName)
     end
 
 end; PropsAndMethods(S)

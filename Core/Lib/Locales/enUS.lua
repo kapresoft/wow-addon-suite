@@ -72,6 +72,7 @@ L['Include Addon Changes in Reload Confirmation::Desc'] = 'Enable to see which a
 L['Confirm Reloads When Switching Profiles']        = 'Confirm Reloads when switching profiles'
 L['Confirm Reloads When Switching Profiles::Desc']  = 'Opting for this setting adds a confirmation step before the UI reloads when you switch profiles through a left-click on the minimap menu. It\'s a safeguard to avoid accidental disruptions.'
 
+L['Hide']                            = true
 L['Hide Minimap Icon']               = true
 L['Hide Minimap Icon::Desc']         = 'Toggles the visibility of the addon\'s minimap icon, hiding it from view when enabled.'
 
@@ -111,3 +112,6 @@ L['RIGHT-Click']                     = true
 L['SHIFT-RIGHT-Click']               = true
 L['Profile Sync Status Indicator']   = true
 L['Profile Sync Status Indicator::Desc']   = 'Enable this option to use |cfdE64750color|r coding on the minimap icon, visually indicating when your profile is synced or needs an update. This provides a quick and easy way to check your profile\'s status at a glance.'
+
+L['Enabled (After Reload)']      = true
+L['Disabled (After Reload)']     = true

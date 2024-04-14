@@ -212,6 +212,9 @@ local function NameSpacePropertiesAndMethods(o)
     --- @return AddonSuite
     function o:a() return _G[self.name] end
 
+    --- @see _Lib.xml
+    function o:pf() return _G['AddonSuiteFrame'] end
+
     --- @param moduleName string The module name, i.e. MainController
     --- @param optionalMajorVersion number|string
     --- @return string The complete module name, i.e. 'ActionbarPlus-MainController-1.0'
