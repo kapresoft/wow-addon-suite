@@ -198,7 +198,7 @@ local function OnClick(self, buttonFrame, button)
         end
         EasyMenu(menu, ddm, 'cursor', 0 , 0, 'MENU')
     else
-        if IsShiftKeyDown() then return A:OpenConfigMinimapProfileMenu() end
+        if IsShiftKeyDown() then return ns:a():OpenConfigMinimapProfileMenu() end
         ns:a():OpenConfig()
     end
 end
