@@ -13,8 +13,8 @@
 ## X-Category: General
 ## X-License: All Rights Reserved: You are free to fork and modify on GitHub, please ask us about anything else.
 
-## X-Github-Repo: https://github.com/kapresoft/wow-addon-template
-## X-Github-Issues: https://github.com/kapresoft/wow-addon-template
+## X-Github-Repo: https://github.com/kapresoft/wow-addon-suite
+## X-Github-Issues: https://github.com/kapresoft/wow-addon-suite
 ## X-CurseForge: https://www.curseforge.com/wow/addons/addon-suite
 ## X-Curse-Project-ID: 785236
 ## X-Github-Project-Author: @project-author@
