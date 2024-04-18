@@ -23,7 +23,7 @@ local libName = 'AddOnManager'
 --- @class AddOnManager
 --- @field missing Boolean
 local S = ns:NewLib(libName)
-local p = ns:CreateDefaultLogger(libName)
+local p = ns:LC().DEPENDENCY:NewLogger(libName)
 
 --[[-----------------------------------------------------------------------------
 Methods
@@ -132,7 +132,7 @@ local function AddonInfoPropsAndMethods(o)
         local deps = {}
         self:ForEachDependency(function(parentAddOn, ao)
             local n = ao.name
-            p:f1(function()
+            p:t(function()
                 return '%s: enabled-deps[%s]=%s', parentAddOn, n, ao:AreDependenciesEnabled()
             end)
 
@@ -144,7 +144,7 @@ local function AddonInfoPropsAndMethods(o)
                 table.insert(deps, n)
             end
         end)
-        p:f1(function() return '%s: deps(before)=%s deps(after): %s',
+        p:t(function() return '%s: deps(before)=%s deps(after): %s',
                                 self.name, self.dependencies, deps end)
         local text = ''
         if #deps > 0 then

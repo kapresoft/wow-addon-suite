@@ -25,13 +25,12 @@
 # To get the Interface/Build Info
 # /dump select(4, GetBuildInfo())
 
+Core\Base\_Base.xml
 #@do-not-package@
 Core\Lib\Developer\_GlobalDeveloper.xml
 #@end-do-not-package@
-
 Core\_Core.xml
 Wrath\_Wrath.xml
-
 #@do-not-package@
 Core\Lib\Developer\_Developer.xml
 #@end-do-not-package@

@@ -77,7 +77,6 @@ end
         elseif GetAddOnEnableState then
             intVal = GetAddOnEnableState(charName, indexOrName)
         end
-        p:f1(function() return 'AddOn[%s] is enabled: %s', indexOrName, tostring(intVal == 2) end)
         return intVal == 2
     end
 

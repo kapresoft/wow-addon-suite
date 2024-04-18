@@ -16,7 +16,7 @@ local LibStub = LibStub
 
 --- @type string
 local addon
---- @type Kapresoft_Base_Namespace
+--- @type BaseNamespace
 local ns
 addon, ns = ...
 local kch = ns.Kapresoft_LibUtil.CH
@@ -160,20 +160,20 @@ local function Methods(o)
     --- @return string, string, string, string, string, string
     function o:GetAddonInfo()
         local versionText, lastUpdate
-        --@non-debug@
         versionText = GetAddOnMetadata(ns.name, 'Version')
         lastUpdate = GetAddOnMetadata(ns.name, 'X-Github-Project-Last-Changed-Date')
-        --@end-non-debug@
-        --@debug@
-        versionText = '1.0.x.dev'
-        lastUpdate = date("%m/%d/%y %H:%M:%S")
-        --@end-debug@
+        --@do-not-package@
+        if ns.debug:IsDeveloper() then
+            versionText = '1.0.0.dev'
+            lastUpdate  = date("%m/%d/%y %H:%M:%S")
+        end
+        --@end-do-not-package@
         local wowInterfaceVersion = select(4, GetBuildInfo())
 
         return versionText, GetAddOnMetadata(ns.name, 'X-CurseForge'),
-        GetAddOnMetadata(ns.name, 'X-Github-Issues'),
-        GetAddOnMetadata(ns.name, 'X-Github-Repo'),
-        lastUpdate, wowInterfaceVersion
+                GetAddOnMetadata(ns.name, 'X-Github-Issues'),
+                GetAddOnMetadata(ns.name, 'X-Github-Repo'),
+                lastUpdate, wowInterfaceVersion
     end
 
     function o:GetAddonInfoFormatted()

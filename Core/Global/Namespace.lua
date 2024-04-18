@@ -12,7 +12,7 @@ Base Namespace
 -------------------------------------------------------------------------------]]
 --- @type string
 local addonName
---- @type Kapresoft_Base_Namespace
+--- @type BaseNamespace
 local kns
 addonName, kns = ...
 
@@ -73,6 +73,8 @@ local LogCategories = {
     PROFILE = "PR",
     --- @type Kapresoft_LogCategory
     DB = "DB",
+    --- @type Kapresoft_LogCategory
+    DEPENDENCY = "DP",
     --- @type Kapresoft_LogCategory
     DEV = "DV",
 }
@@ -145,6 +147,7 @@ local function NamespaceLoggerMethods(o)
     CategoryLogger:Configure(addonName, LogCategories, {
         consoleColors = GC.C.CONSOLE_COLORS,
         levelSupplierFn = function() return __logLevel() end,
+        enabled = kns.debug:IsDeveloper(),
         enabledCategoriesSupplierFn = function() return __categories() end,
     })
     --- @private
@@ -291,9 +294,8 @@ end
 local function CreateNamespace(...)
     --- @type string
     local addon
-    --- @class __Namespace
+    --- @class __Namespace : BaseNamespace
     --- @field DefaultAddOnDatabase AddOn_DB
-    --- @field AddonSuiteDropdownMenu AddonSuiteDropdownMenu
     local ns; addon, ns = ...
 
     --- Place this here before ns.name because it overrides the name field

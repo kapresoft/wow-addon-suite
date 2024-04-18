@@ -11,7 +11,6 @@ New Instance
 --- @class Developer
 local L = {}
 local p = ns:CreateDefaultLogger(libName)
-p:v(function() return "Loaded: %s", libName end)
 
 --[[-----------------------------------------------------------------------------
 Methods
