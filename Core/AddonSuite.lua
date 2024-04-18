@@ -42,19 +42,19 @@ local function MethodsAndProps(o)
     end
 
     function o:SlashCommand_OpenConfig() o:OpenConfig() end
-    function o:SlashCommand_Info_Handler() p:vv(GC:GetAddonInfoFormatted()) end
+    function o:SlashCommand_Info_Handler() p:a(GC:GetAddonInfoFormatted()) end
     function o:SlashCommand_Help_Handler()
-        p:vv('')
+        p:a('')
         local COMMAND_INFO_TEXT = "Prints additional addon info"
         local COMMAND_CONFIG_TEXT = "Shows the config UI"
         local COMMAND_HELP_TEXT = "Shows this help"
         local OPTIONS_LABEL = "options"
         local USAGE_LABEL = sformat("usage: %s [%s]", GC.C.CONSOLE_PLAIN, OPTIONS_LABEL)
-        p:vv(USAGE_LABEL)
-        p:vv(OPTIONS_LABEL .. ":")
-        p:vv(function() return GC.C.CONSOLE_OPTIONS_FORMAT, 'config', COMMAND_CONFIG_TEXT end)
-        p:vv(function() return GC.C.CONSOLE_OPTIONS_FORMAT, 'info', COMMAND_INFO_TEXT end)
-        p:vv(function() return GC.C.CONSOLE_OPTIONS_FORMAT, 'help', COMMAND_HELP_TEXT end)
+        p:a(USAGE_LABEL)
+        p:a(OPTIONS_LABEL .. ":")
+        p:a(function() return GC.C.CONSOLE_OPTIONS_FORMAT, 'config', COMMAND_CONFIG_TEXT end)
+        p:a(function() return GC.C.CONSOLE_OPTIONS_FORMAT, 'info', COMMAND_INFO_TEXT end)
+        p:a(function() return GC.C.CONSOLE_OPTIONS_FORMAT, 'help', COMMAND_HELP_TEXT end)
     end
 
     --- @param spaceSeparatedArgs string
@@ -98,7 +98,9 @@ local function MethodsAndProps(o)
 
     ---@param group string|nil | "'debugging'" | "'profiles'" | "'minimap'"
     function o:OpenConfig(group)
-        if AceConfigDialog.OpenFrames[ns.name] then return end
+        if group and AceConfigDialog.OpenFrames[ns.name] then
+            return AceConfigDialog:SelectGroup(ns.name, group or "general")
+        end
         AceConfigDialog:Open(ns.name)
         self:DialogGlitchHack(group);
 

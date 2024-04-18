@@ -39,16 +39,15 @@ local function MethodsAndProps(o)
     --- @return OptionsMixin
     function o:New(addon) return ns:K():CreateAndInitFromMixin(o, addon) end
 
-    local function ConfigureDebugLevel()
-        local logLevel = ADDON_SUITE_LOG_LEVEL
-
-        --@non-debug@
+    ---@param opt AceConfigOption
+    local function ConfigureDebugging(opt)
+        --@do-not-package@
+        if ns.debug:IsDeveloper() then
+            opt.args.debugging = DebugSettings:CreateDebuggingGroup()
+            return
+        end
+        --@end-do-not-package@
         ADDON_SUITE_LOG_LEVEL = 0
-        --@end-non-debug@
-
-        --@debug@
-        ADDON_SUITE_LOG_LEVEL = logLevel
-        --@end-debug@
     end
 
     function o:CreateOptions()
@@ -62,12 +61,8 @@ local function MethodsAndProps(o)
             args = {
                 general = O.OptionsAddonsMixin:New(self):CreateAddOnsGroup(order),
                 minimap = O.OptionsMinimapMixin:New(self, order):CreateOptions(),
-                --@debug@
-                debugging = DebugSettings:CreateDebuggingGroup(),
-                --@end-debug@
             },
-        }; ConfigureDebugLevel()
-
+        }; ConfigureDebugging(options)
         return options
     end
 

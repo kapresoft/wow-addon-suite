@@ -130,9 +130,14 @@ local function PropsAndMethods(o)
         local util = self.optionsMixin.util
         local ps = CreateProfileSelect()
 
+        local versionText = GC:GetAddonInfo()
+        local versionLabel = GC.C.FRIENDLY_NAME .. BLUE_FONT_COLOR:WrapTextInColorCode(' v' .. versionText)
+
         --- @type table<string, AceConfigOption>
         local options = {
-            header1 = { order = order:next(), type = 'header', name = h(L['General']) },
+            labelVersion = { order = order:next(), type = "description", width='full',
+                             fontSize='medium', name = versionLabel,  },
+            spacer1aa = { order = order:next(), type = "description", name = " ", width='full', fontSize='small' },
             showInQuickProfileSwitchMenu = {
                 name = L['Add to Favorite'], desc = self:C('Add to Favorite::Desc'),
                 order = order:next(), type="toggle", width='normal',
@@ -182,6 +187,7 @@ local function PropsAndMethods(o)
     --- @param state boolean
     local function UpdateEnabledState(addOnName, state)
         local currentlyEnabled = O.API:IsAddOnEnabled(addOnName)
+        p:f1(function() return 'AddOn[%s] is enabled: %s', addOnName, currentlyEnabled end)
         if state == true and not currentlyEnabled then
             return O.API:EnableAddOnForCharacter(addOnName)
         end
@@ -203,16 +209,14 @@ local function PropsAndMethods(o)
     --- @param addOnName Name
     function o.CreateSetFn(addOnName)
         return function(_, v)
-            --@non-debug@
             ns:profile().enabledAddons[addOnName] = v
-            --@end-non-debug@
-
-            --@debug@
-            if String.IsAnyOf(addOnName, 'Ace3', 'BugSack', '!BugGrabber') then
-                ns:profile().enabledAddons[addOnName] = true
+            --@do-not-package@
+            if ns.debug:IsDeveloper() then
+                if String.IsAnyOf(addOnName, 'Ace3', 'BugSack', '!BugGrabber') then
+                    ns:profile().enabledAddons[addOnName] = true
+                end
             end
-            --@end-debug@
-
+            --@end-do-not-package@
             UpdateEnabledState(addOnName, v)
             p:f3(function() return 'Handle Set[%s]: val=%s', addOnName, v end)
         end

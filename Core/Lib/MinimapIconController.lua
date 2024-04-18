@@ -69,10 +69,6 @@ end
 local function FC(hexColor, text) return ns.ch:FormatColor(hexColor, text) end
 local function FCOS(text) return ns.ch:FormatColor(textOutOfSyncColor, text) end
 
---- The global UIDROPDOWNMENU_OPEN_MENU is non-nil whenever a drop-down is showing
---- @return boolean
-local function IsDropDownShowing() return UIDROPDOWNMENU_OPEN_MENU ~= nil end
-
 local function IsHide() return ns:global().minimap.hide == true end
 local function IsShownInTP() return ns:db().char.shownInTitanPanel == true end
 local function IsHideWhenInTP() return ns:global().minimap.hide_when_titan_panel_added == true end
@@ -136,7 +132,6 @@ end
 --- @param self MinimapIconController
 --- @param tooltip _GameTooltip
 local function OnTooltipShow(self, tooltip)
-    if IsDropDownShowing() then return end
     if not tooltip or not tooltip.AddLine then return end
     self.tooltip = tooltip
 
@@ -160,6 +155,12 @@ local function OnTooltipShow(self, tooltip)
         local syncKey = FCOS(L['ALT-LEFT-Click'])
         tooltip:AddDoubleLine(syncKey, ns.ch:T(L['Sync with Profile and Reload']))
     end
+    --@do-not-package@
+    if ns.debug:IsDeveloper() then
+        tooltip:AddDoubleLine(ORANGE_THREAT_COLOR:WrapTextInColorCode('SHIFT-LEFT-Click'),
+                              ns.ch:T('Open Debugging Dialog'))
+    end
+    --@end-do-not-package@
     tooltip:AddDoubleLine(ns.ch:S(L['LEFT-Click']), ns.ch:T(L['View or switch profiles']))
     tooltip:AddDoubleLine(ns.ch:S(L['RIGHT-Click']), ns.ch:T(L['Open settings dialog']))
 
@@ -179,27 +180,39 @@ local function OnTooltipShow(self, tooltip)
 end
 
 --- @param self MinimapIconController
+local function ShowMenu(self)
+    if self.tooltip then self.tooltip:Hide() end
+    local menu = self:BuildProfilesMenu()
+    --- @class AddonSuiteDropdownMenu : Frame
+    local ddm = ns:pf().DropdownMenu
+    if not ddm then
+        --- @type Frame
+        ddm = CreateFrame("Frame", nil, ns:pf(), "UIDropDownMenuTemplate")
+        ddm:SetParentKey('DropdownMenu')
+    end
+    EasyMenu(menu, ddm, 'cursor', -10 , -15, 'MENU')
+end
+
+--- @param self MinimapIconController
 --- @param buttonFrame Button
 --- @param button ButtonName i.e. 'LeftButton'
 local function OnClick(self, buttonFrame, button)
-    if button == "LeftButton" then
+    --@do-not-package@
+    if ns.debug:IsDeveloper() then
+        if button == 'LeftButton' and IsShiftKeyDown() then
+            return ns:a():OpenConfigDebugging()
+        end
+    end
+    --@end-do-not-package@
+    if button == 'LeftButton' then
         if not self:IsInSync() and IsAltKeyDown() then
             return self:SendMessage(MSG.OnAddOnStateChanged, libName)
         end
-        if self.tooltip then self.tooltip:Hide() end
-        local menu = self:BuildProfilesMenu()
-        --- @class AddonSuiteDropdownMenu : Frame
-        local ddm = ns.AddonSuiteDropdownMenu
-        if not ddm then
-            --- @type Frame
-            ns.AddonSuiteDropdownMenu = CreateFrame("Frame", nil, ns:pf(), "UIDropDownMenuTemplate")
-            ns.AddonSuiteDropdownMenu:SetParentKey('DropdownMenu')
-            ddm = ns.AddonSuiteDropdownMenu
-        end
-        EasyMenu(menu, ddm, 'cursor', 0 , 0, 'MENU')
-    else
-        if IsShiftKeyDown() then return ns:a():OpenConfigMinimapProfileMenu() end
-        ns:a():OpenConfig()
+        ShowMenu(self)
+    elseif button == 'RightButton' then
+        local tab
+        if IsShiftKeyDown() then tab = 'minimap' end
+        ns:a():OpenConfig(tab)
     end
 end
 

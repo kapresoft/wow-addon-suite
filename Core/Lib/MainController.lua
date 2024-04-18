@@ -2,30 +2,17 @@
 Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
-local ns = select(2, ...)
-local O, GC, M = ns.O, ns.GC, ns.M
-local Ace, LibStub = ns.KO().AceLibrary.O, ns.LibStub
-local E, MSG, L = GC.E, GC.M, ns:AceLocale()
-local API = O.API
-
---[[-----------------------------------------------------------------------------
-Lua Vars
--------------------------------------------------------------------------------]]
-local sformat = string.format
-
---[[-----------------------------------------------------------------------------
-Blizzard Vars
--------------------------------------------------------------------------------]]
-local CreateFrame, FrameUtil = CreateFrame, FrameUtil
-local RegisterFrameForEvents, RegisterFrameForUnitEvents = FrameUtil.RegisterFrameForEvents, FrameUtil.RegisterFrameForUnitEvents
+local ns     = select(2, ...)
+local O, GC  = ns.O, ns.GC
+local E, MSG = GC.E, GC.M
 
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
 local libName = 'MainController'
 --- @class MainController
-local S = ns:NewLibWithEvent(libName)
-local p = ns:CreateDefaultLogger(libName)
+local S  = ns:NewLibWithEvent(libName)
+local p  = ns:CreateDefaultLogger(libName)
 local pp = ns:CreateDefaultLogger(ns.name)
 
 --[[-----------------------------------------------------------------------------
@@ -36,14 +23,17 @@ local function OnPlayerEnteringWorld(msg, source, ...)
 
     S:OnAddOnReady()
 
-    --@debug@
-    isLogin = true
-    p:d(function() return "IsLogin=%s IsReload=%s", tostring(isLogin), tostring(isReload) end)
-    --@end-debug@
+    --@do-not-package@
+    if ns.debug:IsDeveloper() then
+        isLogin = true
+        p:vv(function()
+            return "IsLogin=%s IsReload=%s LogLevel=%s", isLogin, isReload, ADDON_SUITE_LOG_LEVEL end)
+    end
+    --@end-do-not-package@
 
     if not isLogin then return end
 
-    pp:vv(GC:GetMessageLoadedText())
+    pp:a(GC:GetMessageLoadedText())
 end
 
 --[[-----------------------------------------------------------------------------

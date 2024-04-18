@@ -24,3 +24,7 @@ BaseLibraryObject_WithAceEvent
 --- @field major string Retrieves the major version of the module. i.e., <LibName>-1.0
 --- @field minor string Retrieves the minor version of the module. i.e., <LibName>-1.0
 
+--[[-----------------------------------------------------------------------------
+Type: BaseNamespace
+-------------------------------------------------------------------------------]]
+--- @class BaseNamespace : Kapresoft_Base_Namespace

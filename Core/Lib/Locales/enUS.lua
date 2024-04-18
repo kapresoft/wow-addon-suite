@@ -39,9 +39,9 @@ L['General::Enable All::Button::Desc']     = 'Checks all add-ons below.'
 L['General::Disable All::Button']          = 'None'
 L['General::Disable All::Button::Desc']    = 'Unchecks all add-ons below.'
 
-L['Add-Ons::Desc']            = 'To activate or deactivate an Add-On, check or uncheck its corresponding box. After making your selections, click on "Apply and ReloadUI" to implement the changes to your configuration.'
+L['Add-Ons::Desc']            = 'To activate or deactivate an addon, check or uncheck its corresponding box. After making your selections, click on |cdf6F97FFReloadUI|r to implement the changes to your configuration.'
 L['Reload UI']         = true
-L['Reload UI::Desc']   = 'Apply and Reload Immediately with |cfdE64750No Confirmation.|r\n\nTo activate or deactivate an Add-On, check or uncheck its corresponding box. After making your selections, click on this button to implement the changes to your configuration.'
+L['Reload UI::Desc']   = 'Apply and Reload Immediately with |cfdE64750No Confirmation.|r'
 L['Sync with Profile and Reload'] = 'Sync with Profile and Reload'
 L['Select Profile']           = true
 L['Select Profile::Desc']     = 'Select a profile to activate.  You will be prompted to reload the UI.  Note that these profiles are managed on the Profiles tab.'
