@@ -115,3 +115,11 @@ L['Profile Sync Status Indicator::Desc']   = 'Enable this option to use |cfdE647
 
 L['Enabled (After Reload)']      = true
 L['Disabled (After Reload)']     = true
+
+L['Limit Profile Name Characters']       = 'Limit Profile Name Characters...'
+L['Limit Profile Name Characters::Desc'] = 'Set the maximum number of characters for displaying player profile names displayed to the right of the addon icon in |cdf6F97FFTitan Panel|r. If a name exceeds this limit, it will be shortened and end with an ellipsis ("..."). You can adjust this setting to anywhere between 5 and 20 characters.'
+L['Show Profile Name'] = true
+L['Show Profile Name::Desc'] = 'Enable this option to display the current profile name directly to the right of the icon in |cdf6F97FFTitan Panel|r. When selected, it allows you to quickly see which profile is active.'
+L['Titan Panel Settings'] = true
+L['Show Out of Sync Count'] = true
+L['Show Out of Sync Count::Desc'] = 'Enable this setting to display the number of addons in |cdf6F97FFTitan Panel|r that are currently out of sync with the active profile.'

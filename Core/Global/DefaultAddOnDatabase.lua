@@ -11,9 +11,14 @@ Type: Minimap
 --- @field minimapPos Number Position on the minimap. This is managed by EasyMenu/DataBroker
 local minimap = {
     hide = false,
-    hide_when_titan_panel_added = true,
     confirm_reloads = true,
     sync_status_indicator = true,
+    hide_when_titan_panel_added = true,
+    titan_panel = {
+        show_profile_name = true,
+        show_out_of_sync_count = true,
+        profile_name_max_chars = 20,
+    },
 }
 
 --[[-----------------------------------------------------------------------------
