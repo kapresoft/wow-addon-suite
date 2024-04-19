@@ -87,18 +87,18 @@ local function CheckedStateMethods(o)
 
         return summary
     end
-    
+
     ---@param tooltip GameTooltip
     function o:tooltipSummary(tooltip)
         if #self.checkedButNotLoaded > 0 then
             tooltip:AddLine('\n')
             tooltip:AddLine(L['Enabled (After Reload)'] .. ':', GREEN_FONT_COLOR:GetRGB())
-            tooltip:AddLine('  • ' .. table.concat(self.checkedButNotLoaded, ", "))
+            tooltip:AddLine('  • ' .. TableToString(self.checkedButNotLoaded, 5))
         end
         if #self.loadedButNotChecked > 0 then
             tooltip:AddLine('\n')
             tooltip:AddLine(L['Disabled (After Reload)'] .. ':', RED_FONT_COLOR:GetRGB())
-            tooltip:AddLine('  • ' .. table.concat(self.loadedButNotChecked, ", "))
+            tooltip:AddLine('  • ' .. TableToString(self.loadedButNotChecked, 5))
         end
         if self:GetCount() > 0 then tooltip:AddLine('\n') end
     end
@@ -159,6 +159,30 @@ local function MethodsAndProps(o)
         return summary
     end
 end; MethodsAndProps(D)
+
+--- Converts a table into a string with elements separated by ", " and a newline every 5 elements.
+--- @param tbl table The table to be converted into a string.
+--- @return string The formatted string.
+---@param wrapEvery number
+function TableToString(tbl, wrapEvery)
+    local result = {}
+    for i, value in ipairs(tbl) do
+        -- Append the current value to the result table.
+        table.insert(result, tostring(value))
+        -- Check if the current index is a multiple of 5.
+        if i % wrapEvery == 0 then
+            -- Append a newline if it's the 5th element.
+            table.insert(result, "\n")
+        else
+            -- Otherwise, append a comma and space, unless it's the last element.
+            if i ~= #tbl then
+                table.insert(result, ", ")
+            end
+        end
+    end
+    -- Concatenate all parts of the result table into a single string.
+    return table.concat(result)
+end
 
 --[[-----------------------------------------------------------------------------
 Methods
