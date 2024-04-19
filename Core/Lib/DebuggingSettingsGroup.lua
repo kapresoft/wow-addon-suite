@@ -112,7 +112,7 @@ local function PropsAndMethods(o)
                 a.log_level.set({}, 35)
             end,
         }
-        a.finestBtn = {
+        a.traceBtn = {
             name = 'trace',
             type = "execute", order = dbgSeq:next(), width = 'half',
             desc = "Trace Log Level (50)",
