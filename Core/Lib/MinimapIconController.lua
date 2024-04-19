@@ -271,7 +271,10 @@ local function PropsAndMethods(o)
     function o:New() return ns:K():CreateAndInitFromMixin(o) end
 
     --- @public
-    function o:InitMinimapIcon() self:CreateAndRegisterMinimapDataObject() end
+    function o:InitMinimapIcon()
+        self:CreateAndRegisterMinimapDataObject()
+        OnToggleMinimapIconTitanPanel(self)
+    end
 
     --- @public
     function o:CreateAndRegisterMinimapDataObject()
