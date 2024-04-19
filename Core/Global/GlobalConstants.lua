@@ -133,6 +133,7 @@ local function GlobalConstantProperties(o)
         OnSwitchProfile                 = newMsg('OnSwitchProfile'),
         OnToggleMinimapIcon             = newMsg('OnToggleMinimapIcon'),
         OnToggleMinimapIconTitanPanel   = newMsg('OnToggleMinimapIconTitanPanel'),
+        OnUpdateMinimapState            = newMsg('OnUpdateMinimapState'),
         OnProfileDeleted                = newMsg('OnProfileDeleted'),
         OnProfileChanged                = newMsg('OnProfileChanged'),
         OnToggleShowInQuickProfileMenu  = newMsg('OnToggleShowInQuickProfileMenu'),

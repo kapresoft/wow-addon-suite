@@ -10,6 +10,7 @@ Local Vars
 local ns = select(2, ...)
 local O, GC, M, MSG, KO, LibStub = ns.O, ns.GC, ns.M, ns.GC.M, ns:KO(), ns.LibStub
 local Table, String =  KO.Table, KO.String
+local AceEvent = ns:AceEvent()
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
@@ -47,7 +48,10 @@ local function CreateProfileSelect()
     local function GetCurrentProfile() return ns:db():GetCurrentProfile()  end
     --- @param info table Ignored
     --- @param val string The profile name selected
-    local function SetCurrentProfile(info, val) ns:db():SetProfile(val) end
+    local function SetCurrentProfile(info, val)
+        ns:db():SetProfile(val)
+        AceEvent:SendMessage(MSG.OnUpdateMinimapState, libName)
+    end
     --- Get the Profile names to be used for the select values
     --- @return table<string, string> key is the same as value
     local function GetSortedProfiles()
@@ -218,6 +222,7 @@ local function PropsAndMethods(o)
             end
             --@end-do-not-package@
             UpdateEnabledState(addOnName, v)
+            AceEvent:SendMessage(MSG.OnUpdateMinimapState, libName)
             p:f3(function() return 'Handle Set[%s]: val=%s', addOnName, v end)
         end
     end

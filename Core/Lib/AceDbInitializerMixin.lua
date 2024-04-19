@@ -3,7 +3,7 @@ Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
 local ns = select(2, ...)
-local O, GC, M, LibStub, KO = ns.O, ns.GC, ns.M, ns.LibStub, ns:KO()
+local O, GC, M, LibStub, MSG = ns.O, ns.GC, ns.M, ns.LibStub, ns.GC.M
 local AceDB = O.AceLibrary.AceDB
 local libName = M.AceDbInitializerMixin
 --[[-----------------------------------------------------------------------------
@@ -20,11 +20,11 @@ Methods
 local function AddonCallbackMethods(a)
     function a:OnProfileChanged(evt, db, profileKey)
         p:d('OnProfileChanged called...')
-        AceEvent:SendMessage(GC.M.OnProfileChanged, libName, profileKey)
+        AceEvent:SendMessage(MSG.OnProfileChanged, libName, profileKey)
     end
     function a:OnProfileDeleted(evt, db, profileKey)
         p:d('OnProfileDeleted called...key=' .. profileKey)
-        AceEvent:SendMessage(GC.M.OnProfileDeleted, libName, profileKey)
+        AceEvent:SendMessage(MSG.OnProfileDeleted, libName, profileKey)
     end
     function a:OnProfileCopied()
         p:d('OnProfileCopied called...')

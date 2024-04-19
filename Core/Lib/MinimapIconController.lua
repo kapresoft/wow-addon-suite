@@ -93,7 +93,7 @@ end
 
 --- @param self MinimapIconController
 local function OnOutOfSyncIndicator(self)
-    if ns:global().minimap.sync_status_indicator ~= true then
+    if ns:minimap().sync_status_indicator ~= true then
         return self:UpdateOutOfSyncIndicator(true)
     end
     local inSync, details = self:IsInSync()
@@ -110,6 +110,11 @@ local function OnToggleMinimapIconTitanPanel(self)
         return self:SetShowOnMinimap(false)
     end
     self:SetShowOnMinimap(true)
+end
+
+--- @param self MinimapIconController
+local function OnUpdateMinimapState(self)
+    C_Timer.After(0.1, function() OnOutOfSyncIndicator(self) end)
 end
 
 --- @param self MinimapIconController
@@ -234,6 +239,19 @@ local function Hook_TitanPanelButton_OnShow(self)
 
 end
 
+--- Truncates a string to a specified length and appends ellipses if the string is longer.
+--- @param str string The string to potentially truncate.
+--- @param maxLength number The maximum allowed length of the string before truncation.
+--- @return string The potentially truncated string.
+local function TruncateStringWithEllipses(str, maxLength)
+    assert(type(str) == "string", "str must be a string", 2)
+    assert(type(maxLength) == 'number' and maxLength > 0, "maxLength must be a number greater than zero")
+    if string.len(str) > maxLength then
+        return string.sub(str, 1, maxLength) .. "..."
+    end
+    return str
+end
+
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
@@ -245,6 +263,7 @@ local function PropsAndMethods(o)
         self.addon = ns:a()
         self:RegisterMessage(MSG.OnToggleMinimapIcon, function() OnToggleMinimapIcon(self) end)
         self:RegisterMessage(MSG.OnToggleMinimapIconTitanPanel, function() OnToggleMinimapIconTitanPanel(self) end)
+        self:RegisterMessage(MSG.OnUpdateMinimapState, function() OnUpdateMinimapState(self) end)
     end
 
     --- @public
@@ -273,7 +292,7 @@ local function PropsAndMethods(o)
         })
 
         LibDBIcon:Register(minimapName, dataObject, ns:global().minimap)
-        self:RegisterMessage(MSG.OnUpdateMinimapIconState, function() OnOutOfSyncIndicator(self) end)
+        self:RegisterMessage(MSG.OnUpdateMinimapIconState, function() OnUpdateMinimapState(self) end)
         self.dataObject = dataObject
 
         if not API:IsTitanPanelAvailable() then return end
@@ -372,16 +391,37 @@ local function PropsAndMethods(o)
             return 'inSync=%s details=%s', inSync, details:summary()
         end)
         if inSync then
-            d.text = ' '
+            d.text = self:GetProfileName()
             return self:ChangeIcon(icon)
         end
         self:ChangeIcon(iconRed)
-        d.text = self:GetOutOfSyncCount()
+        d.text = self:GetTitanPluginText()
     end
 
-    function o:GetOutOfSyncCount()
+    function o:GetTitanPluginText()
         local _, state = self:IsInSync()
-        return iconOutOfSyncColor:WrapTextInColorCode(tostring(state:GetCount()))
+        local count = ''
+        if ns:minimap().titan_panel.show_out_of_sync_count then
+            count = iconOutOfSyncColor:WrapTextInColorCode('(' .. tostring(state:GetCount()) .. ')')
+        end
+        if ns:minimap().titan_panel.show_profile_name ~= true then
+            return count
+        end
+        local profileName = self:GetProfileName()
+        if profileName ~= nil then
+            return ns.sformat('%s %s', profileName, count)
+        end
+        return count
+    end
+
+    function o:GetProfileName()
+        local val = ns:minimap().titan_panel.show_profile_name == true
+        if val == true then
+            return TruncateStringWithEllipses(
+                    ns:db():GetCurrentProfile(),
+                    ns:minimap().titan_panel.profile_name_max_chars or 20)
+        end
+        return nil
     end
 
     --- @param acceptFn ProfilePredicateFn | "function(profile) return true end"

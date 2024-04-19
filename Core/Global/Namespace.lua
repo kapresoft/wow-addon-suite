@@ -276,6 +276,8 @@ local function NameSpacePropertiesAndMethods(o)
 
     --- @return Profile_Global_Config
     function o:global() return self.addonDbFn().global end
+    --- @return Minimap
+    function o:minimap() return self:global().minimap end
 
     function o:ToStringNamespaceKeys() return self.pformat(getSortedKeys(self)) end
     function o:ToStringObjectKeys() return self.pformat(getSortedKeys(self.O)) end
