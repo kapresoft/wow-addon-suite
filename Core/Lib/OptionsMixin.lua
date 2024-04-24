@@ -44,6 +44,7 @@ local function MethodsAndProps(o)
         --@do-not-package@
         if ns.debug:IsDeveloper() then
             opt.args.debugging = DebugSettings:CreateDebuggingGroup()
+            p:a(function() return 'Debugging tab in Settings UI is enabled with LogLevel=%s', ADDON_SUITE_LOG_LEVEL end)
             return
         end
         --@end-do-not-package@

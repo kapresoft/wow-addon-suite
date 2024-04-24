@@ -165,6 +165,8 @@ local function AddonInfoPropsAndMethods(o)
     function o:GetNameAndDesc()
         local name = self.name
         local desc = string.gsub(self.notes or '', "[\|n]+$", "")
+        local title = GetAddOnMetadata(self.name, 'Title')
+        desc = title .. '\n\n' .. desc
         local label = ''
         local bullets = {}
 

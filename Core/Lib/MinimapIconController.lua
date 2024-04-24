@@ -70,7 +70,9 @@ local function FC(hexColor, text) return ns.ch:FormatColor(hexColor, text) end
 local function FCOS(text) return ns.ch:FormatColor(textOutOfSyncColor, text) end
 
 local function IsHide() return ns:global().minimap.hide == true end
-local function IsShownInTP() return ns:db().char.shownInTitanPanel == true end
+local function IsShownInTP()
+    return API:IsTitanPanelAvailable() and ns:db().char.shownInTitanPanel == true
+end
 local function IsHideWhenInTP() return ns:global().minimap.hide_when_titan_panel_added == true end
 
 ---@param tooltip _GameTooltip
@@ -106,10 +108,11 @@ local function OnToggleMinimapIcon(self) self:SetShowOnMinimap(not IsHide()) end
 
 --- @param self MinimapIconController
 local function OnToggleMinimapIconTitanPanel(self)
+    local showInMM = true
     if IsHide() or (IsShownInTP() and IsHideWhenInTP()) then
-        return self:SetShowOnMinimap(false)
+        showInMM = false
     end
-    self:SetShowOnMinimap(true)
+    self:SetShowOnMinimap(showInMM)
 end
 
 --- @param self MinimapIconController
