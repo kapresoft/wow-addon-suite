@@ -1,10 +1,9 @@
 ---
 name: Bug report
-about: Create a report to help improve the ActionbarPlus Add-On
+about: Create a report to help improve the Add-On
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 **Describe the bug**

@@ -1,10 +1,9 @@
 ---
 name: Feature request
-about: Suggest an idea for ActionbarPlus Add-On
+about: Suggest an idea for the Add-On
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 **Is your feature request related to a problem? Please describe.**
