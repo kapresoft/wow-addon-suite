@@ -12,7 +12,7 @@ Base Namespace
 -------------------------------------------------------------------------------]]
 --- @type string
 local addonName
---- @type BaseNamespace
+--- @type CoreNamespace
 local kns
 addonName, kns = ...
 
@@ -296,7 +296,7 @@ end
 local function CreateNamespace(...)
     --- @type string
     local addon
-    --- @class __Namespace : BaseNamespace
+    --- @class __Namespace : CoreNamespace
     --- @field DefaultAddOnDatabase AddOn_DB
     local ns; addon, ns = ...
 

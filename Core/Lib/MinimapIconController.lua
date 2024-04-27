@@ -389,7 +389,7 @@ local function PropsAndMethods(o)
     --- @param inSync boolean
     --- @param details CheckedState|nil
     function o:UpdateOutOfSyncIndicator(inSync, details)
-        local d = self.dataObject
+        local d = self.dataObject; if not d then return end
         --- @type LayeredRegion
         local iconT = d.icon; if not iconT then return end
         p:d(function()

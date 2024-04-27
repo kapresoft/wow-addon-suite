@@ -1,7 +1,7 @@
 ## Interface: 30403
 ## Version: @project-version@
-## Title: Addon Suite|cff1784d1 WOTLK|r
-## Notes: Addon Suite Addon Manager
+## Title: Addon Suite |cff1784d1WOTLK|r
+## Notes: Addon Suite Addon Manager. Because Even Your Addons Need an Overlord. The Only Suite Where Every Guest (Addon) Behaves.
 ## Author: kapresoft@gmail.com
 ## DefaultState: enabled
 ## SavedVariables: ADDON_SUITE_DB, ADDON_SUITE_LOG_LEVEL, ADDON_SUITE_DEBUG_MODE, ADDON_SUITE_DEBUG_ENABLED_CATEGORIES
@@ -25,12 +25,5 @@
 # To get the Interface/Build Info
 # /dump select(4, GetBuildInfo())
 
-Core\Base\_Base.xml
-#@do-not-package@
-Core\Lib\Developer\_GlobalDeveloper.xml
-#@end-do-not-package@
+Core\Wrath.lua
 Core\_Core.xml
-Wrath\_Wrath.xml
-#@do-not-package@
-Core\Lib\Developer\_Developer.xml
-#@end-do-not-package@

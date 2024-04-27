@@ -1,6 +1,6 @@
-## Interface: 11502
+## Interface: 40400
 ## Version: @project-version@
-## Title: Addon Suite |cff1784d1Classic|r
+## Title: Addon Suite |cff1784d1Cataclysm|r
 ## Notes: Addon Suite Addon Manager. Because Even Your Addons Need an Overlord. The Only Suite Where Every Guest (Addon) Behaves.
 ## Author: kapresoft@gmail.com
 ## DefaultState: enabled
@@ -14,7 +14,7 @@
 ## X-License: All Rights Reserved: You are free to fork and modify on GitHub, please ask us about anything else.
 
 ## X-Github-Repo: https://github.com/kapresoft/wow-addon-suite
-## X-Github-Issues: https://github.com/kapresoft/wow-addon-suite/issues
+## X-Github-Issues: https://github.com/kapresoft/wow-addon-suite
 ## X-CurseForge: https://www.curseforge.com/wow/addons/addon-suite
 ## X-Curse-Project-ID: 785236
 ## X-Github-Project-Author: @project-author@
@@ -25,5 +25,5 @@
 # To get the Interface/Build Info
 # /dump select(4, GetBuildInfo())
 
-Core\Vanilla.lua
+Core\Cata.lua
 Core\_Core.xml
