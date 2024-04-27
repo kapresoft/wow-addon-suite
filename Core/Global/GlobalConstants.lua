@@ -16,7 +16,7 @@ local LibStub = LibStub
 
 --- @type string
 local addon
---- @type BaseNamespace
+--- @type CoreNamespace
 local ns
 addon, ns = ...
 local kch = ns.Kapresoft_LibUtil.CH
