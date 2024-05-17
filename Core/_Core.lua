@@ -1,72 +1,27 @@
---[[-----------------------------------------------------------------------------
-Type: CoreNamespace
--------------------------------------------------------------------------------]]
---- @class CoreNamespace : Kapresoft_Base_Namespace
---- @field gameVersion GameVersion
-
---- @type string
-local addon
 --- @type CoreNamespace
-local ns
-addon, ns = ...;
-ns.addon     = addon
-ns.shortName = 'ads'
---[[-----------------------------------------------------------------------------
-Print Functions
--------------------------------------------------------------------------------]]
--- global print/logger ('c')
-function ns.print(...)
-    if ns.chatFrame then return ns.chatFrame:log(...) end
-    print(...)
-end;
+local ns = select(2, ...)
+local K = ns.Kapresoft_LibUtil
 
----@param module Name
-function ns.logp(module, ...)
-    if ns.chatFrame then return ns.chatFrame:logp(module,...) end
-    print(module, ...)
-end;
+K:MixinWithDefExc(ns, K.Objects.CoreNamespaceMixin, K.Objects.NamespaceAceLibraryMixin)
 
---[[-----------------------------------------------------------------------------
-CoreNamespaceMixin
--------------------------------------------------------------------------------]]
---- @see AceLibraryMixin.lua
---- @param o CoreNamespace
-local function CoreNamespaceMixin(o)
+--- The "name" field conflicts with K.Objects. We need to restore it here
+--- @deprecated Deprecated. Use ns.addon
+ns.name         = ns.addon
+ns.shortName    = 'ads'
+ns.addonLogName = string.upper(ns.shortName)
 
-    local KO = ns.Kapresoft_LibUtil.Objects
-    local AceMixin = KO.NamespaceAceLibraryMixin
-    o.AceEvent = AceMixin.AceEvent
-    o.AceHook = AceMixin.AceHook
-    o.AceBucket = AceMixin.AceBucket
+--- @type Modules
+ns.O = ns.O or {}
 
-    --- @return Kapresoft_LibUtil
-    function o:K() return ns.Kapresoft_LibUtil end
+--- @type Kapresoft_LibUtil_ColorDefinition
+local consoleColors = {
+    primary   = '7ACFFB',
+    secondary = 'fbeb2d',
+    tertiary  = 'ffffff',
+}; ns.consoleColors = consoleColors
 
-    --- @return Kapresoft_LibUtil_Objects
-    function o:KO() return KO end
-
-    --- @return Kapresoft_LibUtil_AceLibraryObjects
-    function o:AceLibrary() return KO.AceLibrary.O end
-
-    --- @return Kapresoft_LibUtil_Assert
-    function o:Assert() return KO.Assert end
-
-    --- @return Kapresoft_LibUtil_ColorUtil
-    function o:ColorUtil() return KO.ColorUtil end
-
-    --- @return Kapresoft_LibUtil_Safecall
-    function o:Safecall() return KO.Safecall end
-
-    --- @return Kapresoft_LibUtil_String
-    function o:String() return KO.String end
-
-    --- @return Kapresoft_LibUtil_Table
-    function o:Table() return KO.Table end
-
-    --- @return Kapresoft_LibUtil_TimeUtil
-    function o:TimeUtil() return KO.TimeUtil end
-
-end; CoreNamespaceMixin(ns)
+--- @type Kapresoft_LibUtil_ConsoleHelper
+local ch = ns:NewConsoleHelper(consoleColors); ns.ch = ch
 
 --[[-----------------------------------------------------------------------------
 Type: DebugSettingsFlag
@@ -82,22 +37,16 @@ local flag = {
     selectLogConsoleTab = false,
 }
 
---- @return DebugSettings
-local function debug()
-    --- @class DebugSettings
-    local o = {
-        flag = flag,
-    }
-    --- @return boolean
-    function o:IsDeveloper() return self.flag.developer == true  end
-    --- @return boolean
-    function o:IsEnableLogConsole()
-        return self:IsDeveloper() and self.flag.enableLogConsole == true
-    end
-    function o:IsSelectLogConsoleTab()
-        return self:IsEnableLogConsole() and self.flag.selectLogConsoleTab
-    end
-    return o;
-end
+--[[-----------------------------------------------------------------------------
+Type: DebugSettings
+--- Make sure to match this structure in GlobalDeveloper (which is not packaged in releases)
+-------------------------------------------------------------------------------]]
+--- @class DebugSettings
+ns.debug = { flag = flag }
 
-ns.debug = debug()
+--[[-----------------------------------------------------------------------------
+Namespace Methods
+-------------------------------------------------------------------------------]]
+--- @return boolean
+function ns:IsDev() return ns.debug.flag.developer == true end
+

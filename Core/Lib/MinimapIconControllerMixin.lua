@@ -21,18 +21,26 @@ Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
 local ns = select(2, ...)
-local API, MSG, C = ns.O.API, ns.GC.M, ns.GC.C
+local O, MSG, C = ns.O, ns.GC.M, ns.GC.C
 
 local LibDBIcon = ns:LibDBIcon()
 local LibDataBroker = ns:LibDataBroker()
 
 local L = ns:AceLocale()
 local minimapName = ns.name
-local libName = 'MinimapIconController'
+local libName = ns.M.MinimapIconControllerMixin()
+
+local cache = { db = nil }
+
+--[[-----------------------------------------------------------------------------
+Type: MinimapIconController
+-------------------------------------------------------------------------------]]
+--- @class MinimapIconController
+
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
---- @class MinimapIconController : BaseLibraryObject_WithAceEvent
+--- @class MinimapIconControllerMixin
 local S = ns:NewLibWithEvent(libName)
 local p = ns:LC().MINIMAP:NewLogger(libName)
 local pm = ns:LC().MESSAGE:NewLogger(libName)
@@ -48,10 +56,16 @@ local currentSymbol = L['Current::Symbol::Minimap']
 --[[-----------------------------------------------------------------------------
 Support Functions
 -------------------------------------------------------------------------------]]
-local function IsConfirmReload()
-    local minimap = ns:db().global.minimap
-    return minimap and minimap.confirm_reloads == true
+--- @return AddOn_DB
+local function db()
+    if cache.db then return cache.db end; cache.db = ns:db()
+    return cache.db
 end
+
+--- @return Minimap
+local function minimap() return db().global.minimap end
+
+local function IsConfirmReload() return minimap().confirm_reloads == true end
 
 --- This local function is dynamic and needs to be here
 local function GetConfirmReloadText()
@@ -69,11 +83,11 @@ end
 local function FC(hexColor, text) return ns.ch:FormatColor(hexColor, text) end
 local function FCOS(text) return ns.ch:FormatColor(textOutOfSyncColor, text) end
 
-local function IsHide() return ns:global().minimap.hide == true end
+local function IsHide() return minimap().hide == true end
 local function IsShownInTP()
-    return API:IsTitanPanelAvailable() and ns:db().char.shownInTitanPanel == true
+    return O.API:IsTitanPanelAvailable() and db().char.shownInTitanPanel == true
 end
-local function IsHideWhenInTP() return ns:global().minimap.hide_when_titan_panel_added == true end
+local function IsHideWhenInTP() return minimap().hide_when_titan_panel_added == true end
 
 ---@param tooltip _GameTooltip
 ---@param inSync boolean
@@ -86,7 +100,7 @@ end
 
 --- @param inSync boolean
 local function CurrentProfileText(inSync)
-    local currentProfile = ns:db():GetCurrentProfile()
+    local currentProfile = db():GetCurrentProfile()
     local profText = ns.ch:T(L['Current Profile'])
     local prof = FC(profileInSyncColor, currentProfile)
     if not inSync then prof = FCOS(currentProfile) end
@@ -95,7 +109,7 @@ end
 
 --- @param self MinimapIconController
 local function OnOutOfSyncIndicator(self)
-    if ns:minimap().sync_status_indicator ~= true then
+    if minimap().sync_status_indicator ~= true then
         return self:UpdateOutOfSyncIndicator(true)
     end
     local inSync, details = self:IsInSync()
@@ -125,14 +139,14 @@ end
 local function OnSwitchProfile(self, profileName)
     assert(profileName, "Profile Name is missing.")
     p:f1(function() return "OnSwitchProfile: %s", profileName end )
-    ns:db():SetProfile(profileName)
+    db():SetProfile(profileName)
     ns:a():CloseConfig()
     self:SendMessage(MSG.OnAddOnStateChanged, libName)
 end
 
 --- @param self MinimapIconController
 local function OnTitanPanelHide(self)
-    ns:db().char.shownInTitanPanel = false
+    db().char.shownInTitanPanel = false
     if IsHide() then return end
     self:SetShowOnMinimap(true)
 end
@@ -164,7 +178,7 @@ local function OnTooltipShow(self, tooltip)
         tooltip:AddDoubleLine(syncKey, ns.ch:T(L['Sync with Profile and Reload']))
     end
     --@do-not-package@
-    if ns.debug:IsDeveloper() then
+    if ns:IsDev() then
         tooltip:AddDoubleLine(ORANGE_THREAT_COLOR:WrapTextInColorCode('SHIFT-LEFT-Click'),
                               ns.ch:T('Open Debugging Dialog'))
     end
@@ -206,7 +220,7 @@ end
 --- @param button ButtonName i.e. 'LeftButton'
 local function OnClick(self, buttonFrame, button)
     --@do-not-package@
-    if ns.debug:IsDeveloper() then
+    if ns:IsDev() then
         if button == 'LeftButton' and IsShiftKeyDown() then
             return ns:a():OpenConfigDebugging()
         end
@@ -234,7 +248,7 @@ local function Hook_TitanPanelButton_OnShow(self)
         p:f3(function() return 'OnShow(): %s type=%s', frame:GetName(), frame:GetObjectType() end)
         frame:SetScript('OnHide', function() OnTitanPanelHide(self) end)
 
-        ns:db().char.shownInTitanPanel = true
+        db().char.shownInTitanPanel = true
         if not IsHideWhenInTP() then return end
 
         self:SetShowOnMinimap(false)
@@ -258,195 +272,196 @@ end
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
---- @param o MinimapIconController
-local function PropsAndMethods(o)
+--- @type MinimapIconControllerMixin | AceEventInterface
+local LIB = S
 
-    --- @private
-    function o:Init()
-        self.addon = ns:a()
-        self:RegisterMessage(MSG.OnToggleMinimapIcon, function() OnToggleMinimapIcon(self) end)
-        self:RegisterMessage(MSG.OnToggleMinimapIconTitanPanel, function() OnToggleMinimapIconTitanPanel(self) end)
-        self:RegisterMessage(MSG.OnUpdateMinimapState, function() OnUpdateMinimapState(self) end)
+--- @private
+function LIB:Init()
+    self.addon = ns:a()
+    self:RegisterMessage(MSG.OnToggleMinimapIcon, function() OnToggleMinimapIcon(self) end)
+    self:RegisterMessage(MSG.OnToggleMinimapIconTitanPanel, function() OnToggleMinimapIconTitanPanel(self) end)
+    self:RegisterMessage(MSG.OnUpdateMinimapState, function() OnUpdateMinimapState(self) end)
+end
+
+--- @public
+--- @return MinimapIconController
+function LIB:New() return ns:K():CreateAndInitFromMixin(S) end
+
+--- @type MinimapIconController | AceEventInterface
+local o = S
+
+--- @public
+function o:InitMinimapIcon()
+    self:CreateAndRegisterMinimapDataObject()
+    OnToggleMinimapIconTitanPanel(self)
+end
+
+--- @public
+function o:CreateAndRegisterMinimapDataObject()
+    --- @type LibDataBroker_DataObject
+    local dataObject = LibDataBroker:GetDataObjectByName(minimapName)
+    if dataObject then
+        p:d(function() return 'LibDataBroker-DataObject already registered: %s',
+                tostring(type(dataObject) ~= nil) end)
+        return
     end
 
-    --- @public
-    --- @return MinimapIconController
-    function o:New() return ns:K():CreateAndInitFromMixin(o) end
+    dataObject = LibDataBroker:NewDataObject(minimapName, {
+        type = "data source",
+        text = ns.GC.C.FRIENDLY_NAME,
+        icon = icon,
+        OnClick = function(...) OnClick(self, ...)  end,
+        OnTooltipShow = function(...) OnTooltipShow(self, ...)  end,
+    })
 
-    --- @public
-    function o:InitMinimapIcon()
-        self:CreateAndRegisterMinimapDataObject()
-        OnToggleMinimapIconTitanPanel(self)
+    LibDBIcon:Register(minimapName, dataObject, ns:global().minimap)
+    self:RegisterMessage(MSG.OnUpdateMinimapIconState, function() OnUpdateMinimapState(self) end)
+    self.dataObject = dataObject
+
+    if not O.API:IsTitanPanelAvailable() then return end
+
+    Hook_TitanPanelButton_OnShow(self)
+end
+
+--- @return table<number, MinimapIconProfilesMenuItem>
+function o:BuildProfilesMenu()
+
+    local sepColor     = ns.locale.lineSeparator1
+    local selectProfileText = L['Select profile to activate']
+    local noConfirmation = L['No Confirmation']
+    local confirm, line2 = '', ''
+
+    if not IsConfirmReload() then
+        confirm = ns.sformat(' (%s)', noConfirmation)
+        line2 = L['Reloads UI without confirmation']
     end
+    line2 = selectProfileText .. confirm .. '.'
+    local sep = { text = sepColor, notClickable = true, notCheckable = true }
 
-    --- @public
-    function o:CreateAndRegisterMinimapDataObject()
-        --- @type LibDataBroker_DataObject
-        local dataObject = LibDataBroker:GetDataObjectByName(minimapName)
-        if dataObject then
-            p:d(function() return 'LibDataBroker-DataObject already registered: %s',
-                    tostring(type(dataObject) ~= nil) end)
-            return
+    local menu = {
+        { text = ns.ch:T(L['Switch Profile']), isTitle = true, notCheckable = true },
+        { text = ns.ch:FormatColor('fbeb2d', line2), isTitle = true, notCheckable = true },
+        sep,
+    }
+    --- @type table<number, MinimapIconProfilesMenuItem>
+    local menuItems = { }
+
+    --- @param profileName Name
+    local function FnHandler(profileName) return function() OnSwitchProfile(self, profileName) end end
+
+    local dbx = db()
+    local current = dbx:GetCurrentProfile()
+    local char = dbx.char
+
+    self:ForEachProfile(function(name, profile)
+        if (name == current) then return true end
+        local data = char.showInQuickProfileMenu
+        local show = data[name] == true
+        if show == true then
+            p:d(function() return "profile[%s]: show-in-menu: %s", name, tostring(show) end)
         end
-
-        dataObject = LibDataBroker:NewDataObject(minimapName, {
-            type = "data source",
-            text = ns.GC.C.FRIENDLY_NAME,
-            icon = icon,
-            OnClick = function(...) OnClick(self, ...)  end,
-            OnTooltipShow = function(...) OnTooltipShow(self, ...)  end,
-        })
-
-        LibDBIcon:Register(minimapName, dataObject, ns:global().minimap)
-        self:RegisterMessage(MSG.OnUpdateMinimapIconState, function() OnUpdateMinimapState(self) end)
-        self.dataObject = dataObject
-
-        if not API:IsTitanPanelAvailable() then return end
-
-        Hook_TitanPanelButton_OnShow(self)
-    end
-
-    --- @return table<number, MinimapIconProfilesMenuItem>
-    function o:BuildProfilesMenu()
-
-        local sepColor     = ns.locale.lineSeparator1
-        local selectProfileText = L['Select profile to activate']
-        local noConfirmation = L['No Confirmation']
-        local confirm, line2 = '', ''
-
-        if not IsConfirmReload() then
-            confirm = ns.sformat(' (%s)', noConfirmation)
-            line2 = L['Reloads UI without confirmation']
+        return show
+    end, function(name, profile)
+        --- @type MinimapIconProfilesMenuItem
+        local menuItem = { _sortKey=name, text = name, func = FnHandler(name), notCheckable = true }
+        if name == current then
+            menuItem.text = FC(profileInSyncColor, ns.sformat("%s %s", menuItem.text, currentSymbol))
+            menuItem.checked = true
+            menuItem.func = nil
         end
-        line2 = selectProfileText .. confirm .. '.'
-        local sep = { text = sepColor, notClickable = true, notCheckable = true }
-
-        local menu = {
-            { text = ns.ch:T(L['Switch Profile']), isTitle = true, notCheckable = true },
-            { text = ns.ch:FormatColor('fbeb2d', line2), isTitle = true, notCheckable = true },
-            sep,
-        }
-        --- @type table<number, MinimapIconProfilesMenuItem>
-        local menuItems = { }
-
-        --- @param profileName Name
-        local function FnHandler(profileName) return function() OnSwitchProfile(self, profileName) end end
-
-        local current = ns:db():GetCurrentProfile()
-        local char = ns:db().char
-
-        self:ForEachProfile(function(name, profile)
-            if (name == current) then return true end
-            local data = char.showInQuickProfileMenu
-            local show = data[name] == true
-            if show == true then
-                p:d(function() return "profile[%s]: show-in-menu: %s", name, tostring(show) end)
-            end
-            return show
-        end, function(name, profile)
-            --- @type MinimapIconProfilesMenuItem
-            local menuItem = { _sortKey=name, text = name, func = FnHandler(name), notCheckable = true }
-            if name == current then
-                menuItem.text = FC(profileInSyncColor, ns.sformat("%s %s", menuItem.text, currentSymbol))
-                menuItem.checked = true
-                menuItem.func = nil
-            end
-            table.insert(menuItems, menuItem)
+        table.insert(menuItems, menuItem)
+    end)
+    if #menuItems > 0 then
+        table.sort(menuItems, function(a, b)
+            return a._sortKey < b._sortKey
         end)
-        if #menuItems > 0 then
-            table.sort(menuItems, function(a, b)
-                return a._sortKey < b._sortKey
-            end)
-            for i=1, #menuItems do table.insert(menu, menuItems[i]) end
-        end
-        local img = ns.locale.xSymbol
-        table.insert(menu, sep)
-        table.insert(menu, { text = L['Hide'] .. ' ' .. img, notCheckable = true })
-
-        return menu
+        for i=1, #menuItems do table.insert(menu, menuItems[i]) end
     end
+    local img = ns.locale.xSymbol
+    table.insert(menu, sep)
+    table.insert(menu, { text = L['Hide'] .. ' ' .. img, notCheckable = true })
 
-    function o:ChangeIconColor(r, g, b)
-        local button = self:GetMinimapButton()
-        if button and button.icon then
-            button.icon:SetVertexColor(r, g, b)
-        end
-        -- Fire events for each change
-        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconR", r)
-        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconG", g)
-        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconB", b)
+    return menu
+end
 
+function o:ChangeIconColor(r, g, b)
+    local button = self:GetMinimapButton()
+    if button and button.icon then
+        button.icon:SetVertexColor(r, g, b)
     end
+    -- Fire events for each change
+    LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconR", r)
+    LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconG", g)
+    LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName, "iconB", b)
 
-    function o:ChangeIcon(newIconPath)
-        self.dataObject.icon = newIconPath
-        local button = self:GetMinimapButton()
-        if button and button.icon then button.icon:SetTexture(newIconPath) end
-        LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName,
-                "icon", newIconPath)
+end
+
+function o:ChangeIcon(newIconPath)
+    self.dataObject.icon = newIconPath
+    local button = self:GetMinimapButton()
+    if button and button.icon then button.icon:SetTexture(newIconPath) end
+    LibDataBroker.callbacks:Fire("LibDataBroker_AttributeChanged_", minimapName,
+            "icon", newIconPath)
+end
+
+--- @param inSync boolean
+--- @param details CheckedState|nil
+function o:UpdateOutOfSyncIndicator(inSync, details)
+    local d = self.dataObject; if not d then return end
+    --- @type LayeredRegion
+    local iconT = d.icon; if not iconT then return end
+    p:d(function()
+        if inSync then return 'inSync=%s', inSync end
+        return 'inSync=%s details=%s', inSync, details:summary()
+    end)
+    if inSync then
+        d.text = self:GetProfileName()
+        return self:ChangeIcon(icon)
     end
+    self:ChangeIcon(iconRed)
+    d.text = self:GetTitanPluginText()
+end
 
-    --- @param inSync boolean
-    --- @param details CheckedState|nil
-    function o:UpdateOutOfSyncIndicator(inSync, details)
-        local d = self.dataObject; if not d then return end
-        --- @type LayeredRegion
-        local iconT = d.icon; if not iconT then return end
-        p:d(function()
-            if inSync then return 'inSync=%s', inSync end
-            return 'inSync=%s details=%s', inSync, details:summary()
-        end)
-        if inSync then
-            d.text = self:GetProfileName()
-            return self:ChangeIcon(icon)
-        end
-        self:ChangeIcon(iconRed)
-        d.text = self:GetTitanPluginText()
+function o:GetTitanPluginText()
+    local _, state = self:IsInSync()
+    local count = ''
+    if minimap().titan_panel.show_out_of_sync_count then
+        count = iconOutOfSyncColor:WrapTextInColorCode('(' .. tostring(state:GetCount()) .. ')')
     end
-
-    function o:GetTitanPluginText()
-        local _, state = self:IsInSync()
-        local count = ''
-        if ns:minimap().titan_panel.show_out_of_sync_count then
-            count = iconOutOfSyncColor:WrapTextInColorCode('(' .. tostring(state:GetCount()) .. ')')
-        end
-        if ns:minimap().titan_panel.show_profile_name ~= true then
-            return count
-        end
-        local profileName = self:GetProfileName()
-        if profileName ~= nil then
-            return ns.sformat('%s %s', profileName, count)
-        end
+    if minimap().titan_panel.show_profile_name ~= true then
         return count
     end
-
-    function o:GetProfileName()
-        local val = ns:minimap().titan_panel.show_profile_name == true
-        if val == true then
-            return TruncateStringWithEllipses(
-                    ns:db():GetCurrentProfile(),
-                    ns:minimap().titan_panel.profile_name_max_chars or 20)
-        end
-        return nil
+    local profileName = self:GetProfileName()
+    if profileName ~= nil then
+        return ns.sformat('%s %s', profileName, count)
     end
+    return count
+end
 
-    --- @param acceptFn ProfilePredicateFn | "function(profile) return true end"
-    --- @param callbackFn ProfileCallbackFn | "function(profile) print('profile') end"
-    function o:ForEachProfile(acceptFn, callbackFn)
-        for name, profile in pairs(ns:db().profiles) do
-            if acceptFn(name, profile) == true then callbackFn(name, profile) end
-        end
+function o:GetProfileName()
+    local val = minimap().titan_panel.show_profile_name == true
+    if val == true then
+        return TruncateStringWithEllipses(
+                db():GetCurrentProfile(),
+                minimap().titan_panel.profile_name_max_chars or 20)
     end
+    return nil
+end
 
-    --- @return boolean, CheckedState
-    function o:IsInSync() return ns.O.AddOnStateController:IsInSync() end
-    --- @return MinimapButton
-    function o:GetMinimapButton() return LibDBIcon:GetMinimapButton(minimapName) end
-
-    function o:SetShowOnMinimap(state)
-        if state == true then return LibDBIcon:Show(minimapName) end
-        LibDBIcon:Hide(minimapName)
+--- @param acceptFn ProfilePredicateFn | "function(profile) return true end"
+--- @param callbackFn ProfileCallbackFn | "function(profile) print('profile') end"
+function o:ForEachProfile(acceptFn, callbackFn)
+    for name, profile in pairs(ns:db().profiles) do
+        if acceptFn(name, profile) == true then callbackFn(name, profile) end
     end
+end
 
-end; PropsAndMethods(S)
+--- @return boolean, CheckedState
+function o:IsInSync() return ns.O.AddOnStateController:IsInSync() end
+--- @return MinimapButton
+function o:GetMinimapButton() return LibDBIcon:GetMinimapButton(minimapName) end
 
+function o:SetShowOnMinimap(state)
+    if state == true then return LibDBIcon:Show(minimapName) end
+    LibDBIcon:Hide(minimapName)
+end

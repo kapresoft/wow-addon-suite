@@ -1,4 +1,10 @@
 --[[-----------------------------------------------------------------------------
+Blizzard Vars
+-------------------------------------------------------------------------------]]
+local CreateFrame, FrameUtil = CreateFrame, FrameUtil
+local RegisterFrameForEvents, UnregisterFrameForEvents = FrameUtil.RegisterFrameForEvents, FrameUtil.UnregisterFrameForEvents
+
+--[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
@@ -9,41 +15,35 @@ local E, toMsg, MSG = GC.E, GC.toMsg, ns.GC.M
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
-local libName = 'EventToMessageRelay'
+local libName = ns.M.EventToMessageRelay()
+
 --- @class EventToMessageRelay
-local L = ns:NewLibWithEvent(libName)
+local S = ns:NewLibWithEvent(libName)
 local p = ns:CreateDefaultLogger(libName)
 local pt = ns:LC().MESSAGE_TRACE:NewLogger(libName)
---[[-----------------------------------------------------------------------------
-Blizzard Vars
--------------------------------------------------------------------------------]]
-local CreateFrame, FrameUtil = CreateFrame, FrameUtil
-local RegisterFrameForEvents, RegisterFrameForUnitEvents = FrameUtil.RegisterFrameForEvents, FrameUtil.RegisterFrameForUnitEvents
 
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
---- @param o EventToMessageRelay | AceEvent
-local function PropsAndMethods(o)
+--- @type EventToMessageRelay | AceEventInterface
+local o = S
 
-    function o.OnLoad(frame, event, ...)
-        frame:SetScript(E.OnEvent, function(self, evt, ...) L:OnMessageTransmitter(evt, ...) end)
-        --- @see GlobalConstants#M (Messages)
-        RegisterFrameForEvents(frame, {
-            E.PLAYER_ENTERING_WORLD,
-        })
-    end
+function o.OnLoad(frame, event, ...)
+    frame:SetScript(E.OnEvent, function(self, evt, ...) S:OnMessageTransmitter(self, evt, ...) end)
+    --- @see GlobalConstants#M (Messages)
+    RegisterFrameForEvents(frame, {
+        E.PLAYER_ENTERING_WORLD,
+    })
+end
 
-    --- @param event string
-    function o:OnMessageTransmitter(event, ...)
-        pt:t(function() return "Relaying event[%s] to message[%s]", event, GC.toMsg(event) end)
-        self:SendMessage(toMsg(event), ns.name, ...)
-    end
+--- @param event string
+function o:OnMessageTransmitter(frame, event, ...)
+    pt:t(function() return "Relaying event[%s] to message[%s]", event, GC.toMsg(event) end)
+    self:SendMessage(toMsg(event), ns.name, ...)
 
-    ns.EventToMessageRelay_OnLoad = o.OnLoad
+    -- Unregister one-time events
+    local unregisterEvents = { E.PLAYER_ENTERING_WORLD }
+    UnregisterFrameForEvents(frame, unregisterEvents)
+end
 
-end; PropsAndMethods(L)
-
-
-
-
+ns.EventToMessageRelay_OnLoad = o.OnLoad

@@ -26,9 +26,9 @@ Type: Profile_Global_Config
 -------------------------------------------------------------------------------]]
 --- @class Profile_Global_Config : AceDB_Global
 --- @field minimap Minimap
-local DefaultGlobal = {
+local DefaultGlobal   = {
     sync_addon_states = false,
-    minimap = minimap,
+    minimap           = minimap,
 }
 
 --[[-----------------------------------------------------------------------------

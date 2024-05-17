@@ -3,9 +3,13 @@ Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
 local ns = select(2, ...)
-local O, M, LibStub = ns.O, ns.M, ns.LibStub
-local String = ns:KO().String
-local IsAnyOf = String.IsAnyOf
+
+local O, M           = ns.O, ns.M
+local String         = ns:String()
+local AddOnManager   = M.AddOnManagerMixin
+local excludedAddOns = { ns.addon, 'DebugChatFrame' }
+
+local IsAnyOfString, EqualsIgnoreCase = String.IsAnyOf, String.EqualsIgnoreCase
 
 --[[-----------------------------------------------------------------------------
 Blizzard Vars
@@ -17,19 +21,24 @@ local C_AddOns_GetAddOnEnableState = C_AddOns.GetAddOnEnableState
 local EnableAddOn, DisableAddOn = EnableAddOn or C_AddOns.EnableAddOn, DisableAddOn or C_AddOns.DisableAddOn
 local IsAddOnLoaded = C_AddOns.IsAddOnLoaded or IsAddOnLoaded
 
+ns:OnAddOnStartLoad(function() AddOnManager = O.AddOnManagerMixin end)
+
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
---- @return API, Kapresoft_CategoryLogger
-local function CreateLib()
-    local libName = M.API or 'API'
-    --- @class API : BaseLibraryObject
-    local newLib = LibStub:NewLibrary(libName); if not newLib then return nil end
-    local logger = ns:LC().API:NewLogger(libName)
-    return newLib, logger
-end; local L, p = CreateLib(); if not L then return end
-
-local function m() return O.AddOnManager  end
+local libName = M.API()
+--- @class API
+local L = ns:NewLib(libName)
+local p = ns:LC().API:NewLogger(libName)
+--[[-----------------------------------------------------------------------------
+Support Functions
+-------------------------------------------------------------------------------]]
+--- @return boolean Returns true if it is to be included
+--- @param info AddOnInfo
+local function developerAddOnsPredicateFn(info)
+    local include = not IsAnyOfString(info.name, unpack(excludedAddOns))
+    return include
+end
 
 --[[-----------------------------------------------------------------------------
 Methods
@@ -53,15 +62,15 @@ local function PropsAndMethods(o)
     function o:GetEnabledAndInstalledAddOns()
         local toRemove = {}
         for name in pairs(ns:profile().enabledAddons) do
-            local a = m():New(name)
+            local a = AddOnManager:New(name)
             if a.missing then table.insert(toRemove, name) end
         end
         for _, name in ipairs(toRemove) do
             ns:profile().enabledAddons[name] = nil
         end
 
-    return ns:profile().enabledAddons
-end
+        return ns:profile().enabledAddons
+    end
 
     function o:GetEnabledAddOns() return self:GetEnabledAndInstalledAddOns() end
 
@@ -95,23 +104,32 @@ end
     --  TODO: New Option to "Sort By Index", checked by default, else sort by name
     --- @param callbackFn AddOnCallbackFn
     function o:ForEachAddOn(callbackFn)
-        return self:ForAllAddOns(callbackFn, function(info)
-            return IsAnyOf(info.name, ns.name) ~= true
-        end, true)
+        return self:ForAllAddOns(callbackFn, developerAddOnsPredicateFn, true)
+    end
+
+    ---@param name Name
+    function o:IsAddOnLibraryType(name)
+        local type = GetAddOnMetadata(name, 'X-Category')
+        return type and EqualsIgnoreCase(type, 'library')
     end
 
     --- @param callbackFn AddOnCallbackFn
     --- @param predicateFn fun(info:AddOnInfo) | "function(info) return true end" | "A function that returns true to accept the element"
     ---@param sortByName boolean|nil Defaults to true
     function o:ForAllAddOns(callbackFn, predicateFn, sortByName)
-        sortByName = sortByName == nil and true
+        sortByName = sortByName or true
 
         local addOnCount = GetNumAddOns()
         if addOnCount <= 0 then return end
 
         local addOns = {}
         for i = 1, addOnCount do
-            local info = m().GetAddOnInfo(i)
+            local info = AddOnManager.GetAddOnInfo(i)
+            info.sortKey = info.name
+            local type = GetAddOnMetadata(info.name, 'X-Category') or ''
+            if EqualsIgnoreCase(type, 'library') then
+                info.sortKey = '!!A' .. info.name
+            end
             table.insert(addOns, info)
             if not sortByName and predicateFn and predicateFn(info) then
                 callbackFn(info)
@@ -121,7 +139,7 @@ end
 
         --- @param a AddOnInfo
         --- @param b AddOnInfo
-        table.sort(addOns, function(a,b) return a.name < b.name end)
+        table.sort(addOns, function(a,b) return a.sortKey < b.sortKey end)
         for _, info in pairs(addOns) do
             if predicateFn and predicateFn(info) then callbackFn(info) end
         end
@@ -133,7 +151,7 @@ end
         if not addons then return end
         for name, checked in pairs(addons) do
             if checked == true then
-                local info =  m():New(name)
+                local info =  AddOnManager:New(name)
                 if info then callbackFn(info) end
             end
         end
@@ -148,7 +166,7 @@ end
         if addOnCount <= 0 then return end
 
         for i = 1, addOnCount do
-            local info = m():New(i)
+            local info = AddOnManager:New(i)
             local checked = addons[info.name] == true
             local validCandidate = ns.name ~= info.name and checked ~= true
                     and not info.loadOnDemand and info.enabled == true
