@@ -8,7 +8,6 @@
     <!--@do-not-package@-->
     <Include file="Lib\Developer\_DeveloperComponents.xml"/>
     <!--@end-do-not-package@-->
-    <!-- Global Lib for the Addon   -->
     <Include file="Global\_Global.xml"/>
     <Include file="Lib\_Lib.xml"/>
     <!--@do-not-package@-->

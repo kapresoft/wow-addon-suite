@@ -1,324 +1,170 @@
 --[[-----------------------------------------------------------------------------
-Blizzard Vars
--------------------------------------------------------------------------------]]
---- @see BlizzardInterfaceCode:Interface/SharedXML/Mixin.lua
---- @class _Mixin
-local Mixin = Mixin
-
---- @type LibStub
-local LibStub = LibStub
---[[-----------------------------------------------------------------------------
 Base Namespace
 -------------------------------------------------------------------------------]]
---- @type string
-local addonName
 --- @type CoreNamespace
-local kns
-addonName, kns = ...
+local kns = select(2, ...)
 
 --[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
---- @type GlobalConstants
-local GC = LibStub(addonName .. '-GlobalConstants-1.0')
-local K = kns.Kapresoft_LibUtil
+--- @type LibStub
+local LibStub = LibStub
+local GC, K = kns.GC, kns.Kapresoft_LibUtil
 local KO = K.Objects
+local CategoryLoggerMixin, EventMessagesMixin = kns.O.CategoryLoggerMixin, kns.O.EventMessagesMixin
 
 --[[-----------------------------------------------------------------------------
-Global Variables: Replace with Addon-specific global vars
--------------------------------------------------------------------------------]]
----@param val EnabledInt|boolean|nil
----@param key string|nil Category name
----@return table<string, string>
-local function __categories(key, val)
-    if key then ADDON_SUITE_DEBUG_ENABLED_CATEGORIES[key] = val end
-    return ADDON_SUITE_DEBUG_ENABLED_CATEGORIES or {}
-end
-local function __category(key)
-    ADDON_SUITE_DEBUG_ENABLED_CATEGORIES = ADDON_SUITE_DEBUG_ENABLED_CATEGORIES or {}
-    return ADDON_SUITE_DEBUG_ENABLED_CATEGORIES[key]
-end
---- @param val number|nil Optional log level to set
---- @return number The new log level passed back
-local function __logLevel(val)
-    if val then ADDON_SUITE_LOG_LEVEL = val end
-    return ADDON_SUITE_LOG_LEVEL or 0
-end
-
---[[-----------------------------------------------------------------------------
-Log Categories
--------------------------------------------------------------------------------]]
-local LogCategories = {
-    --- @type Kapresoft_LogCategory
-    DEFAULT = 'DEFAULT',
-    --- @type Kapresoft_LogCategory
-    ADDON = 'AD',
-    --- @type Kapresoft_LogCategory
-    API = "AP",
-    --- @type Kapresoft_LogCategory
-    OPTIONS = "OP",
-    --- @type Kapresoft_LogCategory
-    EVENT = "EV",
-    --- @type Kapresoft_LogCategory
-    FRAME = "FR",
-    --- @type Kapresoft_LogCategory
-    MINIMAP = "MM",
-    --- @type Kapresoft_LogCategory
-    MESSAGE = "MS",
-    --- @type Kapresoft_LogCategory
-    MESSAGE_TRACE = "MT",
-    --- @type Kapresoft_LogCategory
-    TRACE = "TR",
-    --- @type Kapresoft_LogCategory
-    PROFILE = "PR",
-    --- @type Kapresoft_LogCategory
-    DB = "DB",
-    --- @type Kapresoft_LogCategory
-    DEPENDENCY = "DP",
-    --- @type Kapresoft_LogCategory
-    DEV = "DV",
-}
---[[-----------------------------------------------------------------------------
-GlobalObjects
--------------------------------------------------------------------------------]]
---- @class GlobalObjects
---- @field pformat fun(fmt:string, ...)|fun(val:string)
---- @field AceLibrary Kapresoft_LibUtil_AceLibraryObjects
---- @field AceDbInitializerMixin AceDbInitializerMixin
---- @field AddOnManager AddOnManager
---- @field AddOnStateController AddOnStateController
---- @field API API
---- @field GlobalConstants GlobalConstants
---- @field DebuggingSettingsGroup DebuggingSettingsGroup
---- @field MainController MainController
---- @field MinimapIconController MinimapIconController
---- @field OptionsAddonsMixin OptionsAddonsMixin
---- @field OptionsController OptionsController
---- @field OptionsMixin OptionsMixin
---- @field OptionsMinimapMixin OptionsMinimapMixin
---- @field OptionsUtil OptionsUtil
-
---[[-----------------------------------------------------------------------------
-Modules
+Type: Modules
 -------------------------------------------------------------------------------]]
 --- @class Modules
 local M = {
-    pformat = '',
-    sformat = '',
-    AceLibrary = '',
-    AceDbInitializerMixin = '',
-    AddOnStateController = '',
-    API = '',
-    GlobalConstants = '',
-    DebuggingSettingsGroup = '',
-    MinimapIconController = '',
-    OptionsAddonsMixin = '',
-    OptionsController = '',
-    OptionsMixin = '',
-    OptionsMinimapMixin = '',
-    OptionsUtil = '',
-}; for moduleName in pairs(M) do M[moduleName] = moduleName end
+    --- @type AceDbInitializerMixin
+    AceDbInitializerMixin = {},
+    --- @type AddOnManagerMixin
+    AddOnManagerMixin = {},
+    --- @type AddOnStateController
+    AddOnStateController = {},
+    --- @type API
+    API = {},
+    --- @type DebuggingSettingsGroup
+    DebuggingSettingsGroup = {},
+    --- @type EventMessagesMixin
+    EventMessagesMixin = {},
+    --- @type EventToMessageRelay
+    EventToMessageRelay = {},
+    --- @type CategoryLoggerMixin
+    CategoryLoggerMixin = {},
+    --- @type ConfigDialogController,
+    ConfigDialogController = {},
+    --- @type MainController
+    MainController = {},
+    --- @type MinimapIconControllerMixin
+    MinimapIconControllerMixin = {},
+    --- @type OptionsAddonsMixin
+    OptionsAddonsMixin = {},
+    --- @type OptionsMixin
+    OptionsMixin = {},
+    --- @type OptionsMinimapMixin
+    OptionsMinimapMixin = {},
+    --- @type OptionsUtil
+    OptionsUtil = {},
+}; KO.LibModule.EnrichModules(M)
 
-local InitialModuleInstances = {
-    -- External Libs --
-    AceLibrary = K.Objects.AceLibrary.O,
-    AceLibStub = LibStub,
-    -- Internal Libs --
-    GlobalConstants = LibStub(GC.LibName(M.GlobalConstants)),
-    sformat = string.format,
-    pformat = K.pformat,
-}
---[[
---- Some Utility Methods to make things easier to access the Library
---- @class Kapresoft_LibUtil_Mixins
-local Kapresoft_LibUtil_Mixins = {
-    K = function(self) return self.Kapresoft_LibUtil end,
-    KO = function(self) return self.Kapresoft_LibUtil.Objects  end,
-}]]
+--- @alias Namespace __Namespace | CategoryLoggerMixin | EventMessagesMixin | Kapresoft_LibUtil_NamespaceAceLibraryMixin
 
---- @class __NamespaceLoggerMixin
---- @field O GlobalObjects
-local NamespaceLoggerMixin = {}
----@param o __NamespaceLoggerMixin
-local function NamespaceLoggerMethods(o)
-    --categories = categories or {}
+--[[-----------------------------------------------------------------------------
+Type: __Namespace
+-------------------------------------------------------------------------------]]
+--- @class __Namespace : CoreNamespace
+--- @field DefaultAddOnDatabase AddOn_DB
+--- @field GC GlobalConstants
+local ns = kns;
+--- @type Modules
+ns.M = M
+ns.mt = { __tostring = function() return ns.addon .. '::Namespace'  end }
+setmetatable(ns, ns.mt)
 
-    local CategoryLogger = KO.CategoryMixin:New()
-    CategoryLogger:Configure(addonName, LogCategories, {
-        consoleColors = GC.C.CONSOLE_COLORS,
-        levelSupplierFn = function() return __logLevel() end,
-        enabled = kns.debug:IsDeveloper(),
-        enabledCategoriesSupplierFn = function() return __categories() end,
-    })
-    --- @private
-    o.LogCategory = CategoryLogger
-    --- @return number
-    function o:GetLogLevel() return __logLevel() end
-    --- @param level number
-    function o:SetLogLevel(level) __logLevel(level) end
-
-    --- @param name string | "'ADDON'" | "'BAG'" | "'BUTTON'" | "'DRAG_AND_DROP'" | "'EVENT'" | "'FRAME'" | "'ITEM'" | "'MESSAGE'" | "'MOUNT'" | "'PET'" | "'PROFILE'" | "'SPELL'"
-    --- @param v boolean|number | "1" | "0" | "true" | "false"
-    function o:SetLogCategory(name, val)
-        assert(name, 'Debug category name is missing.')
-        ---@param v boolean|nil
-        local function normalizeVal(v) if v == 1 or v == true then return 1 end; return 0 end
-        __categories(name, normalizeVal(val))
-    end
-    --- @return boolean
-    function o:IsLogCategoryEnabled(name)
-        assert(name, 'Debug category name is missing.')
-        local val = __category(name)
-        return val == 1 or val == true
-    end
-    function o:LC() return LogCategories end
-    function o:CreateDefaultLogger(moduleName) return LogCategories.DEFAULT:NewLogger(moduleName) end
-
-end; NamespaceLoggerMethods(NamespaceLoggerMixin)
-
-
----@param o __Namespace | Namespace
-local function InitLocalLibStub(o)
-    --- @class LocalLibStub : Kapresoft_LibUtil_LibStubMixin
-    local LocalLibStub = o:K().Objects.LibStubMixin:New(o.name, 1.0,
-            function(name, newLibInstance)
-                -- local p = LogCategories.DEFAULT:NewLogger("Namespace::InitLocalLibStub")
-                -- can only use verbose here because global vars are not yet loaded
-                -- p:vv( function() return 'New Lib: %s', newLibInstance.major end)
-                o:Register(name, newLibInstance)
-            end)
-    o.LibStubAce = LibStub
-    o.LibStub = LocalLibStub
-    o.O.LibStub = LocalLibStub
+--[[-----------------------------------------------------------------------------
+Namespace Methods
+-------------------------------------------------------------------------------]]
+--- @type __Namespace | Namespace
+local o = ns; do
+    ---@param nSpace __Namespace | Namespace
+    local function InitLocalLibStub(nSpace)
+        --- @class LocalLibStub : Kapresoft_LibUtil_LibStubMixin
+        local LocalLibStub = nSpace:K().Objects.LibStubMixin:New(nSpace.name, 1.0, function(name, newLibInstance)
+            -- local p = LogCategories.DEFAULT:NewLogger("Namespace::InitLocalLibStub")
+            -- can only use verbose here because global vars are not yet loaded
+            -- p:vv( function() return 'New Lib: %s', newLibInstance.major end)
+            nSpace:Register(name, newLibInstance)
+        end)
+        nSpace.LibStubAce  = LibStub
+        nSpace.LibStub     = LocalLibStub
+        nSpace.O.LibStub   = LocalLibStub
+    end; InitLocalLibStub(o)
 end
 
----@param o __Namespace | Namespace
-local function NameSpacePropertiesAndMethods(o)
-    local getSortedKeys = o:KO().Table.getSortedKeys
+CategoryLoggerMixin:Configure(ns)
+EventMessagesMixin:Mixin(ns)
 
-    --- @type string
-    o.nameShort = GC:GetLogName()
+--- @type string
+o.nameShort = GC:GetLogName()
 
-    if 'table' ~= type(o.O) then o.O = {} end
+o.locale = o.locale or {}
 
-    for key, _ in pairs(M) do
-        local lib = InitialModuleInstances[key]
-        if lib then o.O[key] = lib end
-    end
+--- @return AddonSuite
+function o:a() return ADDON_SUITE end
 
-    o.pformat = o.O.pformat
-    o.sformat = o.O.sformat
-    o.M = M
-    o.ch = o:NewConsoleHelper(GC.C.CONSOLE_COLORS)
-    o.locale = o.locale or {}
+--- @see _Lib.xml
+function o:pf() return _G['AddonSuiteFrame'] end
 
-    --- @return AddonSuite
-    function o:a() return _G[self.name] end
+--- @param moduleName string The module name, i.e. MainController
+--- @param optionalMajorVersion number|string
+--- @return string The complete module name, i.e. 'ActionbarPlus-MainController-1.0'
+function o:LibName(moduleName, optionalMajorVersion) return GC.LibName(moduleName, optionalMajorVersion) end
+--- @param moduleName string The module name, i.e. MainController
+function o:ToStringFunction(moduleName) return GC.ToStringFunction(moduleName) end
 
-    --- @see _Lib.xml
-    function o:pf() return _G['AddonSuiteFrame'] end
-
-    --- @param moduleName string The module name, i.e. MainController
-    --- @param optionalMajorVersion number|string
-    --- @return string The complete module name, i.e. 'ActionbarPlus-MainController-1.0'
-    function o:LibName(moduleName, optionalMajorVersion) return GC.LibName(moduleName, optionalMajorVersion) end
-    --- @param moduleName string The module name, i.e. MainController
-    function o:ToStringFunction(moduleName) return GC.ToStringFunction(moduleName) end
-
-    --- Simple Library
-    ---@param libName Name
-    --- @vararg any|nil Optional Mixins
-    function o:NewLib(libName, ...)
-        assert(libName, "LibName is required")
-        local newLib = {}
-        local len = select("#", ...)
-        if len > 0 then newLib = self:K():Mixin({}, ...) end
-        newLib.mt = { __tostring = GC.ToStringFunction(libName)}
-        setmetatable(newLib, newLib.mt)
-        self.O[libName] = newLib
-        return newLib
-    end
-    --- Simple Library with AceEvent
-    --- @param libName Name
-    --- @vararg any|nil Optional Mixins
-    function o:NewLibWithEvent(libName, ...)
-        assert(libName, "LibName is required")
-        local newLib = self.O.AceLibrary.AceEvent:Embed({})
-        local len = select("#", ...)
-        if len > 0 then newLib = self:K():Mixin(newLib, ...) end
-        newLib.mt = { __tostring = GC.ToStringFunction(libName)}
-        setmetatable(newLib, newLib.mt)
-        self.O[libName] = newLib
-        return newLib
-    end
-
-    --- @param obj table The library object instance
-    function o:Register(libName, obj)
-        if not (libName or obj) then return end
-        self.O[libName] = obj
-    end
-
-    --- @param dbfn fun() : AddOn_DB | "function() return addon.db end"
-    function o:SetAddOnFn(dbfn) self.addonDbFn = dbfn end
-
-    --- @return AddOn_DB
-    function o:db() return self.addonDbFn() end
-
-    --- @return Profile_Config
-    function o:profile()
-        local db = self.addonDbFn()
-        local profile = db and db.profile
-        if not profile.enabledAddons then
-            profile.enabledAddons = {}
-        end
-        return profile
-    end
-
-    --- @return Profile_Global_Config
-    function o:global() return self.addonDbFn().global end
-    --- @return Minimap
-    function o:minimap() return self:global().minimap end
-
-    function o:ToStringNamespaceKeys() return self.pformat(getSortedKeys(self)) end
-    function o:ToStringObjectKeys() return self.pformat(getSortedKeys(self.O)) end
-
-    --- @return LibDataBroker
-    function o:LibDataBroker() return LibStub("LibDataBroker-1.1") end
-    --- @return LibDBIcon
-    function o:LibDBIcon() return LibStub("LibDBIcon-1.0") end
-
-    InitLocalLibStub(o)
+--- Simple Library
+---@param libName Name
+--- @vararg any|nil Optional Mixins
+function o:NewLib(libName, ...)
+    assert(libName, "LibName is required")
+    local newLib = {}
+    local len = select("#", ...)
+    if len > 0 then newLib = self:K():Mixin({}, ...) end
+    newLib.mt = { __tostring = GC.ToStringFunction(libName)}
+    setmetatable(newLib, newLib.mt)
+    self.O[libName] = newLib
+    return newLib
+end
+--- Simple Library with AceEvent
+--- @param libName Name
+--- @vararg any|nil Optional Mixins
+function o:NewLibWithEvent(libName, ...)
+    assert(libName, "LibName is required")
+    local newLib = o:AceEvent()
+    local len = select("#", ...)
+    if len > 0 then newLib = self:K():Mixin(newLib, ...) end
+    newLib.mt = { __tostring = GC.ToStringFunction(libName)}
+    setmetatable(newLib, newLib.mt)
+    self.O[libName] = newLib
+    return newLib
 end
 
---- @alias Namespace __Namespace | __NamespaceLoggerMixin | Kapresoft_LibUtil_NamespaceAceLibraryMixin | Kapresoft_LibUtil_NamespaceKapresoftLibMixin
+--- @param obj table The library object instance
+function o:Register(libName, obj)
+    if not (libName or obj) then return end
+    self.O[libName] = obj
+end
 
---- @return Namespace
-local function CreateNamespace(...)
-    --- @type string
-    local addon
-    --- @class __Namespace : CoreNamespace
-    --- @field DefaultAddOnDatabase AddOn_DB
-    local ns; addon, ns = ...
+--- @param dbfn fun() : AddOn_DB | "function() return addon.db end"
+function o:SetAddOnFn(dbfn) self.addonDbFn = dbfn end
 
-    --- Place this here before ns.name because it overrides the name field
-    --- @see BlizzardInterfaceCode:Interface/SharedXML/Mixin.lua
-    Mixin(ns, KO.NamespaceAceLibraryMixin, KO.NamespaceKapresoftLibMixin, NamespaceLoggerMixin)
+--- @return AddOn_DB
+function o:db() return self.addonDbFn() end
 
-    --- @type GlobalObjects
-    ns.O = ns.O or {}
-    --- @type string
-    ns.name = addon
-    ns.addon = addon
+--- @return Profile_Config
+function o:profile()
+    local db = self.addonDbFn()
+    local profile = db and db.profile
+    if not profile.enabledAddons then
+        profile.enabledAddons = {}
+    end
+    return profile
+end
 
-    NameSpacePropertiesAndMethods(ns)
+--- @return Profile_Global_Config
+function o:global() return self.addonDbFn().global end
+--- @return Minimap
+function o:minimap() return self:global().minimap end
+--- @return LibDataBroker
+function o:LibDataBroker() return LibStub("LibDataBroker-1.1") end
+--- @return LibDBIcon
+function o:LibDBIcon() return LibStub("LibDBIcon-1.0") end
 
-    ns.GC = ns.O.GlobalConstants
-    ns.mt = { __tostring = function() return addon .. '::Namespace'  end }
-    setmetatable(ns, ns.mt)
-
-    --- print(ns.name .. '::Namespace:: pformat:', pformat)
-    --- Global Function
-    pformat = pformat or ns.pformat
-
-    return ns
-end; if kns.name then return end; ADDON_SUITE_NS = CreateNamespace(...)
+--[[-----------------------------------------------------------------------------
+Namespace Global Var
+-------------------------------------------------------------------------------]]
+--- @type Namespace
+ADDON_SUITE_NS = ns

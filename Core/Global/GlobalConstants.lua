@@ -43,11 +43,7 @@ local TOSTRING_SUBMODULE_FMT = '|cfdfefefe{{|r|cfdeab676%s|r|cfdfefefe::|r|cfdfb
 Console Colors
 -------------------------------------------------------------------------------]]
 --- @type Kapresoft_LibUtil_ColorDefinition
-local consoleColors = {
-    primary   = '7ACFFB',
-    secondary = 'fbeb2d',
-    tertiary  = 'ffffff',
-}
+local consoleColors = ns.consoleColors
 
 local command = kch:FormatColor(consoleColors.primary, '/' .. consoleCommand)
 local commandShort = kch:FormatColor(consoleColors.primary, '/' .. consoleCommandShort)
@@ -83,7 +79,7 @@ InitGlobalVars(globalVarPrefix)
 GlobalConstants
 -------------------------------------------------------------------------------]]
 --- @class GlobalConstants
-local L = LibStub:NewLibrary(LibName('GlobalConstants'), 1)
+local S = {}
 
 --- @param o GlobalConstants
 local function GlobalConstantProperties(o)
@@ -94,7 +90,6 @@ local function GlobalConstantProperties(o)
         CONSOLE_COMMAND_NAME = consoleCommand,
         CONSOLE_COMMAND_SHORT = consoleCommandShort,
         CONSOLE_COMMAND_OPTIONS = consoleCommandOptions,
-        CONSOLE_COLORS = consoleColors,
         DB_NAME = dbName,
         CONSOLE_HEADER_FORMAT = '|cfdeab676### %s ###|r',
         CONSOLE_OPTIONS_FORMAT = '  - %-8s|cfdeab676:: %s|r',
@@ -122,21 +117,23 @@ local function GlobalConstantProperties(o)
 
     --- @class MessageNames
     local M = {
-        OnAfterInitialize               = newMsg('OnAfterInitialize'),
+        OnAddOnStartLoad                = newMsg('OnAddOnStartLoad'),
         OnAddOnReady                    = newMsg('OnAddonReady'),
+        OnAddOnStateChanged             = newMsg('OnAddOnStateChanged'),
+        OnAfterInitialize               = newMsg('OnAfterInitialize'),
         OnAfterOnAddOnReady             = newMsg('OnAfterOnAddOnReady'),
         OnApplyAndRestart               = newMsg('OnApplyAndRestart'),
-        OnSwitchProfile                 = newMsg('OnSwitchProfile'),
+        OnBeforeInitialize              = newMsg('OnBeforeInitialize'),
         OnHideSettings                  = newMsg('OnHideSettings'),
-        OnUpdateMinimapIconState        = newMsg('OnUpdateMinimapIconState'),
-        OnAddOnStateChanged             = newMsg('OnAddOnStateChanged'),
+        OnProfileChanged                = newMsg('OnProfileChanged'),
+        OnProfileDeleted                = newMsg('OnProfileDeleted'),
+        OnSwitchProfile                 = newMsg('OnSwitchProfile'),
         OnSwitchProfile                 = newMsg('OnSwitchProfile'),
         OnToggleMinimapIcon             = newMsg('OnToggleMinimapIcon'),
         OnToggleMinimapIconTitanPanel   = newMsg('OnToggleMinimapIconTitanPanel'),
-        OnUpdateMinimapState            = newMsg('OnUpdateMinimapState'),
-        OnProfileDeleted                = newMsg('OnProfileDeleted'),
-        OnProfileChanged                = newMsg('OnProfileChanged'),
         OnToggleShowInQuickProfileMenu  = newMsg('OnToggleShowInQuickProfileMenu'),
+        OnUpdateMinimapIconState        = newMsg('OnUpdateMinimapIconState'),
+        OnUpdateMinimapState            = newMsg('OnUpdateMinimapState'),
     }
 
     o.C = C
@@ -145,6 +142,11 @@ local function GlobalConstantProperties(o)
     o.toMsg = toMsg
 
 end
+
+local isDev = ns:IsDev()
+--@do-not-package@
+isDev = true
+--@end-do-not-package@
 
 --- @param o GlobalConstants
 local function Methods(o)
@@ -164,7 +166,7 @@ local function Methods(o)
         versionText = GetAddOnMetadata(ns.name, 'Version')
         lastUpdate = GetAddOnMetadata(ns.name, 'X-Github-Project-Last-Changed-Date')
         --@do-not-package@
-        if ns.debug:IsDeveloper() then
+        if isDev then
             versionText = '1.0.0.dev'
             lastUpdate  = date("%m/%d/%y %H:%M:%S")
         end
@@ -203,5 +205,4 @@ local function Methods(o)
     o.ToStringFunction = ToStringFunction
 end
 
-GlobalConstantProperties(L)
-Methods(L)
+GlobalConstantProperties(S); Methods(S); ns.GC = S

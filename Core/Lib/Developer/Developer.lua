@@ -18,7 +18,7 @@ Methods
 ---@param o Developer
 local function PropsAndMethods(o)
     local a = O.API
-    local am = O.AddOnManager
+    local am = O.AddOnManagerMixin
     function o:en(nameOrIndex) return a:IsAddOnEnabled(nameOrIndex) end
 
     function o:pa(addon)

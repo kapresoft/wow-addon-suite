@@ -3,6 +3,6 @@
 ..\FrameXML\UI.xsd">
 
     <Script file="API.lua"/>
-    <Script file="AddOnManager.lua"/>
+    <Script file="AddOnManagerMixin.lua"/>
 
 </Ui>

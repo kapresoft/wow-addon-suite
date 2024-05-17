@@ -139,7 +139,7 @@ jobs:
       ## https://github.com/actions/upload-artifact
       - name: Upload Build Artifact File
         if: ${{ env.uploadBuildArtifacts == 'true' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.buildArtifactFilename }}
           path: ${{ env.buildArtifact }}
@@ -147,7 +147,7 @@ jobs:
       ## ------------------------------------------------ ##
       - name: Upload Build Artifact Checksum File
         if: ${{ env.uploadBuildArtifacts == 'true' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env. buildArtifactChecksumFilename }}
           path: ${{ env.buildArtifactChecksumFile }}

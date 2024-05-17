@@ -1,18 +1,26 @@
 --[[-----------------------------------------------------------------------------
+Type: AceDbInitializer
+-------------------------------------------------------------------------------]]
+--- @class AceDbInitializer
+
+--[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
 local ns = select(2, ...)
-local O, GC, M, LibStub, MSG = ns.O, ns.GC, ns.M, ns.LibStub, ns.GC.M
-local AceDB = O.AceLibrary.AceDB
-local libName = M.AceDbInitializerMixin
+
+local GC, M, LibStub, MSG = ns.GC, ns.M, ns.LibStub, ns.GC.M
+local AceDB, AceEvent     = ns:AceDB(), ns:AceEvent()
+
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
---- @class AceDbInitializerMixin : BaseLibraryObject
-local L = LibStub:NewLibrary(libName); if not L then return end
+local libName = M.AceDbInitializerMixin()
+
+--- @class AceDbInitializerMixin
+local S = LibStub:NewLibrary(libName); if not S then return end
 local p = ns:LC().DB:NewLogger(libName)
-local AceEvent = ns:AceEvent()
+
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
@@ -34,40 +42,48 @@ local function AddonCallbackMethods(a)
     end
 end
 
---- @param o AceDbInitializerMixin
-local function PropsAndMethods(o)
+--[[-----------------------------------------------------------------------------
+Library Methods
+-------------------------------------------------------------------------------]]
+--- @type AceDbInitializerMixin
+local LIB = S
 
-    --- Called by CreateAndInitFromMixin(..) Automatically
-    --- @param addon AddonSuite
-    function o:Init(addon)
-        assert(addon, "AddonSuite is required")
-        self.addon = addon
-        self.addon.db = AceDB:New(GC.C.DB_NAME)
-        self.addon.dbInit = self
-        ns:SetAddOnFn(function() return self.addon.db end)
-    end
+--- Usage:  local instance = AceDbInitializerMixin:New(addon)
+--- @param addon AddonSuite
+--- @return AceDbInitializer
+function LIB:New(addon) return ns:K():CreateAndInitFromMixin(S, addon) end
 
-    --- Usage:  local instance = AceDbInitializerMixin:New(addon)
-    --- @param addon AddonSuite
-    --- @return AceDbInitializerMixin
-    function o:New(addon) return ns:K():CreateAndInitFromMixin(o, addon) end
+--[[-----------------------------------------------------------------------------
+Instance Methods
+-------------------------------------------------------------------------------]]
+--- @type AceDbInitializer
+local o = S
 
-    --- @return AceDB
-    function o:GetDB() return self.addon.db end
+--- Called by CreateAndInitFromMixin(..) Automatically
+--- @param addon AddonSuite
+function o:Init(addon)
+    assert(addon, "AddonSuite is required")
+    self.addon = addon
+    self.addon.db = AceDB:New(GC.C.DB_NAME)
+    self.addon.dbInit = self
+    ns:SetAddOnFn(function() return self.addon.db end)
+end
 
-    function o:InitDb()
-        p:f1( 'Initialize called...')
-        AddonCallbackMethods(self.addon)
-        ns:db().RegisterCallback(self.addon, "OnProfileChanged", "OnProfileChanged")
-        ns:db().RegisterCallback(self.addon, "OnProfileCopied", "OnProfileCopied")
-        ns:db().RegisterCallback(self.addon, "OnProfileReset", "OnProfileReset")
-        ns:db().RegisterCallback(self.addon, "OnProfileDeleted", "OnProfileDeleted")
-        self:InitDbDefaults()
-    end
+--- @return AceDB
+function o:GetDB() return self.addon.db end
 
-    function o:InitDbDefaults()
-        ns:db():RegisterDefaults(ns.DefaultAddOnDatabase)
-        ns:db().profile.enable = true
-        p:i(function() return 'Profile: %s', ns:db():GetCurrentProfile() end)
-    end
-end; PropsAndMethods(L)
+function o:InitDb()
+    p:f1( 'Initialize called...')
+    AddonCallbackMethods(self.addon)
+    ns:db().RegisterCallback(self.addon, "OnProfileChanged", "OnProfileChanged")
+    ns:db().RegisterCallback(self.addon, "OnProfileCopied", "OnProfileCopied")
+    ns:db().RegisterCallback(self.addon, "OnProfileReset", "OnProfileReset")
+    ns:db().RegisterCallback(self.addon, "OnProfileDeleted", "OnProfileDeleted")
+    self:InitDbDefaults()
+end
+
+function o:InitDbDefaults()
+    ns:db():RegisterDefaults(ns.DefaultAddOnDatabase)
+    ns:db().profile.enable = true
+    p:i(function() return 'Profile: %s', ns:db():GetCurrentProfile() end)
+end
