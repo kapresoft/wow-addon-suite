@@ -30,7 +30,6 @@ local p = ns:CreateDefaultLogger(libName)
 --[[-----------------------------------------------------------------------------
 Support Functions
 -------------------------------------------------------------------------------]]
-
 ---@param detailsText string
 local function ShowReloadConfirm(detailsText)
     if not StaticPopupDialogs[DEV_RELOAD_CONFIRM_DLG] then
@@ -51,6 +50,31 @@ local function ShowReloadConfirm(detailsText)
     local dlgMsg = L['REQUIRES_RELOAD_PROFILE_CHANGED'] .. '\n\n'
     StaticPopup_Show(DEV_RELOAD_CONFIRM_DLG, ns.name, dlgMsg)
 end
+
+--- Converts a table into a string with elements separated by ", " and a newline every 5 elements.
+--- @param tbl table The table to be converted into a string.
+--- @return string The formatted string.
+---@param wrapEvery number
+function TableToString(tbl, wrapEvery)
+    local result = {}
+    for i, value in ipairs(tbl) do
+        -- Append the current value to the result table.
+        table.insert(result, tostring(value))
+        -- Check if the current index is a multiple of 5.
+        if i % wrapEvery == 0 then
+            -- Append a newline if it's the 5th element.
+            table.insert(result, "\n")
+        else
+            -- Otherwise, append a comma and space, unless it's the last element.
+            if i ~= #tbl then
+                table.insert(result, ", ")
+            end
+        end
+    end
+    -- Concatenate all parts of the result table into a single string.
+    return table.concat(result)
+end
+
 --[[-----------------------------------------------------------------------------
 Mixin: CheckedStateMixin
 -------------------------------------------------------------------------------]]
