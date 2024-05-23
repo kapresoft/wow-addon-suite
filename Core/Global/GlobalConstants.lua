@@ -124,6 +124,7 @@ local function GlobalConstantProperties(o)
         OnAfterOnAddOnReady             = newMsg('OnAfterOnAddOnReady'),
         OnApplyAndRestart               = newMsg('OnApplyAndRestart'),
         OnBeforeInitialize              = newMsg('OnBeforeInitialize'),
+        OnFlushAddOnDependenciesCache   = newMsg('OnFlushAddOnDependenciesCache'),
         OnHideSettings                  = newMsg('OnHideSettings'),
         OnProfileChanged                = newMsg('OnProfileChanged'),
         OnProfileDeleted                = newMsg('OnProfileDeleted'),
@@ -150,15 +151,32 @@ isDev = true
 
 --- @param o GlobalConstants
 local function Methods(o)
+
+    --- @return boolean
+    local function IsDev()
+        local _isDev = ns:IsDev()
+        --@do-not-package@
+        _isDev = true
+        --@end-do-not-package@
+        return _isDev
+    end
+
     function o:GetLogName()
         local logName = addon
         if useShortName then logName = addonShortName end
         return logName
     end
 
+    function o:AIU()
+        if o.AddonUtil then return o.AddonUtil end
+        o.AddonUtil = ns:AddonInfoUtil():New(addon, ns.consoleColors, IsDev())
+        return o.AddonUtil
+    end
+
+
     ---#### Example
     ---```
-    ---local version, curseForge, issues, repo, lastUpdate, wowInterfaceVersion = GC:GetAddonInfo()
+    ---local version, curseForge, issues, repo, lastUpdate, wowInterfaceVersion = G:GetAddonInfo()
     ---```
     --- @return string, string, string, string, string, string
     function o:GetAddonInfo()
@@ -194,11 +212,7 @@ local function Methods(o)
     end
 
     function o:GetMessageLoadedText()
-        local consoleCommandMessageFormat = sformat('Type %s or %s for available commands.',
-                command, commandShort)
-        return sformat("%s version %s by %s is loaded. %s",
-                kch:P(addon) , self:GetAddonInfo(), kch:FormatColor(consoleColors.primary, 'kapresoft'),
-                consoleCommandMessageFormat)
+        return self:AIU():GetMessageLoadedText(command, commandShort)
     end
 
     o.LibName = LibName

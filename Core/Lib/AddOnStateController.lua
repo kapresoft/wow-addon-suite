@@ -9,6 +9,11 @@ Type: CheckedState
 --- @class CheckedState
 
 --[[-----------------------------------------------------------------------------
+Blizzard Vars
+-------------------------------------------------------------------------------]]
+local C_AddOns_GetAddOnInfo = C_AddOns.GetAddOnInfo or GetAddOnInfo
+
+--[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
@@ -18,14 +23,24 @@ local O, MSG, API = ns.O, ns.GC.M, ns.O.API
 local K, L        = ns:K(), ns:AceLocale()
 
 local DEV_RELOAD_CONFIRM_DLG = 'DEV_RELOAD_CONFIRM'
+
+local c1 = K:cf(RED_FONT_COLOR)
+local c1L = K:cfHex('FB7E7Ecf')
+local c2 = K:cf(YELLOW_FONT_COLOR)
+local c3 = K:cf(GREEN_FONT_COLOR)
+local c4 = K:cf(LIGHTGRAY_FONT_COLOR)
+local ca = K:cf(BLUE_FONT_COLOR)
+
+
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
 local libName = ns.M.AddOnStateController()
+local libNameShort = 'AOSC'
 --- @class AddOnStateController
 local S = ns:NewLibWithEvent(libName)
 ns:AceHook(S)
-local p = ns:CreateDefaultLogger(libName)
+local p = ns:LC().STATE:NewLogger(libNameShort)
 
 --[[-----------------------------------------------------------------------------
 Support Functions
@@ -73,6 +88,76 @@ function TableToString(tbl, wrapEvery)
     end
     -- Concatenate all parts of the result table into a single string.
     return table.concat(result)
+end
+
+-- Define return codes
+--- @class AddOnStateCodes
+local AddOnStateCodes = {
+    NOT_INSTALLED          = 0,
+    ENABLED_BUT_NOT_LOADED = 1,
+    DISABLED_BUT_LOADED    = 2,
+    LOAD_ON_DEMAND         = 3,
+    NO_ACTION_REQUIRED     = 4,
+}
+local asc = AddOnStateCodes; do
+    local _names = {}
+    for name, code in pairs(AddOnStateCodes) do
+        if type(code) == 'number' then
+            _names[code] = ns.sformat('%s(%s)', name, code)
+        end
+    end
+    --- @param code number
+    function asc:Get(code) return c4(_names[code] or 'UNKNOWN') end
+end
+
+--- Checks if an addon is enabled but requires a restart or is load on demand.
+--- @param name AddOnName The name of the addon to check.
+--- @return boolean, number True if the addon requires a restart, the code, and a message.
+local function CheckAddonState(name)
+    local _name = C_AddOns_GetAddOnInfo(name)
+    if not _name then return false, AddOnStateCodes.NOT_INSTALLED end
+    local enabled = GetAddOnEnableState(UnitName("player"), name) > 0
+    local loaded = API:IsAddOnLoaded(name)
+    local loadOnDemand = API:IsAddOnLoadOnDemand(name)
+
+    if loadOnDemand then
+        return false, AddOnStateCodes.LOAD_ON_DEMAND
+    elseif enabled and not loaded then
+        return true, AddOnStateCodes.ENABLED_BUT_NOT_LOADED
+    elseif not enabled and loaded then
+        return true, AddOnStateCodes.DISABLED_BUT_LOADED
+    else
+        return false, AddOnStateCodes.NO_ACTION_REQUIRED
+    end
+end
+
+local function _cond(n)
+    return ns:String().IsAnyOf(n, 'ActionbarPlus', 'Bagnon', 'BagBrother',
+                               'Bagnon_GuildBank', 'Scrap', 'Scrap_Config')
+end
+
+---@param info AddOnInfo
+local function _DebugCheckedState(info, requiresRestart, statusCode)
+    local n = info.name
+    local loaded, onDemand = API:IsAddOnLoaded(n), API:IsAddOnLoadOnDemand(n)
+    local enabled = ns:KO().AddonUtil:IsAddOnEnabled(n)
+    local depsInfo = API:GetDependencyDetails(n)
+    if _cond(n) then
+        local nn = ca(n)
+        local rr = requiresRestart
+        local od = onDemand
+        local _enabled = (enabled and c3(enabled)) or c1L(enabled)
+        local _loaded = loaded; if loaded == true then _loaded = c3(loaded) end
+        local cbe = (depsInfo:CanBeEnabled() and c3(depsInfo:CanBeEnabled())) or c1L(depsInfo:CanBeEnabled())
+        if requiresRestart then rr = c1(rr) end
+        if onDemand == true then od = c2(od) end
+
+        p:f1(function()
+            return '[%s]:: enabled=%s can-be-enabled=%s loaded=%s '
+                    .. 'on-demand=%s status=%s requires-restart=%s',
+                    nn, _enabled, cbe, _loaded, od, AddOnStateCodes:Get(statusCode), rr
+        end)
+    end
 end
 
 --[[-----------------------------------------------------------------------------
@@ -268,56 +353,51 @@ function o.OnHideSettingsBlizzardAddonsList()
     p:f1("OnHideSettingsBlizzardAddonsList called..")
 end
 
---- @return boolean, CheckedState, AddOnStateDataMixin
+--- @return boolean, CheckedState, AddOnStateData
 function o:GetSynchronizedState()
     local checkState = self:GetCheckedState()
     return checkState:IsInSync(), checkState, self:GetAddOnState()
 end
 
---- @return AddOnStateDataMixin
+--- @return AddOnStateData
 function o:GetAddOnState()
     local addons = ns:profile().enabledAddons
     if not addons then return end
 
     local addOnState = D:New()
 
-    API:ForEachCheckedAndLoadableAddon(function(info)
-        addOnState:Enable(info.name)
+    API:ForEachCheckedAndLoadableAddon(function(name)
+        addOnState:Enable(name)
     end)
-    API:ForEachAddOnThatCanBeDisabled(function(info)
-        addOnState:Disable(info.name)
+    API:ForEachAddOnThatCanBeDisabled(function(name)
+        addOnState:Disable(name)
     end)
 
-    p:f1(function()
+    p:f2(function()
         return "enable=%s disable=%s empty=%s",
         addOnState.enable, addOnState.disable, addOnState:IsEmpty() end)
 
     return addOnState
 end
 
---- @return CheckedState
+--- @return CheckedState The state of the addOn checkboxes compared to the Enabled state of the addOn
 function o:GetCheckedState()
-    local _m = 'GetCheckedState()'
-    local addons = ns:profile().enabledAddons
     local state = CheckedStateMixin:New()
-    for n, checked in pairs(addons) do
-        local ai = O.AddOnManagerMixin:New(n)
-        if checked == true and ai.loadable then
-            local loaded, onDemand = API:IsAddOnLoaded(n), API:IsAddOnLoadOnDemand(n)
-            local hasDisabledDeps = not ai.dependencyEnabled
-            if not (loaded or onDemand or hasDisabledDeps) then
-                p:f1(function() return '%s [%s] checked but not loaded', _m, n end);
-                table.insert(state.checkedButNotLoaded, n)
-            end
-        elseif not checked and not ai.loadable and ai.loaded then
-            -- TODO: Retail behavior different when disabling 'AddonUsage'
-            -- Going from enabled to disabled (unchecked), still shows as syncd.
-            if not ai.loadOnDemand then
-                p:f1(function() return '%s [%s] Loaded but not checked', _m, n end);
-                table.insert(state.loadedButNotChecked, n)
-            end
+    API:ForEachAddOn(function(info)
+        local n = info.name
+        local requiresRestart, status = CheckAddonState(n)
+        --@do-not-package@
+        if ns:IsDev() then _DebugCheckedState(info, requiresRestart, status) end
+        --@end-do-not-package@
+        if AddOnStateCodes.LOAD_ON_DEMAND == status then return state end
+
+        local depsInfo = API:GetDependencyDetails(n)
+        if AddOnStateCodes.ENABLED_BUT_NOT_LOADED == status and depsInfo:CanBeEnabled() then
+            table.insert(state.checkedButNotLoaded, n)
+        elseif AddOnStateCodes. DISABLED_BUT_LOADED == status then
+            table.insert(state.loadedButNotChecked, n)
         end
-    end
+    end)
     return state
 end
 

@@ -1,7 +1,7 @@
 --[[-----------------------------------------------------------------------------
 Callback Functions
 -------------------------------------------------------------------------------]]
---- @alias AddOnCallbackFn fun(addOn:AddOnManager) | "function(addOn) print('addOn:', pformat(addOn)) end"
+--- @alias AddOnCallbackFn fun(addOn:AddOnInfo) | "function(addOn) print('addOn:', pformat(addOn)) end"
 --- @alias ProfilePredicateFn fun(name:Name, profile:Profile_Config) : boolean
 --- @alias ProfileCallbackFn fun(name:Name, profile:Profile_Config) : void
 --- @alias WithAceEvent AceEvent

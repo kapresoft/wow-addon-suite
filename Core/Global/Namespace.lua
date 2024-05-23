@@ -20,8 +20,8 @@ Type: Modules
 local M = {
     --- @type AceDbInitializerMixin
     AceDbInitializerMixin = {},
-    --- @type AddOnManagerMixin
-    AddOnManagerMixin = {},
+    --- @type AddOnDependencyUtil
+    AddOnDependencyUtil = {},
     --- @type AddOnStateController
     AddOnStateController = {},
     --- @type API
@@ -48,6 +48,8 @@ local M = {
     OptionsMinimapMixin = {},
     --- @type OptionsUtil
     OptionsUtil = {},
+    --- @type SynchronizedAddOns
+    SynchronizedAddOns = {},
 }; KO.LibModule.EnrichModules(M)
 
 --- @alias Namespace __Namespace | CategoryLoggerMixin | EventMessagesMixin | Kapresoft_LibUtil_NamespaceAceLibraryMixin
@@ -57,7 +59,9 @@ Type: __Namespace
 -------------------------------------------------------------------------------]]
 --- @class __Namespace : CoreNamespace
 --- @field DefaultAddOnDatabase AddOn_DB
+--- @field SynchronizedAddOns SynchronizedAddOns
 --- @field GC GlobalConstants
+--- @field locale LocaleInfo
 local ns = kns;
 --- @type Modules
 ns.M = M

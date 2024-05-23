@@ -11,6 +11,12 @@ local ns = select(2, ...)
 local M, MSG = ns.M, ns.GC.M
 local libName = M.OptionsMinimapMixin()
 local sformat = ns.sformat
+local ACU = ns:KO().AceConfigUtil:New(ns.addon, not ns:IsDev())
+
+--- @type AceLocale
+local L
+ns:OnAddOnStartLoad(function() L = ns:AceLocale() end)
+
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
@@ -45,18 +51,19 @@ local o = S
 
 --- Called Automatically by CreateAndInitFromMixin
 --- @private
---- @param optionsMixin OptionsMixin
---- @param order Kapresoft_LibUtil_SequenceMixin
-function o:Init(optionsMixin, order)
-    self.optionsMixin = optionsMixin
-    self.util = self.optionsMixin.util
-    self.order = order
-    self.startingOrder = order:get()
+--- @param options Options
+function o:Init(options)
+    self.mainOptions   = options
+    self.util          = options.util
+    self.order         = options.order
+    self.startingOrder = self.order:get()
 end
 
 --- @return AceConfigOption
 function o:CreateOptions()
-    local L = self.optionsMixin.locale
+    --- @type AceConfigOption
+    local options = {
+    }; self.options = options
 
     --- @type AceConfigOption
     local group = {
@@ -64,54 +71,41 @@ function o:CreateOptions()
         name = L['Minimap'],
         desc = L['Minimap::Desc'],
         order = self.order:next(),
-        args = self:CreateSubGroup(self.order)
+        args = self:CreateSubGroup()
     }
     return group
 end
 
-function o:G(localeText)
-    return self.locale[localeText] .. '\n' .. self.locale['Global Setting']
-end
-function o:C(localeText)
-    return self.locale[localeText] .. '\n' .. self.locale['Character Setting']
-end
-
---- @param order Kapresoft_LibUtil_SequenceMixin
 --- @return AceConfigOption
-function o:CreateSubGroup(order)
-    local L = self.optionsMixin.locale; self.locale = L;
+function o:CreateSubGroup()
+    local options = self.options
+    local order   = self.order
     local minimap = ns:minimap()
 
-    --- @type AceConfigOption
-    local options = {
-        h1 = {  type = 'header', name = h1(L['General Minimap Settings']), descStyle = 'inline', order = order:next(), },
-        hideMinimapIcon = {
-            name = L['Hide Minimap Icon'], desc = self:G('Hide Minimap Icon::Desc'),
-            order = self.order:next(), type="toggle", width=2.0,
-            get = function() return minimap.hide == true end,
-            set = function(_, v)
-                ns:db().global.minimap.hide = (v == true)
-                self:SendMessage(MSG.OnToggleMinimapIcon, libName)
-            end
-        },
-        syncStatusIndicator = {
-            name = L['Profile Sync Status Indicator'], desc=L['Profile Sync Status Indicator::Desc'],
-            order = order:next(), type="toggle", width=1.3,
-            get = function() return minimap.sync_status_indicator == true end,
-            set = function(_, v)
-                ns:db().global.minimap.sync_status_indicator = (v == true)
-            end
-        },
-        confirmReloads = {
-            name = L['Confirm Reloads When Switching Profiles'],
-            desc = self:G('Confirm Reloads When Switching Profiles::Desc'),
-            order = order:next(), type="toggle", width=2.0,
-            get = function() return minimap.confirm_reloads == true end,
-            set = function(_, v)
-                ns:db().global.minimap.confirm_reloads = (v == true)
-            end
-        },
-    }; self.options = options
+    local hideMinimapIcon = ACU:CreateGlobalOption('Hide Minimap Icon', {
+        order = self.order:next(), type="toggle", width=2.0,
+        get = function() return minimap.hide == true end,
+        set = function(_, v)
+            minimap.hide = (v == true)
+            self:SendMessage(MSG.OnToggleMinimapIcon, libName)
+        end
+    })
+
+    local syncStatusIndicator = ACU:CreateGlobalOption('Profile Sync Status Indicator', {
+        order = order:next(), type="toggle", width=1.3,
+        get = function() return minimap.sync_status_indicator == true end,
+        set = function(_, v) minimap.sync_status_indicator = (v == true) end
+    })
+
+    local confirmReloads = ACU:CreateGlobalOption('Confirm Reloads When Switching Profiles', {
+        order = order:next(), type="toggle", width=2.0,
+        get = function() return minimap.confirm_reloads == true end,
+        set = function(_, v) minimap.confirm_reloads = (v == true) end,
+    })
+
+    options.hideMinimapIcon     = hideMinimapIcon
+    options.syncStatusIndicator = syncStatusIndicator
+    options.confirmReloads      = confirmReloads
 
     self:CreateTitanPanelOptions(options, order, L)
 
@@ -129,34 +123,29 @@ function o:CreateSubGroup(order)
     return options
 end
 
---- @param options AceConfigOption
---- @param order Kapresoft_LibUtil_SequenceMixin
---- @param L AceLocale
-function o:CreateTitanPanelOptions(options, order, L)
+function o:CreateTitanPanelOptions()
+    local options = self.options
+    local order   = self.order
     local minimap = ns:minimap()
 
     options.h2 = {  type = 'header', name = h1(L['Titan Panel Settings']), descStyle = 'inline', order = order:next(), }
-    options.TP_hideMinimapIconWhenInTitanPanel = {
-        name = L['Hide Minimap Icon TitanPanel'], desc = self:G('Hide Minimap Icon TitanPanel::Desc'),
+    options.TP_hideMinimapIconWhenInTitanPanel = ACU:CreateGlobalOption('Hide Minimap Icon TitanPanel', {
         order = self.order:next(), type="toggle", width=2.0,
         get = function() return minimap.hide_when_titan_panel_added == true end,
         set = function(_, v)
             minimap.hide_when_titan_panel_added = (v == true)
             self:SendMessage(MSG.OnToggleMinimapIconTitanPanel, libName)
         end
-    }
-    options.TP_showOutOfSyncCount = {
-        name = L['Show Out of Sync Count'], desc = self:G('Show Out of Sync Count::Desc'),
+    })
+    options.TP_showOutOfSyncCount = ACU:CreateGlobalOption('Show Out of Sync Count', {
         order = self.order:next(), type="toggle", width=2.0,
         get = function() return minimap.titan_panel.show_out_of_sync_count == true end,
         set = function(_, v)
             minimap.titan_panel.show_out_of_sync_count = (v == true)
             self:SendMessage(MSG.OnUpdateMinimapState, libName)
         end
-    }
-    options.TP_showProfileName = {
-        name = 'Show Profile Name',
-        desc = self:G('Show Profile Name::Desc'),
+    })
+    options.TP_showProfileName = ACU:CreateGlobalOption('Show Profile Name', {
         order = self.order:next(), type="toggle", width=2.0,
         get = function() return minimap.titan_panel.show_profile_name == true end,
         set = function(_, v)
@@ -165,24 +154,18 @@ function o:CreateTitanPanelOptions(options, order, L)
             minimap.titan_panel.show_profile_name = val
             self:SendMessage(MSG.OnUpdateMinimapState, libName)
         end
-    }
-    options.TP_maxProfileName = {
+    })
+    options.TP_maxProfileName = ACU:CreateGlobalOption('Limit Profile Name Characters', {
         disabled = options.TP_showProfileName.get() ~= true,
-        type = 'range',
-        order = self.order:next(),
-        step = 1,
-        min = 1, max = 50,
-        softMin = 5,
-        softMax = 20,
-        width = 1.3,
-        name = L['Limit Profile Name Characters'],
-        desc = self:G('Limit Profile Name Characters::Desc'),
+        type = 'range', order = self.order:next(),
+        step = 1, min = 1, max = 50,
+        softMin = 5, softMax = 20, width = 1.3,
         get = function() return minimap.titan_panel.profile_name_max_chars end,
         set = function(_, v)
             minimap.titan_panel.profile_name_max_chars = v
             self:SendMessage(MSG.OnUpdateMinimapState, libName)
         end,
-    }
+    })
 
 end
 
@@ -197,10 +180,9 @@ function o:GetProfileKeys()
     return keys
 end
 
---- @param options AceConfigOption
-function o:CreateToggles(options)
-    local L = self.optionsMixin.locale
-    local currentColor = L['Current Profile Color']
+function o:CreateToggles()
+    local options       = self.options
+    local currentColor  = L['Current Profile Color']
     local currentSymbol = L['Current::Symbol::Options']
 
     -- reset each time we re-create
@@ -227,14 +209,14 @@ end
 function o:OnProfileDeleted(deletedProfileKey)
     self.options[deletedProfileKey] = nil
     ns:db().char.showInQuickProfileMenu[deletedProfileKey] = nil
-    self:CreateToggles(self.options)
+    self:CreateToggles()
 end
 --- Handles profile change and profile creation events. The OnNewProfile doesn't fire
 --- Note: AceDb OnProfileChanged also gets fired during a delete (for reason I do not know yet)
 ---@param newProfile string
 function o:OnProfileChanged(newProfile)
     pm:f3(function() return "OnProfileChanged received... newProfile=%s", newProfile end)
-    self:CreateToggles(self.options)
+    self:CreateToggles()
 end
 
 function o:RegisterCallbacks()
