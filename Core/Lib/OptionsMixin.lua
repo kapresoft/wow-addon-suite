@@ -23,8 +23,6 @@ New Instance
 local S = LibStub:NewLibrary(libName); if not S then return end;
 local p = ns:LC().OPTIONS:NewLogger(libName)
 
--- todo: prompt user to reload if addons need to be enabled/disabled in general settings
-
 --[[-----------------------------------------------------------------------------
 Library Methods
 -------------------------------------------------------------------------------]]
@@ -66,14 +64,15 @@ end
 
 function o:CreateOptions()
     local order = ns:CreateSequence()
+    self.order = order
     --- @type AceConfigOption
     local options = {
         name = GC.C.FRIENDLY_NAME,
         handler = self,
         type = "group",
         args = {
-            general = OptionsAddonsMixin:New(self):CreateAddOnsGroup(order),
-            minimap = OptionsMinimapMixin:New(self, order):CreateOptions(),
+            general = OptionsAddonsMixin:New(self):CreateAddOnsGroup(),
+            minimap = OptionsMinimapMixin:New(self):CreateOptions(),
         },
     }; ConfigureDebugging(options)
     return options

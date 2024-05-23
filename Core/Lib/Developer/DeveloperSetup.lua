@@ -9,6 +9,7 @@ Debug Flags
 local d                  = ns.debug
 local flag               = ns.debug.flag
 flag.developer           = true
+d.alwaysEnabledAddOns = { 'Ace3', '!BugGrabber', 'BugSack' }
 
 --[[-----------------------------------------------------------------------------
 Main Code

@@ -36,6 +36,10 @@ local LogCategories = {
     --- @type Kapresoft_LogCategory
     MESSAGE_TRACE = "MT",
     --- @type Kapresoft_LogCategory
+    SYNC = "SY",
+    --- @type Kapresoft_LogCategory
+    STATE = "ST",
+    --- @type Kapresoft_LogCategory
     TRACE = "TR",
     --- @type Kapresoft_LogCategory
     PROFILE = "PR",
@@ -82,10 +86,10 @@ local o = S; do
         nSpace.LogCategories = function() return LogCategories end
         local CategoryLogger = nSpace:KO().CategoryMixin:New()
         CategoryLogger:Configure(nSpace.addonLogName, LogCategories, {
-            consoleColors = ns.consoleColors,
+            consoleColors = nSpace.consoleColors,
             levelSupplierFn = function() return __GetLogLevel() end,
             enabledCategoriesSupplierFn = function() return __GetCategories() end,
-            printerFn = ns.print,
+            printerFn = nSpace.print,
             enabled = nSpace:IsDev(),
         })
         nSpace.CategoryLogger = function() return CategoryLogger end

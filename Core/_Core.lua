@@ -42,7 +42,7 @@ Type: DebugSettings
 --- Make sure to match this structure in GlobalDeveloper (which is not packaged in releases)
 -------------------------------------------------------------------------------]]
 --- @class DebugSettings
-ns.debug = { flag = flag }
+ns.debug = { flag = flag, alwaysEnabledAddOns = {}, }
 
 --[[-----------------------------------------------------------------------------
 Namespace Methods

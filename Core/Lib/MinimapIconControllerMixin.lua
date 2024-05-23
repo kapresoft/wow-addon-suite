@@ -232,7 +232,7 @@ local function OnClick(self, buttonFrame, button)
         end
         ShowMenu(self)
     elseif button == 'RightButton' then
-        local tab
+        local tab = 'general'
         if IsShiftKeyDown() then tab = 'minimap' end
         ns:a():OpenConfig(tab)
     end
@@ -423,6 +423,7 @@ function o:UpdateOutOfSyncIndicator(inSync, details)
 end
 
 function o:GetTitanPluginText()
+    if not O.API:IsTitanPanelAvailable() then return '' end
     local _, state = self:IsInSync()
     local count = ''
     if minimap().titan_panel.show_out_of_sync_count then

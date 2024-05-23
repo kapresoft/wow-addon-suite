@@ -6,20 +6,37 @@ Type: OptionsAddons
 --[[-----------------------------------------------------------------------------
 Lua Vars
 -------------------------------------------------------------------------------]]
-local sformat = string.format
+local C_Timer_NewTicker = C_Timer.NewTicker
 
 --[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
 local ns = select(2, ...)
-local O, GC, M, MSG, KO = ns.O, ns.GC, ns.M, ns.GC.M, ns:KO()
-local Table, String =  KO.Table, KO.String
-local AceEvent, API = ns:AceEvent(), O.API
-local AddOnManager = O.AddOnManagerMixin
+local O, GC, M, MSG, K, KO = ns.O, ns.GC, ns.M, ns.GC.M, ns:K(), ns:KO()
+local Table, String     = KO.Table, KO.String
+local AceEvent          = ns:AceEvent()
+local ACU = KO.AceConfigUtil:New(ns.addon, not ns:IsDev())
 
---- These AddOns are always checked in Developer mode
-local developerAddOns = { 'Ace3', 'BugSack', '!BugGrabber' }
+--[[-----------------------------------------------------------------------------
+OnLoad
+-------------------------------------------------------------------------------]]
+local fVersion = K:cf(BLUE_FONT_COLOR)
+local fDisabled = K:cf(LIGHTGRAY_FONT_COLOR)
+local fLib      = K:cf(LIGHTBLUE_FONT_COLOR)
+
+--- @type string
+local libPrefix
+--- @type AceLocale
+local L
+
+local API, ADU = M.API, M.AddOnDependencyUtil
+ns:OnAddOnStartLoad(function()
+    API, ADU = O.API, O.AddOnDependencyUtil
+    API:PrefetchAddOnInfo()
+    L = ns:AceLocale()
+    libPrefix = L['Lib:'] .. ' '
+end)
 
 --[[-----------------------------------------------------------------------------
 New Instance
@@ -28,7 +45,6 @@ local libName = M.OptionsAddonsMixin()
 
 --- @class OptionsAddonsMixin
 --- @field optionsMixin OptionsMixin
---- @field locale AceLocale
 local S = ns:NewLibWithEvent(libName)
 local p = ns:LC().OPTIONS:NewLogger(libName)
 
@@ -36,17 +52,6 @@ local p = ns:LC().OPTIONS:NewLogger(libName)
 Support Functions
 -------------------------------------------------------------------------------]]
 local sp = '                                                                   '
-
---- @param fallback boolean The fallback value
---- @param addonName string The key value
-local function AutoLoadAddOnsGet(addonName, fallback)
-    return function(_) return ns:profile().enabledAddons[addonName] or fallback end
-end
---- @param addonName string The key value
-local function AutoLoadAddOnsSet(addonName)
-    --- @param v boolean
-    return function(_, v) ns.requiresReload = true; ns:profile().enabledAddons[addonName] = v; end
-end
 
 --- @return ProfileSelect
 local function CreateProfileSelect()
@@ -88,15 +93,70 @@ local function CreateProfileSelect()
     return ret
 end
 --[[-----------------------------------------------------------------------------
-Library Methods
+CoroutineManager: This component warms up the cache in the background on login so that
+the WoW UI can prioritize the threads.
+-------------------------------------------------------------------------------]]
+--- Coroutine manager for handling async tasks
+--- @class OptionsCoroutineManager
+local CoroutineManager = {
+    coroutines = {},
+    ticker = nil
+}
+
+--- @type OptionsCoroutineManager
+local CM = CoroutineManager
+
+--- Creates a coroutine and stores it in the manager
+function CM:Create(fn)
+    local co = coroutine.create(fn)
+    table.insert(self.coroutines, co)
+    if not self.ticker then self:StartTicker() end
+    return co
+end
+
+--- Resumes all coroutines and processes their results
+function CM:ResumeAll()
+    for i = #self.coroutines, 1, -1 do
+        local co = self.coroutines[i]
+        if coroutine.status(co) == "suspended" then
+            local success, result = coroutine.resume(co)
+            if not success then
+                p:e(function() return "Coroutine error: %s", result end)
+                table.remove(self.coroutines, i)
+            elseif coroutine.status(co) == "dead" then
+                table.remove(self.coroutines, i)
+            end
+        end
+    end
+    if #self.coroutines == 0 then
+        self:StopTicker()
+        p:f1('CoroutineManager ticker stopped.')
+    end
+end
+
+--- Starts the ticker to resume coroutines periodically
+function CM:StartTicker()
+    self.ticker = C_Timer_NewTicker(0.1, function() self:ResumeAll() end)
+    p:f1('CoroutineManager ticker started.')
+end
+
+function CM:StopTicker()
+    if self.ticker then
+        self.ticker:Cancel()
+        self.ticker = nil
+    end
+end
+
+--[[-----------------------------------------------------------------------------
+Methods: OptionsAddonsMixin
 -------------------------------------------------------------------------------]]
 --- @type OptionsAddonsMixin | AceEventInterface
 local LIB = S
 
 --- @public
---- @param optionsMixin OptionsMixin
+--- @param options Options
 --- @return OptionsAddons
-function LIB:New(optionsMixin) return ns:K():CreateAndInitFromMixin(S, optionsMixin) end
+function LIB:New(options) return ns:K():CreateAndInitFromMixin(S, options) end
 
 --[[-----------------------------------------------------------------------------
 Methods
@@ -106,83 +166,71 @@ local o = S
 
 --- Called Automatically by CreateAndInitFromMixin
 --- @private
---- @param optionsMixin OptionsMixin
-function o:Init(optionsMixin)
-    self.optionsMixin = optionsMixin
+--- @param options Options
+function o:Init(options)
+    self.mainOptions = options
+    self.util        = options.util
+    self.order       = options.order
 end
 
---- @param order Kapresoft_LibUtil_SequenceMixin
 --- @return AceConfigOption
-function o:CreateAddOnsGroup(order)
-    local L = self.optionsMixin.locale
+function o:CreateAddOnsGroup()
+    self.order = self.order
+
     --- @type AceConfigOption
     local group = {
-        type = 'group',
-        name = L['General'],
-        desc = L['General::Desc'],
-        order = order:next(),
-        args = self:CreateAddOnsOptions(order)
+        type  = 'group',
+        name  = L['General'],
+        desc  = L['General::Desc'],
+        order = self.order:next(),
+        args  = self:CreateAddOnsOptions()
     }
     return group
 end
 
----@param name string
-local function h(name)
-    return sformat('      %s      ', name)
-end
-
-function o:G(localeText)
-    return self.locale[localeText] .. '\n' .. self.locale['Global Setting']
-end
-function o:C(localeText)
-    return self.locale[localeText] .. '\n' .. self.locale['Character Setting']
-end
-
 --- @return AceConfigOption
---- @param order Kapresoft_LibUtil_SequenceMixin
-function o:CreateAddOnsOptions(order)
-    local L = self.optionsMixin.locale; self.locale = L;
-    local util = self.optionsMixin.util
-    local ps = CreateProfileSelect()
+function o:CreateAddOnsOptions()
+    local order = self.order
+    local util  = self.util
+    local ps    = CreateProfileSelect()
 
-    local versionText = GC:GetAddonInfo()
-    local versionLabel = GC.C.FRIENDLY_NAME .. BLUE_FONT_COLOR:WrapTextInColorCode(' v' .. versionText)
+    local versionLabel = GC.C.FRIENDLY_NAME .. fVersion(' v' .. GC:GetAddonInfo())
 
     --- @type table<string, AceConfigOption>
     local options = {
-        labelVersion = { order = order:next(), type = "description", width='full',
-                         fontSize='medium', name = versionLabel,  },
-        spacer1aa = { order = order:next(), type = "description", name = " ", width='full', fontSize='small' },
-        showInQuickProfileSwitchMenu = {
-            name = L['Add to Favorite'], desc = self:C('Add to Favorite::Desc'),
-            order = order:next(), type="toggle", width='normal',
-            get = util:QuickProfileMenuGet(),
-            set = util:QuickProfileMenuSet()
-        },
-        syncAddOnStates = {
-            name = L['Prompt me to Reload UI'], desc = self:G('Prompt me to Reload UI::Desc'),
-            order = order:next(), type="toggle", width=2.0,
-            get = util:GlobalGet('sync_addon_states'),
-            set = util:GlobalSet('sync_addon_states'),
-        },
-        spacer1a = { order = order:next(), type = "description", name = "", width='full' },
+        labelVersion = ACU:CreateLabelByName(versionLabel, {
+            order = order:next(),
+        }), spacer1a  = ACU:CreateSpacer(order:next()),
+        showInQuickProfileSwitchMenu = ACU:CreateGlobalOption('Add to Favorite', {
+            order = order:next(), type = "toggle", width = 'normal',
+            get   = util:QuickProfileMenuGet(),
+            set   = util:QuickProfileMenuSet()
+        }),
+        syncAddOnStates = ACU:CreateGlobalOption('Prompt me to Reload UI', {
+            order = order:next(), type = "toggle", width = 3.0,
+            get   = util:GlobalGet('sync_addon_states'),
+            set   = util:GlobalSet('sync_addon_states'),
+        }), spacer1b = ACU:CreateSpacer(order:next()),
+        reloadUI = ACU:CreateOption('Reload UI', {
+            name = L['Reload UI'], desc = L['Reload UI::Desc'],
+            type = "execute", order = order:next(), width = 0.7,
+            func = function() util:SendEventMessage(GC.M.OnApplyAndRestart, libName) end
+        }),
+        profileSelection = ACU:CreateCharOption('Select Profile', {
+            type   = "select", width = "normal", order = order:next(),
+            values = ps.kvPairs, sorting = ps.sorting,
+            get    = ps.get,
+            set    = ps.set
+        }),
     }
-    options.reloadUI = {
-        name = L['Reload UI'], desc = L['Reload UI::Desc'],
-        type = "execute", order = order:next(), width = 0.7,
-        func = function() util:SendEventMessage(GC.M.OnApplyAndRestart, libName) end
-    }
-    options.profileSelection = {
-        name = L['Select Profile'] .. ':', desc = L['Select Profile::Desc'], order = order:next(),
-        type = "select", width="normal",
-        values = ps.kvPairs, sorting = ps.sorting,
-        get = ps.get,
-        set = ps.set
-    }
-    options.spacer1 = { order = order:next(), type = "description", name = "", width=0.3 }
-    options.enable_all = self:CreateEnableAll(options, order, L)
-    options.disable_all = self:CreateDisableAll(options, order, L)
-    options.spacer3 = { order = order:next(), type = "description", name = L['Add-Ons::Desc'] .. '\n\n', fontSize='medium' }
+
+    options.spacer1     = ACU:CreateSpacer({ order = order:next(), width = 0.5 })
+    options.enable_all  = self:CreateEnableAll()
+    options.disable_all = self:CreateDisableAll()
+    options.spacer3     = ACU:CreateLabel('Add-Ons::Desc', {
+        order = order:next(), width=3.5
+    })
+    options.spacer1c = ACU:CreateSpacer(order:next())
 
     local addOnCount = GetNumAddOns()
     if addOnCount <= 0 then
@@ -193,21 +241,73 @@ function o:CreateAddOnsOptions(order)
     end
     self.addonsOptions = options
 
-    self:CreateAddOnCheckList(order)
+    self:CreateAddOnCheckList()
 
     return options
 end
 
---- @param addOnName Name
---- @param state boolean
-local function UpdateEnabledState(addOnName, state)
-    local currentlyEnabled = API:IsAddOnEnabled(addOnName)
-    p:f1(function() return 'AddOn[%s] is enabled: %s', addOnName, currentlyEnabled end)
-    if state == true and not currentlyEnabled then
-        return API:EnableAddOnForCharacter(addOnName)
+--- Clicking a parent AddOn will enable the dependent addOns if configured
+--- @see SynchronizedAddOns
+--- @param options AceConfigOption
+--- @param name AddOnName
+--- @param v boolean The checked value
+function o:OnSyncCheckedStateWithRelatedAddOns(options, name, v)
+    local syncd = ns.SynchronizedAddOns
+    syncd:ForEachSyncdAddOn(name, function(syncdAddOnName)
+        if not options[syncdAddOnName] then
+            p:w(function()
+                return 'AddOnNotInstalled: %s. Fix SynchronizedAddOns configuration.', syncdAddOnName
+            end)
+            ns:profile().enabledAddons[syncdAddOnName] = nil
+            return
+        end
+        ns:profile().enabledAddons[syncdAddOnName] = v
+        o:UpdateEnabledState(syncdAddOnName, v)
+    end)
+end
+
+--- This part depends on the addon dependency details cache being called
+--- @see AddOnDependencyUtil#FlushAddOnDependencyDetailsCache
+--- @param indexOrName IndexOrName The AddOn Index or Name
+--- @return string
+function o.GetDisplayName(indexOrName)
+    local name = indexOrName
+    if API:IsAddOnLibraryType(name) then return fLib(libPrefix .. name) end
+    return (ADU:CanEnableByProfile(name) and name) or fDisabled(name)
+end
+
+--- @param name AddOnName The AddOn Index or Name
+--- @return string
+function o.GetDesc(name)
+    local info     = API:GetAddOnInfo(name)
+    local depsInfo = API:GetDependencyDetails(name)
+    local desc     = info.desc
+    local label    = ''
+
+    desc = info.title .. '\n\n' .. desc
+    if depsInfo:HasDependencies() then
+        label = label .. '\n\n' .. depsInfo:GetDependencyLabel()
     end
-    if state == false and currentlyEnabled then
-        API:DisableAddOnForCharacter(addOnName)
+    desc = desc .. label
+    return desc
+end
+
+--- @param name AddOnName
+--- @param state boolean
+--- @param flush boolean Flushes the AddOnDependencyDetails cache; defaults to false
+function o:UpdateEnabledState(name, state, flush)
+    flush = flush == true or false
+    local currentlyEnabled = API:IsAddOnEnabled(name)
+    if state == true and not currentlyEnabled then
+        if flush then
+            AceEvent:SendMessage(MSG.OnFlushAddOnDependenciesCache, libName)
+        end
+        return API:EnableAddOnForCharacter(name)
+    elseif state == false and currentlyEnabled then
+        if flush then
+            AceEvent:SendMessage(MSG.OnFlushAddOnDependenciesCache, libName)
+        end
+        API:DisableAddOnForCharacter(name)
     end
 end
 
@@ -215,79 +315,87 @@ function o.CreateGetFn(addOnName)
     --- @return boolean
     return function()
         local v = ns:profile().enabledAddons[addOnName] == true
-        p:f3(function() return 'Handle Get[%s]: val=%s', addOnName, v end)
-        UpdateEnabledState(addOnName, v)
+        o:UpdateEnabledState(addOnName, v)
         return v
     end
 end
 
 --- @param addOnName Name
-function o.CreateSetFn(addOnName)
-    return function(_, v)
+--- @param options AceConfigOption
+function o.CreateSetFn(options, addOnName)
+    return function(ctx, v)
         ns:profile().enabledAddons[addOnName] = v
         --@do-not-package@
-        if String.IsAnyOf(addOnName, unpack(developerAddOns)) then
-            ns:profile().enabledAddons[addOnName] = true
+        if ns:IsDev() then
+            if String.IsAnyOf(addOnName, unpack(ns.debug.alwaysEnabledAddOns)) then
+                ns:profile().enabledAddons[addOnName] = true
+                v = true
+            end
         end
         --@end-do-not-package@
-        UpdateEnabledState(addOnName, v)
+        o:OnSyncCheckedStateWithRelatedAddOns(options, addOnName, v)
+        o:UpdateEnabledState(addOnName, v, true)
         AceEvent:SendMessage(MSG.OnUpdateMinimapState, libName)
-        p:f3(function() return 'Handle Set[%s]: val=%s', addOnName, v end)
     end
 end
 
----@param self AceConfigOption
-function o.GetAddOnName(self, name)
+--- @param name Name The addon name
+function o.GetAddOnNameFn(name)
     return function()
-        local ai = AddOnManager:New(name)
-        p:f1(function() return "[%s]: reason: %s enabled: %s", ai.name, ai.reason, ai.enabled end)
-        return ai:GetNameAndDesc(self.get())
+        local displayName
+        local co = CoroutineManager:Create(function()
+            displayName = o.GetDisplayName(name)
+            coroutine.yield(displayName)
+        end)
+        coroutine.resume(co)
+        return displayName
     end
 end
----@param self AceConfigOption
-function o.GetAddOnDesc(self, name)
-    return function() return select(2, AddOnManager:New(name):GetNameAndDesc()) end
+
+--- @param name Name The addon name
+function o.GetAddOnDescFn(name)
+    return function()
+        local description
+        local co = CoroutineManager:Create(function()
+            description = o.GetDesc(name)
+            coroutine.yield(description)
+        end)
+        coroutine.resume(co)
+        return description
+    end
 end
 
-function o:CreateAddOnCheckList(order)
+function o:CreateAddOnCheckList()
+    local order = self.order
     local options = self.addonsOptions
-    local A = O.API
 
-    A:ForEachAddOn(function(info)
+    API:ForEachAddOn(function(info)
         local name = info.name
         options[name] = {
             order = order:next(),
             type = 'toggle',
             width = 1.3,
             get = o.CreateGetFn(name),
-            set = o.CreateSetFn(name),
         }
         local opt = options[name];
-        opt.name = o.GetAddOnName(opt, name)
-        opt.desc = o.GetAddOnDesc(opt, name)
+        opt.set = o.CreateSetFn(options, name)
+        opt.name = o.GetAddOnNameFn(name)
+        opt.desc = o.GetAddOnDescFn(name)
     end)
 end
 
---- @param options AceConfigOption
---- @param order Kapresoft_LibUtil_SequenceMixin
---- @param L AceLocale
-function o:CreateEnableAll(options, order, L)
-    return {
-        name = L['General::Enable All::Button'], desc = L['General::Enable All::Button::Desc'],
-        type = "execute", order = order:next(), width = 'half',
-        func = function() self:ForEachToggle(function(opt) opt.set({}, true) end) end
-    }
+function o:CreateEnableAll()
+    return ACU:CreateOption('General::Enable All::Button', {
+        type = "execute", order = self.order:next(), width = 'half',
+        func = function() self:ForEachToggle(function(opt) opt.set({ isBulkOperation=true }, true) end) end
+    })
 end
 
---- @param options AceConfigOption
---- @param order Kapresoft_LibUtil_SequenceMixin
---- @param L AceLocale
-function o:CreateDisableAll(options, order, L)
-    return {
-        name = L['General::Disable All::Button'], desc = L['General::Disable All::Button::Desc'],
-        type="execute", order=order:next(), width = 'half',
-        func = function() self:ForEachToggle(function(opt) opt.set({}, false) end) end
-    }
+function o:CreateDisableAll()
+    return ACU:CreateOption('General::Disable All::Button', {
+        type="execute", order=self.order:next(), width = 'half',
+        func = function() self:ForEachToggle(function(opt) opt.set({ isBulkOperation=true }, false) end) end
+    })
 end
 
 --- @param applyFn fun(option:AceConfigOption) | "function(option) end"
@@ -296,5 +404,3 @@ function o:ForEachToggle(applyFn)
         if option.type == 'toggle' then applyFn(option) end
     end
 end
-
-
