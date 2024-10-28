@@ -20,7 +20,7 @@ Local Vars
 local ns = select(2, ...)
 
 local O, MSG, API = ns.O, ns.GC.M, ns.O.API
-local K, L        = ns:K(), ns:AceLocale()
+local K, L, AU    = ns:K(), ns:AceLocale(), ns:KO().AddonUtil
 
 local DEV_RELOAD_CONFIRM_DLG = 'DEV_RELOAD_CONFIRM'
 
@@ -116,7 +116,7 @@ end
 local function CheckAddonState(name)
     local _name = C_AddOns_GetAddOnInfo(name)
     if not _name then return false, AddOnStateCodes.NOT_INSTALLED end
-    local enabled = GetAddOnEnableState(UnitName("player"), name) > 0
+    local enabled = AU:IsAddOnEnabled(name)
     local loaded = API:IsAddOnLoaded(name)
     local loadOnDemand = API:IsAddOnLoadOnDemand(name)
 

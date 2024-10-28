@@ -5,7 +5,7 @@ local GetNumAddOns = GetNumAddOns or C_AddOns.GetNumAddOns
 local EnableAddOn, DisableAddOn = EnableAddOn or C_AddOns.EnableAddOn, DisableAddOn or C_AddOns.DisableAddOn
 local IsAddOnLoaded = C_AddOns.IsAddOnLoaded or IsAddOnLoaded
 local C_Timer_NewTicker, C_Timer_After = C_Timer.NewTicker, C_Timer.After
-
+local GetAddOnMetadata = C_AddOns.GetAddOnMetadata or GetAddOnMetadata
 --[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]

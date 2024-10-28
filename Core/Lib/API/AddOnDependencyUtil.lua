@@ -133,7 +133,7 @@ function o:GetDepsDetail(name) return cache.dependencyDetails[name] end
 --- @return table<Index, AddOnName>
 function o:GetAddOnDependencies(name)
     if cache.dependencies[name] == nil then
-        cache.dependencies[name] = { GetAddOnDependencies(name) }
+        cache.dependencies[name] = AU:GetAddOnDependencies(name)
     end
     return cache.dependencies[name]
 end
