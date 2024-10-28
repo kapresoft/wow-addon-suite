@@ -7,7 +7,7 @@ Type: OptionsAddons
 Lua Vars
 -------------------------------------------------------------------------------]]
 local C_Timer_NewTicker = C_Timer.NewTicker
-
+local GetNumAddOns = GetNumAddOns or C_AddOns.GetNumAddOns
 --[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]

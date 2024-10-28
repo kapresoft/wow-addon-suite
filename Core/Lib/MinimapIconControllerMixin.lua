@@ -89,6 +89,24 @@ local function IsShownInTP()
 end
 local function IsHideWhenInTP() return minimap().hide_when_titan_panel_added == true end
 
+local function _EasyMenu(menuList, frame, anchor, x, y, displayMode, autoHideDelay)
+    if not frame then return end
+    frame.displayMode = displayMode or "MENU"
+    frame.point = x or -10
+    frame.relativePoint = y or -15
+    frame.menuList = menuList
+    frame.initialize = function(self, level)
+        if level == 1 then
+            for _, item in pairs(menuList) do
+                UIDropDownMenu_AddButton(item, level)
+            end
+        end
+    end
+    ToggleDropDownMenu(1, nil, frame, anchor or "cursor", x or -10, y or -15)
+end
+-- EasyMenu is not available in Retail
+local EasyMenu = EasyMenu or _EasyMenu
+
 ---@param tooltip _GameTooltip
 ---@param inSync boolean
 local function OutOfSyncMessage(tooltip, inSync)
