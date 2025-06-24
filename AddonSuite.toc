@@ -1,14 +1,14 @@
-## Interface: 110105
+## Interface: 110107
 ## Version: @project-version@
-## Title: Addon Suite |cff1784d1Retail|r
+## Title: Addon|cffFF863FSuite|r Retail
 ## Notes: Addon Suite Addon Manager. Because Even Your Addons Need an Overlord. The Only Suite Where Every Guest (Addon) Behaves.
 ## Author: Antonio W. Lagnada (kapresoft@gmail.com)
 ## DefaultState: enabled
 ## SavedVariables: ADDON_SUITE_DB, ADDON_SUITE_LOG_LEVEL, ADDON_SUITE_DEBUG_MODE, ADDON_SUITE_DEBUG_ENABLED_CATEGORIES
 ## SavedVariablesPerCharacter: ADDON_SUITE_CHARACTER_DB
 ## IconTexture: Interface/AddOns/AddonSuite/Core/Assets/addon-icon.tga
-
 ## OptionalDeps: Ace3
+## Category-enUS: AddOn Managers
 
 ## X-Credits: Antonio W. Lagnada (kapresoft@gmail.com)
 ## X-Category: General
