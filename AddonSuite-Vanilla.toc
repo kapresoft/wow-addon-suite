@@ -1,16 +1,16 @@
-## Interface: 11506
+## Interface: 11507
 ## Version: @project-version@
-## Title: |TInterface/Addons/AddonSuite/Core/Assets/addon-icon.tga:18:18|t Addon Suite |cff1784d1Classic|r
+## Title: |TInterface/Addons/AddonSuite/Core/Assets/addon-icon.tga:18:18|t Addon|cffFF863FSuite|r Classic
 ## Notes: Addon Suite Addon Manager. Because Even Your Addons Need an Overlord. The Only Suite Where Every Guest (Addon) Behaves.
 ## Author: Antonio W. Lagnada (kapresoft@gmail.com)
 ## DefaultState: enabled
 ## SavedVariables: ADDON_SUITE_DB, ADDON_SUITE_LOG_LEVEL, ADDON_SUITE_DEBUG_MODE, ADDON_SUITE_DEBUG_ENABLED_CATEGORIES
 ## SavedVariablesPerCharacter: ADDON_SUITE_CHARACTER_DB
-
 ## OptionalDeps: Ace3
+## Category-enUS: AddOn Managers
 
 ## X-Credits: Antonio W. Lagnada (kapresoft@gmail.com)
-## X-Category: General
+## X-Category: AddOn Managers
 ## X-License: All Rights Reserved. |cff1784d1This addon is provided 'as is' without any warranties. Redistribution or modification is not permitted.|r
 
 ## X-Github-Repo: https://github.com/kapresoft/wow-addon-suite
