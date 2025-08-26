@@ -1,7 +1,7 @@
 --[[-----------------------------------------------------------------------------
 Blizzard Vars
 -------------------------------------------------------------------------------]]
-local C_Timer_After = C_Timer.After
+local C_Timer_NewTicker, C_Timer_After = C_Timer.NewTicker, C_Timer.After
 
 --[[-----------------------------------------------------------------------------
 Local Vars
@@ -43,18 +43,67 @@ AddOnCache
 local LocalCache = {
     dependencies = {},
     dependencyDetails = {},
+    timestamps = {},
+    maxEntries = 100,
+    ttl = 60 * 10, -- seconds
+    cleanupInterval = 60 * 5,
 }
 
-local IsTableEmpty = ns:Table().IsEmpty
-
 local c = LocalCache; do
+
+    function c:Size()
+        local n = 0; for _ in pairs(self.dependencyDetails) do n = n + 1 end; return n
+    end
+
+    ---@param name AddOnName
+    function c:Touch(name) self.timestamps[name] = time() end
+
+    function c:FlushOldEntries()
+        local now = time()
+        for name, ts in pairs(self.timestamps) do
+            if (now - ts) > self.ttl then
+                self.dependencyDetails[name] = nil
+                self.timestamps[name] = nil
+            end
+        end
+    end
+
+    function c:Trim()
+        while self:Size() > self.maxEntries do
+            local oldestName, oldestTime
+            for name, ts in pairs(self.timestamps) do
+                if not oldestTime or ts < oldestTime then
+                    oldestName, oldestTime = name, ts
+                end
+            end
+            if not oldestName then break end
+            self.dependencyDetails[oldestName] = nil
+            self.timestamps[oldestName] = nil
+        end
+    end
+
+    function c:Cleanup(reference)
+        local before = self:Size()
+        self:FlushOldEntries()
+        self:Trim()
+        local after = self:Size()
+        if before ~= after then
+            local fmt = 'Cache %s. size %d->%d'
+            if reference then fmt = fmt .. ' [ref=%s]' end
+            p:d(function() return fmt, c2('cleaned'), before, after, reference end)
+        end
+    end
+
     ---@param reference Name Informational parameter to display the referenceID of the caller.
     function c:Flush(reference)
-        if IsTableEmpty(self.dependencyDetails) then return end
+        local before = self:Size()
+        if before == 0 then return end
         self.dependencyDetails = {}
-        local fmt = 'Cache %s.'
+        self.timestamps = {}
+        local after = self:Size()
+        local fmt = 'Cache %s. size %d->%d'
         if reference then fmt = fmt .. ' [ref=%s]' end
-        p:d(function() return fmt, c2('flushed'), reference end)
+        p:d(function() return fmt, c2('flushed'), before, after, reference end)
     end
 end
 
@@ -122,12 +171,18 @@ local cache = LocalCache
 function o:NewDependencyDetails(name)
     local inst = AddOnDependencyDetailsMixin:New(name)
     LocalCache.dependencyDetails[name] = inst
+    cache:Touch(name)
+    cache:Trim()
     return inst
 end
 
 --- @param name AddOnName
 --- @return AddOnDependencyDetails
-function o:GetDepsDetail(name) return cache.dependencyDetails[name] end
+function o:GetDepsDetail(name)
+    local info = cache.dependencyDetails[name]
+    if info then cache:Touch(name) end
+    return info
+end
 
 --- @param name AddOnName
 --- @return table<Index, AddOnName>
@@ -264,6 +319,14 @@ Events / Messages
 ns:OnAddOnStartLoad(function()
     local AceEvent = ns:AceEvent()
     local AceBucket = ns:AceBucket()
+
+    C_Timer_NewTicker(LocalCache.cleanupInterval, function()
+        LocalCache:Cleanup(createRef('ticker', 'PeriodicCleanup'))
+    end)
+
+    AceEvent:RegisterEvent('PLAYER_LOGIN', function()
+        FlushDelayed(0.1, createRef('PLAYER_LOGIN', 'Event'))
+    end)
 
     AceEvent:RegisterMessage(MSG.OnProfileChanged, function(msg, src)
         FlushDelayed(0.1, createRef(src, 'OnProfileChanged'))

@@ -60,6 +60,7 @@ function o:SlashCommand_Help_Handler()
     local COMMAND_INFO_TEXT = "Prints additional addon info"
     local COMMAND_CONFIG_TEXT = "Shows the config UI"
     local COMMAND_HELP_TEXT = "Shows this help"
+    local COMMAND_FLUSH_TEXT = "Flushes dependency cache"
     local OPTIONS_LABEL = "options"
     local USAGE_LABEL = sformat("usage: %s [%s]", GC.C.CONSOLE_PLAIN, OPTIONS_LABEL)
     p:a(USAGE_LABEL)
@@ -67,6 +68,7 @@ function o:SlashCommand_Help_Handler()
     p:a(function() return C.CONSOLE_OPTIONS_FORMAT, 'config', COMMAND_CONFIG_TEXT end)
     p:a(function() return C.CONSOLE_OPTIONS_FORMAT, 'info', COMMAND_INFO_TEXT end)
     p:a(function() return C.CONSOLE_OPTIONS_FORMAT, 'help', COMMAND_HELP_TEXT end)
+    p:a(function() return C.CONSOLE_OPTIONS_FORMAT, 'flushcache', COMMAND_FLUSH_TEXT end)
 end
 
 --- @param spaceSeparatedArgs string
@@ -80,6 +82,10 @@ function o:SlashCommands(spaceSeparatedArgs)
     end
     if IsAnyOf('info', unpack(args)) then
         self:SlashCommand_Info_Handler(); return
+    end
+    if IsAnyOf('flushcache', unpack(args)) then
+        ns.O.AddOnDependencyUtil:FlushAddOnDependencyDetailsCache()
+        return
     end
     -- Otherwise, show help
     self:SlashCommand_Help_Handler()
