@@ -265,16 +265,26 @@ end
 
 function o:PrefetchAddOnInfo()
     local function PrefetchWithTicker(coThread)
-        local throttleInterval = 0.01
+        local throttleInterval = 0.1
+        local batchSize = 20
+        local maxIterations = 100
+        local iterations = 0
 
         -- Create a ticker to resume the coroutine at regular intervals
         --- @type Ticker
         local ticker
 
         ticker = C_Timer_NewTicker(throttleInterval, function()
-            if coroutine.status(coThread) == "suspended" then
-                coroutine.resume(coThread)
-            else
+            iterations = iterations + 1
+            local processed = 0
+
+            while processed < batchSize and coroutine.status(coThread) == "suspended" do
+                local ok = coroutine.resume(coThread)
+                if not ok then break end
+                processed = processed + 1
+            end
+
+            if coroutine.status(coThread) ~= "suspended" or processed == 0 or iterations >= maxIterations then
                 ticker:Cancel()
                 p:vv("Background task completed: AddOnInfoPrefetch")
             end
