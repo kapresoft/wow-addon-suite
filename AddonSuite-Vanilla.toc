@@ -1,4 +1,4 @@
-## Interface: 11507
+## Interface: 11508
 ## Version: @project-version@
 ## Title: |TInterface/Addons/AddonSuite/Core/Assets/addon-icon.tga:18:18|t Addon|cffFF863FSuite|r Classic
 ## Notes: Addon Suite Addon Manager. Because Even Your Addons Need an Overlord. The Only Suite Where Every Guest (Addon) Behaves.
