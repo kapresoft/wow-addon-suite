@@ -69,7 +69,7 @@ local function IsConfirmReload() return minimap().confirm_reloads == true end
 
 --- This local function is dynamic and needs to be here
 local function GetConfirmReloadText()
-    local confirmationText = ns.ch:T(L['Currently configured to load %s confirmation'])
+    local confirmationText = ns.ch:T(L['Currently set to switch profiles %s a confirmation prompt.'])
     local without      = L['without']
     local with         = L['with']
 
@@ -198,19 +198,19 @@ local function OnTooltipShow(self, tooltip)
     --@do-not-package@
     if ns:IsDev() then
         tooltip:AddDoubleLine(ORANGE_THREAT_COLOR:WrapTextInColorCode('SHIFT-LEFT-Click'),
-                              ns.ch:T(L['Open Debugging Dialog']))
+                              ns.ch:T(L['Open debug settings']))
     end
     --@end-do-not-package@
     tooltip:AddDoubleLine(ns.ch:S(L['LEFT-Click']), ns.ch:T(L['View or switch profiles']))
-    tooltip:AddDoubleLine(ns.ch:S(L['RIGHT-Click']), ns.ch:T(L['Open settings dialog']))
+    tooltip:AddDoubleLine(ns.ch:S(L['RIGHT-Click']), ns.ch:T(L['Open settings']))
 
-    tooltip:AddDoubleLine(ns.ch:S(L['SHIFT-RIGHT-Click']), ns.ch:T(L['Open minimap settings dialog']))
+    tooltip:AddDoubleLine(ns.ch:S(L['SHIFT-RIGHT-Click']), ns.ch:T(L['Open minimap settings']))
     tooltip:AddLine(' ')
     tooltip:AddLine(commandLines)
     local cmdLine = ns.sformat("/%s or /%s", C.CONSOLE_COMMAND_NAME, C.CONSOLE_COMMAND_SHORT)
     local cmdLineCfg = ns.sformat("/%s config", C.CONSOLE_COMMAND_SHORT)
     tooltip:AddDoubleLine(ns.ch:S(cmdLine), ns.ch:T(L['View available commands']))
-    tooltip:AddDoubleLine(ns.ch:S(cmdLineCfg), ns.ch:T(L['Open settings dialog']))
+    tooltip:AddDoubleLine(ns.ch:S(cmdLineCfg), ns.ch:T(L['Open settings']))
 
     if inSync then return end
 
