@@ -20,6 +20,7 @@ local addon
 local ns
 addon, ns = ...
 local kch = ns.Kapresoft_LibUtil.CH
+local fVersion = ns:K():cf(BLUE_FONT_COLOR)
 
 local addonShortName = 'AddonSuite'
 local addonFriendlyName = 'Addon Suite'
@@ -173,6 +174,7 @@ local function Methods(o)
         return o.AddonUtil
     end
 
+    function o:GetAddOnTitle() return self.C.FRIENDLY_NAME .. fVersion(' v' .. self:GetAddonInfo()) end
 
     ---#### Example
     ---```

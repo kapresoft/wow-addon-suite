@@ -67,7 +67,7 @@ function o:CreateOptions()
     self.order = order
     --- @type AceConfigOption
     local options = {
-        name = GC.C.FRIENDLY_NAME,
+        name = GC:GetAddOnTitle(),
         handler = self,
         type = "group",
         args = {
