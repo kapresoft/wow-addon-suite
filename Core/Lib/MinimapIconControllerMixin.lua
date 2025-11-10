@@ -21,7 +21,7 @@ Local Vars
 -------------------------------------------------------------------------------]]
 --- @type Namespace
 local ns = select(2, ...)
-local O, MSG, C = ns.O, ns.GC.M, ns.GC.C
+local O, MSG, C, GC = ns.O, ns.GC.M, ns.GC.C, ns.GC
 
 local LibDBIcon = ns:LibDBIcon()
 local LibDataBroker = ns:LibDataBroker()
