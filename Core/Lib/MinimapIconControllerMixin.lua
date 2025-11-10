@@ -69,7 +69,7 @@ local function IsConfirmReload() return minimap().confirm_reloads == true end
 
 --- This local function is dynamic and needs to be here
 local function GetConfirmReloadText()
-    local confirmationText = ns.ch:T('Currently configured to load %s confirmation')
+    local confirmationText = ns.ch:T(L['Currently configured to load %s confirmation'])
     local without      = L['without']
     local with         = L['with']
 
@@ -198,7 +198,7 @@ local function OnTooltipShow(self, tooltip)
     --@do-not-package@
     if ns:IsDev() then
         tooltip:AddDoubleLine(ORANGE_THREAT_COLOR:WrapTextInColorCode('SHIFT-LEFT-Click'),
-                              ns.ch:T('Open Debugging Dialog'))
+                              ns.ch:T(L['Open Debugging Dialog']))
     end
     --@end-do-not-package@
     tooltip:AddDoubleLine(ns.ch:S(L['LEFT-Click']), ns.ch:T(L['View or switch profiles']))
