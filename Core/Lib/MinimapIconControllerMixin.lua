@@ -181,7 +181,7 @@ local function OnTooltipShow(self, tooltip)
     local currentProfileText, currentProfile = CurrentProfileText(inSync)
     local confirmationLine = GetConfirmReloadText()
 
-    local header1 = ns.sformat('%s %s', iconText, ns.ch:P(ns.GC.C.FRIENDLY_NAME))
+    local header1 = ns.sformat('%s %s', iconText, GC:GetAddOnTitle())
     local header3 = ns.sformat('%s: %s', currentProfileText, currentProfile)
 
     tooltip:AddDoubleLine(header1, header3)

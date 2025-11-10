@@ -198,9 +198,6 @@ function o:CreateAddOnsOptions()
 
     --- @type table<string, AceConfigOption>
     local options = {
-        labelVersion = ACU:CreateLabelByName(versionLabel, {
-            order = order:next(),
-        }), spacer1a  = ACU:CreateSpacer(order:next()),
         showInQuickProfileSwitchMenu = ACU:CreateGlobalOption('Add to Favorite', {
             order = order:next(), type = "toggle", width = 'normal',
             get   = util:QuickProfileMenuGet(),
