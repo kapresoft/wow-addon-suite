@@ -94,11 +94,11 @@ L['Hide Minimap Icon TitanPanel']       = 'Hide Minimap Icon When Added to Titan
 L['Hide Minimap Icon TitanPanel::Desc'] = 'Toggles the visibility of the addon\'s minimap icon when added to a TitanPanel, hiding it from view when enabled.'
 
 L['View or switch profiles']      = true
-L['Open minimap settings dialog'] = true
+L['Open minimap settings'] = true
 L['View available commands']      = true
-L['Open settings dialog']         = true
+L['Open settings']                = true
 L['Command Lines']                = true
-L['Currently configured to load %s confirmation'] = true
+L['Currently set to switch profiles %s a confirmation prompt.'] = true
 
 L['Add to Favorite']              = true
 L['Add to Favorite::Desc']        = "Enable this option to display the current profile in the minimap profile switch menu accessible with a LEFT-click, allowing for easy access. Disable to hide the profile from the menu."
@@ -127,7 +127,7 @@ L['SHIFT-RIGHT-Click']          = true
 L['Profile Sync Status Indicator']       = true
 L['Profile Sync Status Indicator::Desc'] = 'Enable this option to use |cfdE64750color|r coding on the minimap icon, visually indicating when your profile is synced or needs an update. This provides a quick and easy way to check your profile\'s status at a glance.'
 
-L['Open Debugging Dialog'] = true
+L['Open debug settings'] = true
 
 L['Enabled (After Reload)']  = true
 L['Disabled (After Reload)'] = true
