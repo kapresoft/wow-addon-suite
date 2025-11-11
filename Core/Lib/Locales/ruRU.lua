@@ -20,7 +20,7 @@ Namespace
 local ns = select(2, ...)
 local addonName = ns.addon
 
-local L = LibStub("AceLocale-3.0"):NewLocale(addonName, "ruRU");
+local L = LibStub("AceLocale-3.0"):NewLocale(addonName, "ruRU"); if not L then return end
 
 ns.locale.greenIndicator   = '|TInterface\\Common\\Indicator-Green:16:16:0:-1|t'
 ns.locale.checkMark        = '|TInterface\\Buttons\\UI-CheckBox-Check:21:21:0:-1|t'
