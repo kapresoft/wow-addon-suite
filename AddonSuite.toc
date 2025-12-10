@@ -2,13 +2,25 @@
 ## Version: @project-version@
 ## Title: Addon|cffFF863FSuite|r Retail
 ## Notes: Addon Suite Addon Manager. Because Even Your Addons Need an Overlord. The Only Suite Where Every Guest (Addon) Behaves.
+
 ## Author: Antonio W. Lagnada (kapresoft@gmail.com)
 ## DefaultState: enabled
 ## SavedVariables: ADDON_SUITE_DB, ADDON_SUITE_LOG_LEVEL, ADDON_SUITE_DEBUG_MODE, ADDON_SUITE_DEBUG_ENABLED_CATEGORIES
 ## SavedVariablesPerCharacter: ADDON_SUITE_CHARACTER_DB
 ## IconTexture: Interface/AddOns/AddonSuite/Core/Assets/addon-icon.tga
 ## OptionalDeps: Ace3
+
 ## Category-enUS: AddOn Managers
+## Category-deDE: AddOn-Verwaltung
+## Category-esES: Gestores de AddOns
+## Category-esMX: Gestores de AddOns
+## Category-frFR: Gestionnaires d’AddOns
+## Category-itIT: Gestori di AddOn
+## Category-koKR: 애드온 관리자
+## Category-ptBR: Gerenciadores de AddOns
+## Category-ruRU: Менеджеры аддонов
+## Category-zhCN: 插件管理器
+## Category-zhTW: 插件管理器
 
 ## X-Credits: Antonio W. Lagnada (kapresoft@gmail.com)
 ## X-Category: General
