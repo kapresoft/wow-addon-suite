@@ -1,12 +1,13 @@
-## Interface: 30403
+## Interface: 20505
 ## Version: @project-version@
-## Title: |TInterface/Addons/AddonSuite/Core/Assets/addon-icon.tga:18:18|t Addon|cffFF863FSuite|r WOTLK
-## Notes: Addon Suite Addon Manager. Because Even Your Addons Need an Overlord. The Only Suite Where Every Guest (Addon) Behaves.
+## Title: Addon|cffFF863FSuite|r TBC
+## Notes: Addon Suite Addon Manager. Because Even Your Addons Need an Overlord. The Only Suite Where Every Guest (Addon) Behaves. |cff1784d1This addon is provided 'as is' without any warranties. All rights reserved. Redistribution or modification is not permitted.|r
 
 ## Author: Antonio W. Lagnada (kapresoft@gmail.com)
 ## DefaultState: enabled
 ## SavedVariables: ADDON_SUITE_DB, ADDON_SUITE_LOG_LEVEL, ADDON_SUITE_DEBUG_MODE, ADDON_SUITE_DEBUG_ENABLED_CATEGORIES
 ## SavedVariablesPerCharacter: ADDON_SUITE_CHARACTER_DB
+## IconTexture: Interface/AddOns/AddonSuite/Core/Assets/addon-icon.tga
 ## OptionalDeps: Ace3
 
 ## Category-enUS: AddOn Managers
@@ -22,11 +23,11 @@
 ## Category-zhTW: 插件管理器
 
 ## X-Credits: Antonio W. Lagnada (kapresoft@gmail.com)
-## X-Category: AddOn Managers
+## X-Category: General
 ## X-License: All Rights Reserved. |cff1784d1This addon is provided 'as is' without any warranties. Redistribution or modification is not permitted.|r
 
 ## X-Github-Repo: https://github.com/kapresoft/wow-addon-suite
-## X-Github-Issues: https://github.com/kapresoft/wow-addon-suite
+## X-Github-Issues: https://github.com/kapresoft/wow-addon-suite/issues
 ## X-CurseForge: https://www.curseforge.com/wow/addons/addon-suite
 ## X-Curse-Project-ID: 785236
 ## X-Github-Project-Author: @project-author@
@@ -37,5 +38,5 @@
 # To get the Interface/Build Info
 # /dump select(4, GetBuildInfo())
 
-Core\Wrath.lua
+Core\Retail.lua
 Core\_Core.xml
