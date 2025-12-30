@@ -37,8 +37,8 @@ function o:CreateDebuggingGroup()
         type = 'group',
         name = L['Debugging'],
         desc = L['Debugging::Desc'],
-        -- Place right before Profiles
-        order = 101, -- so it is after Profiles
+        -- Profiles is 1000, this will place before profiles
+        order = 999,
 
         args = {
             log_level = {
