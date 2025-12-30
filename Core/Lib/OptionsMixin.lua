@@ -82,6 +82,7 @@ function o:InitOptions()
     local options = self:CreateOptions()
     -- This creates the Profiles Tab/Section in Settings UI
     options.args.profiles = AceDBOptions:GetOptionsTable(ns:db())
+    options.args.profiles.order = 1000
     AceConfig:RegisterOptionsTable(ns.name, options, { GC.C.CONSOLE_COMMAND_OPTIONS })
     if API:GetUIScale() > 1.0 then return end
 

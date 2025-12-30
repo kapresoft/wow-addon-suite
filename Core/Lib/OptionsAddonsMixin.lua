@@ -175,8 +175,6 @@ end
 
 --- @return AceConfigOption
 function o:CreateAddOnsGroup()
-    self.order = self.order
-
     --- @type AceConfigOption
     local group = {
         type  = 'group',
