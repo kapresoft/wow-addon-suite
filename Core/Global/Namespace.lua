@@ -26,6 +26,8 @@ local M = {
     AddOnStateController = {},
     --- @type API
     API = {},
+    --- @type AceConfigDialogUtil
+    AceConfigDialogUtil = {},
     --- @type DebuggingSettingsGroup
     DebuggingSettingsGroup = {},
     --- @type EventMessagesMixin

@@ -11,13 +11,26 @@ local SyncData = {
 
     --- @type table<string, table<number, AddOnName>>
     items = {
+        ['AtlasLootClassic'] = { 'AtlasLootClassic_Collections', 'AtlasLootClassic_Crafting',
+                                 'AtlasLootClassic_Data', 'AtlasLootClassic_DungeonsAndRaids',
+                                 'AtlasLootClassic_Factions', 'AtlasLootClassic_Options',
+                                 'AtlasLootClassic_PvP' },
         ['BugSack']      = { '!BugGrabber' },
         ['!BugGrabber']  = { 'BugSack' },
         ['VuhDo']        = { 'VuhDoOptions' },
         ['BadBoy']       = { 'BadBoy_Ignore', 'BadBoy_Levels' },
-        ['Bagnon']       = { 'BagBrother', 'Bagnon_Config',
-                             'Bagnon_ItemInfo', 'Bagnon_Scrap' },
+        ['Bagnon']       = { 'BagBrother', 'Bagnon_Config', 'Bagnon_Bank',
+                             'Bagnon_RequiredLevel', 'Bagnon_ItemInfo', 'Bagnon_Scrap' },
+        ['Baganator']    = { 'Syndicator' },
+        ['Capping']      = { 'Capping_Options' },
+        ['Details']      = { 'Details_Compare2', 'Details_DataStorage', 'Details_EncounterDetails',
+                             'Details_RaidCheck', 'Details_Streamer', 'Details_TinyThreat',
+                             'Details_Vanguard' },
+        ['DBM-Core']     = { 'DBM-GUI', 'DBM-VPVEM', 'DBM-StatusBarTimers' },
+        ['GatherMate2']  = { 'GatherMate2Marker'},
+        ['ItemRack']     = { 'ItemRackOptions'},
         ['Scrap']        = { 'Scrap_Config', 'Scrap_Merchant', 'Bagnon_Scrap' },
+        ['ShadowedUnitFrames'] = { 'ShadowedUF_Options'},
         ['TitanClassic'] = { 'TitanVolume', 'TitanXP' },
     }
 }

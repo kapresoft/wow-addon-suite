@@ -14,6 +14,7 @@
         </Scripts>
     </Frame>
 
+    <Script file="AceConfigDialogUtil.lua" />
     <Script file="MainController.lua" />
     <Script file="ConfigDialogController.lua" />
 
