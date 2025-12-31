@@ -38,12 +38,15 @@ ns:OnAddOnStartLoad(function()
     libPrefix = L['Lib:'] .. ' '
 end)
 
+--- @type boolean
+local IsOptionsVisible = false
+
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
 local libName = M.OptionsAddonsMixin()
 
---- @class OptionsAddonsMixin
+--- @class OptionsAddonsMixin : AceEvent
 --- @field optionsMixin OptionsMixin
 local S = ns:NewLibWithEvent(libName)
 local p = ns:LC().OPTIONS:NewLogger(libName)
@@ -336,27 +339,14 @@ end
 
 --- @param name Name The addon name
 function o.GetAddOnNameFn(name)
-    return function()
-        local displayName
-        local co = CoroutineManager:Create(function()
-            displayName = o.GetDisplayName(name)
-            coroutine.yield(displayName)
-        end)
-        coroutine.resume(co)
-        return displayName
-    end
+    return function() return o.GetDisplayName(name) end
 end
 
 --- @param name Name The addon name
 function o.GetAddOnDescFn(name)
     return function()
-        local description
-        local co = CoroutineManager:Create(function()
-            description = o.GetDesc(name)
-            coroutine.yield(description)
-        end)
-        coroutine.resume(co)
-        return description
+        if not IsOptionsVisible then return '' end
+        return o.GetDesc(name)
     end
 end
 
@@ -399,3 +389,12 @@ function o:ForEachToggle(applyFn)
         if option.type == 'toggle' then applyFn(option) end
     end
 end
+
+local AU = ns.O.AceConfigDialogUtil
+AU:OnOpenAndClose(ns.name, function(msgName, appName, container)
+    IsOptionsVisible = true
+    p:vv(function() return 'Handler::%s: IsOptionsVisible=%s', msgName, IsOptionsVisible end)
+end, function(msgName, appName)
+    IsOptionsVisible = false
+    p:vv(function() return 'Handler::%s: IsOptionsVisible=%s', msgName, IsOptionsVisible end)
+end)

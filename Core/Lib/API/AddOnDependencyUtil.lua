@@ -145,14 +145,15 @@ function o:HasDependencies(name) return #self:GetAddOnDependencies(name) > 0 end
 function o:FlushAddOnDependencyDetailsCache() LocalCache:Flush(libName) end
 
 --- @param addOnName Name
---- @return AddOnDependencyDetails
 --- @param useCache boolean defaults to true
+--- @return AddOnDependencyDetails
 function o:GetDependencyDetails(addOnName, useCache)
     useCache = (useCache == nil) or useCache
     --- @type AddOnDependencyDetails
-    local info = self:GetDepsDetail(addOnName); if useCache and info then return info end
+    local info = self:GetDepsDetail(addOnName)
+    if useCache and info then return info end
 
-    return self:GetDependenciesInfoInternal(addOnName, useCache)
+    return self:GetDependenciesInfoInternal(addOnName)
 end
 
 --- @private
