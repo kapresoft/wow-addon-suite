@@ -393,8 +393,8 @@ end
 local AU = ns.O.AceConfigDialogUtil
 AU:OnOpenAndClose(ns.name, function(msgName, appName, container)
     IsOptionsVisible = true
-    p:vv(function() return 'Handler::%s: IsOptionsVisible=%s', msgName, IsOptionsVisible end)
+    p:d(function() return 'Handler::%s: IsOptionsVisible=%s', msgName, IsOptionsVisible end)
 end, function(msgName, appName)
     IsOptionsVisible = false
-    p:vv(function() return 'Handler::%s: IsOptionsVisible=%s', msgName, IsOptionsVisible end)
+    p:d(function() return 'Handler::%s: IsOptionsVisible=%s', msgName, IsOptionsVisible end)
 end)
