@@ -224,6 +224,16 @@ function o:RegisterCallbacks()
     --- @param evt string
     --- @param source string The source Event
     --- @param newProfileKey string
+    self:RegisterMessage(MSG.OnProfileCreated, function(evt, source, newProfileKey)
+        pm:f3(function()
+            return 'MSG:R:%s received from[%s]. newProfileKey=%s', evt, source, newProfileKey end)
+        ns:db().char.showInQuickProfileMenu[newProfileKey] = true
+    end)
+
+    --- Use "self" to register here so we have visibility to the instance
+    --- @param evt string
+    --- @param source string The source Event
+    --- @param newProfileKey string
     self:RegisterMessage(MSG.OnProfileChanged, function(evt, source, newProfileKey)
         pm:f3(function()
             return 'MSG:R:%s received from[%s]. newProfileKey=%s', evt, source, newProfileKey end)
