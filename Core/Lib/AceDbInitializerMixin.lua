@@ -26,6 +26,10 @@ Methods
 -------------------------------------------------------------------------------]]
 --- @param a AddonSuite
 local function AddonCallbackMethods(a)
+    function a:OnNewProfile(evt, db, profileKey)
+        p:d('OnNewProfile called...')
+        AceEvent:SendMessage(MSG.OnProfileCreated, libName, profileKey)
+    end
     function a:OnProfileChanged(evt, db, profileKey)
         p:d('OnProfileChanged called...')
         AceEvent:SendMessage(MSG.OnProfileChanged, libName, profileKey)
@@ -40,6 +44,12 @@ local function AddonCallbackMethods(a)
     function a:OnProfileReset()
         p:d('OnProfileReset called...')
     end
+
+    ns:db().RegisterCallback(a, "OnNewProfile", "OnNewProfile")
+    ns:db().RegisterCallback(a, "OnProfileChanged", "OnProfileChanged")
+    ns:db().RegisterCallback(a, "OnProfileCopied", "OnProfileCopied")
+    ns:db().RegisterCallback(a, "OnProfileReset", "OnProfileReset")
+    ns:db().RegisterCallback(a, "OnProfileDeleted", "OnProfileDeleted")
 end
 
 --[[-----------------------------------------------------------------------------
@@ -75,10 +85,6 @@ function o:GetDB() return self.addon.db end
 function o:InitDb()
     p:f1( 'Initialize called...')
     AddonCallbackMethods(self.addon)
-    ns:db().RegisterCallback(self.addon, "OnProfileChanged", "OnProfileChanged")
-    ns:db().RegisterCallback(self.addon, "OnProfileCopied", "OnProfileCopied")
-    ns:db().RegisterCallback(self.addon, "OnProfileReset", "OnProfileReset")
-    ns:db().RegisterCallback(self.addon, "OnProfileDeleted", "OnProfileDeleted")
     self:InitDbDefaults()
 end
 
