@@ -67,6 +67,7 @@ ignore:
   - Core/ExtLib/Kapresoft-LibUtil/LICENSE
   - Core/ExtLib/Kapresoft-LibUtil/dev
   - Core/ExtLib/Kapresoft-LibUtil/doc
+  - Core/ExtLib/Kapresoft-LibUtil/Lib-2-0
   - Core/ExtLib/WowAce/LibQTip/LibQTip-1.0/LibStub
   - Core/ExtLib/WowAce/LibQTip/LibQTip-1.0/LibQTip-1.0.toc
   - Core/ExtLib/WowAce/Ace3/tests
