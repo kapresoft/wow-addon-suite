@@ -7,7 +7,6 @@ local kns = select(2, ...)
 --[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
---- @type LibStub
 local LibStub = LibStub
 local GC, K = kns.GC, kns.Kapresoft_LibUtil
 local KO = K.Objects
@@ -36,7 +35,7 @@ local M = {
     EventToMessageRelay = {},
     --- @type CategoryLoggerMixin
     CategoryLoggerMixin = {},
-    --- @type ConfigDialogController,
+    --- @type ConfigDialogController
     ConfigDialogController = {},
     --- @type MainController
     MainController = {},
@@ -54,17 +53,17 @@ local M = {
     SynchronizedAddOns = {},
 }; KO.LibModule.EnrichModules(M)
 
---- @alias Namespace __Namespace | CategoryLoggerMixin | EventMessagesMixin | Kapresoft_LibUtil_NamespaceAceLibraryMixin
-
 --[[-----------------------------------------------------------------------------
 Type: __Namespace
 -------------------------------------------------------------------------------]]
---- @class __Namespace : CoreNamespace
+--- @class Namespace : CoreNamespace, CategoryLoggerMixin,EventMessagesMixin, Kapresoft_LibUtil_NamespaceAceLibraryMixin
 --- @field DefaultAddOnDatabase AddOn_DB
 --- @field SynchronizedAddOns SynchronizedAddOns
 --- @field GC GlobalConstants
 --- @field locale LocaleInfo
-local ns = kns;
+--- @field LibStub LocalLibStub
+local ns = kns
+
 --- @type Modules
 ns.M = M
 ns.mt = { __tostring = function() return ns.addon .. '::Namespace'  end }
@@ -73,9 +72,8 @@ setmetatable(ns, ns.mt)
 --[[-----------------------------------------------------------------------------
 Namespace Methods
 -------------------------------------------------------------------------------]]
---- @type __Namespace | Namespace
 local o = ns; do
-    ---@param nSpace __Namespace | Namespace
+    ---@param nSpace Namespace
     local function InitLocalLibStub(nSpace)
         --- @class LocalLibStub : Kapresoft_LibUtil_LibStubMixin
         local LocalLibStub = nSpace:K().Objects.LibStubMixin:New(nSpace.name, 1.0, function(name, newLibInstance)
@@ -161,9 +159,10 @@ function o:profile()
 end
 
 --- @return Profile_Global_Config
-function o:global() return self.addonDbFn().global end
+function o:g() return self.addonDbFn()['global'] end
+
 --- @return Minimap
-function o:minimap() return self:global().minimap end
+function o:minimap() return self:g().minimap end
 --- @return LibDataBroker
 function o:LibDataBroker() return LibStub("LibDataBroker-1.1") end
 --- @return LibDBIcon

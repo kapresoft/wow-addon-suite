@@ -322,7 +322,7 @@ function o.OnAddOnStateChanged()
     o:SynchronizeAddOns()
     if o:IsInSync() then return end
 
-    if ns:global().minimap.confirm_reloads == true then
+    if ns:g().minimap.confirm_reloads == true then
         return ShowReloadConfirm()
     end
     o.OnApplyAndRestartNoConfirmation()
@@ -343,7 +343,7 @@ end
 --- The dialog automatically synchronizes the addons. No need ot call SynchronizeAddOns()
 function o.OnHideSettings()
     o:SendMessage(MSG.OnUpdateMinimapIconState, ns.name)
-    if ns:global().sync_addon_states ~= true then return end
+    if ns:g().sync_addon_states ~= true then return end
     o:SynchronizeAddOns(true)
     if o:IsInSync() == true then return end
     return ShowReloadConfirm();
