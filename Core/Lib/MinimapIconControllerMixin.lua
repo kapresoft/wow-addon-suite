@@ -14,7 +14,6 @@ Type: MinimapIconProfilesMenuItem
 --- @field checked boolean
 --- @field func fun() | "function() end" | "A function action handler"
 --- @field _sortKey string The sort key (Custom Field)
---- @type table<number, MinimapIconProfilesMenuItem>
 
 --[[-----------------------------------------------------------------------------
 Local Vars
@@ -63,7 +62,7 @@ local function db()
 end
 
 --- @return Minimap
-local function minimap() return db().global.minimap end
+local function minimap() return ns:g().minimap end
 
 local function IsConfirmReload() return minimap().confirm_reloads == true end
 
@@ -332,7 +331,7 @@ function o:CreateAndRegisterMinimapDataObject()
         OnTooltipShow = function(...) OnTooltipShow(self, ...)  end,
     })
 
-    LibDBIcon:Register(minimapName, dataObject, ns:global().minimap)
+    LibDBIcon:Register(minimapName, dataObject, ns:g().minimap)
     self:RegisterMessage(MSG.OnUpdateMinimapIconState, function() OnUpdateMinimapState(self) end)
     self.dataObject = dataObject
 
