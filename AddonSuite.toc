@@ -1,6 +1,6 @@
-## Interface: 120007
+## Interface: 11509, 20506, 30403, 40402, 50504, 120007
 ## Version: @project-version@
-## Title: Addon|cffFF863FSuite|r Retail
+## Title: Addon|cffFF863FSuite|r
 ## Notes: Addon Suite Addon Manager. Because Even Your Addons Need an Overlord. The Only Suite Where Every Guest (Addon) Behaves.
 
 ## Author: Antonio W. Lagnada (kapresoft@gmail.com)
@@ -38,5 +38,4 @@
 # To get the Interface/Build Info
 # /dump select(4, GetBuildInfo())
 
-Core\Retail.lua
 Core\_Core.xml
