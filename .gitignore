@@ -55,3 +55,5 @@ luac.out
 /Interface
 deployer-config.lua
 .emmyrc.json
+
+AddonSuite/ThirdParty/Libs

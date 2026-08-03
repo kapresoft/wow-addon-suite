@@ -1,0 +1,41 @@
+<!--suppress ALL -->
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+    <Script file="_Core.lua"/>
+
+    <Script file="Global\GlobalConstants.lua"/>
+    <Script file="Global\DefaultAddOnDatabase.lua"/>
+    <Script file="Global\EventMessagesMixin.lua"/>
+    <Script file="Global\NamespaceModules.lua"/>
+    <Script file="Global\Namespace.lua"/>
+
+    <!--@do-not-package@-->
+    <Script file="Developer\DeveloperSetup.lua" />
+    <!--@end-do-not-package@-->
+
+    <Script file="API\AddOnDependencyUtil.lua" />
+    <Script file="API\API.lua" />
+
+    <Script file="Locales\enUS.lua"/>
+    <Script file="Locales\Localization.lua"/>
+
+    <Frame name="AddonSuiteFrame" parentKey="AddonSuite" parent="UIParent" />
+
+    <Script file="Modules\SynchronizedAddOns.lua"/>
+    <Script file="Modules\AceConfigDialogUtil.lua" />
+    <Script file="Modules\MainController.lua" />
+    <Script file="Modules\ConfigDialogController.lua" />
+    <Script file="Modules\AceDbInitializerMixin.lua" />
+    <Script file="Modules\OptionsUtilMixin.lua" />
+    <Script file="Modules\OptionsAddonsMixin.lua" />
+    <Script file="Modules\OptionsMinimapMixin.lua" />
+    <Script file="Modules\MinimapIconControllerMixin.lua" />
+    <Script file="Modules\AddOnStateController.lua" />
+    <Script file="Modules\OptionsMixin.lua" />
+    <!--@do-not-package@-->
+    <Script file="Developer\Developer.lua" />
+    <!--@end-do-not-package@-->
+    <Script file="AddonSuite.lua"/>
+
+</Ui>

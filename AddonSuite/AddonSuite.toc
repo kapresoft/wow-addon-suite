@@ -1,0 +1,44 @@
+## Interface: 11509, 20506, 30403, 40402, 50504, 120007
+## Version: @project-version@
+## Title: Addon|cffFF863FSuite|r
+## Notes: Addon Suite Addon Manager. Because Even Your Addons Need an Overlord. The Only Suite Where Every Guest (Addon) Behaves.
+
+## Author: Antonio W. Lagnada (kapresoft@gmail.com)
+## DefaultState: enabled
+## SavedVariables: ADDON_SUITE_DB, ADDON_SUITE_LOG_LEVEL, ADDON_SUITE_DEBUG_MODE, ADDON_SUITE_DEBUG_ENABLED_CATEGORIES
+## SavedVariablesPerCharacter: ADDON_SUITE_CHARACTER_DB
+
+## IconTexture: Interface/AddOns/AddonSuite/Assets/addon-icon.tga
+
+## OptionalDeps: Ace3, DevSuite
+
+## Category-enUS: AddOn Managers
+## Category-deDE: AddOn-Verwaltung
+## Category-esES: Gestores de AddOns
+## Category-esMX: Gestores de AddOns
+## Category-frFR: Gestionnaires d’AddOns
+## Category-itIT: Gestori di AddOn
+## Category-koKR: 애드온 관리자
+## Category-ptBR: Gerenciadores de AddOns
+## Category-ruRU: Менеджеры аддонов
+## Category-zhCN: 插件管理器
+## Category-zhTW: 插件管理器
+
+## X-Credits: Antonio W. Lagnada (kapresoft@gmail.com)
+## X-Category: General
+## X-License: All Rights Reserved. |cff1784d1This addon is provided 'as is' without any warranties. Redistribution or modification is not permitted.|r
+
+## X-Github-Repo: https://github.com/kapresoft/wow-addon-suite
+## X-Github-Issues: https://github.com/kapresoft/wow-addon-suite/issues
+## X-CurseForge: https://www.curseforge.com/wow/addons/addon-suite
+## X-Curse-Project-ID: 785236
+## X-Github-Project-Author: @project-author@
+## X-Github-Project-Hash: @project-hash@
+## X-Github-Project-Last-Changed-Date: @project-date-iso@
+## X-Github-Project-Version: @project-version@
+
+# To get the Interface/Build Info
+# /dump select(4, GetBuildInfo())
+
+ThirdParty\ThirdParty.xml
+Libs\_Libs.xml
