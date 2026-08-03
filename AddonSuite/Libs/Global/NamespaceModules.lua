@@ -11,6 +11,8 @@ local ModuleUtil = LibStub('Kapresoft-ModuleUtil-2-0')
 local M = {
   --- @type Kapresoft-AceConfigUtil-2-0
   AceConfigUtil = {},
+  --- @type Kapresoft-AddonInfoUtil-2-0
+  AddonInfoUtil = {},
   --- @type Kapresoft-AddonUtil-2-0
   AddonUtil = {},
   --- @type Kapresoft-AceLib-2-0
@@ -40,6 +42,8 @@ local M = {
   EventMessagesMixin = {},
   --- @type EventToMessageRelay
   EventToMessageRelay = {},
+  --- @type Kapresoft-GameVersion-2-0
+  GameVersionMixin = {},
   --- @type ConfigDialogController
   ConfigDialogController = {},
   --- @type MainController
@@ -62,9 +66,12 @@ local M = {
 --[[-----------------------------------------------------------------------------
 ThirdParty References
 -------------------------------------------------------------------------------]]
+ns:Register(M.GameVersionMixin(), LibStub('Kapresoft-GameVersionMixin-2-0'))
 ns:Register(M.AceConfigUtil(), LibStub('Kapresoft-AceConfigUtil-2-0'))
+ns:Register(M.AddonInfoUtil(), LibStub('Kapresoft-AddonInfoUtil-2-0'))
 ns:Register(M.AddonUtil(), LibStub('Kapresoft-AddonUtil-2-0'))
 ns:Register(M.AceLib(), LibStub('Kapresoft-AceLib-2-0'))
 ns:Register(M.String(), LibStub('Kapresoft-String-2-0'))
 ns:Register(M.SequenceMixin(), LibStub('Kapresoft-SequenceMixin-2-0'))
 ns:Register(M.Table(), LibStub('Kapresoft-Table-2-0'))
+ns:Register(M.TimeUtil(), LibStub('Kapresoft-TimeUtil-2-0'))

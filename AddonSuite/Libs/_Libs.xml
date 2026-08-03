@@ -9,11 +9,9 @@
     <Script file="Global\EventMessagesMixin.lua"/>
     <Script file="Global\NamespaceModules.lua"/>
     <Script file="Global\Namespace.lua"/>
-
     <!--@do-not-package@-->
     <Script file="Developer\DeveloperSetup.lua" />
     <!--@end-do-not-package@-->
-
     <Script file="API\AddOnDependencyUtil.lua" />
     <Script file="API\API.lua" />
 

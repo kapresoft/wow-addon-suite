@@ -25,21 +25,17 @@
     <Script file="Libs\LibDBIcon\LibDBIcon-1.0\LibDataBroker-1.1\LibDataBroker-1.1.lua"/>
     <Script file="Libs\LibDBIcon\LibDBIcon-1.0\LibDBIcon-1.0\LibDBIcon-1.0.lua"/>
 
-    <!--<Include file="Libs\Kapresoft-LibUtil\_Lib.xml"/>-->
-    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\AceLib.lua"/>
-    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\AddonUtil.lua"/>
-    <Script file='Libs\Kapresoft-LibUtil\Lib-2-0\Table.lua'/>
+    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\GameVersionMixin.lua"/>
     <Script file='Libs\Kapresoft-LibUtil\Lib-2-0\String.lua'/>
+    <Script file='Libs\Kapresoft-LibUtil\Lib-2-0\Table.lua'/>
+    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\AceLib.lua"/>
+    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\AceConfigUtil.lua"/>
+    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\AddonUtil.lua"/>
+    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\ColorFormatter.lua"/>
+    <Script file='Libs\Kapresoft-LibUtil\Lib-2-0\ModuleUtil.lua'/>
+    <Script file='Libs\Kapresoft-LibUtil\Lib-2-0\TimeUtil.lua'/>
     <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\AddonInfoUtil.lua"/>
     <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\ConsoleHelperMixin.lua"/>
     <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\SequenceMixin.lua"/>
-
-    <!--
-    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\ColorFormatter.lua"/>
-    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\GameVersionMixin.lua"/>
-    <Script file='Libs\Kapresoft-LibUtil\Lib-2-0\AceLocaleUtil.lua'/>
-    <Script file='Libs\Kapresoft-LibUtil\Lib-2-0\ModuleUtil.lua'/>
-    -->
-
 
 </Ui>
