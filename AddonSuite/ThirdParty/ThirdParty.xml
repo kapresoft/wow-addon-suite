@@ -1,0 +1,45 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+    <!--@do-not-package@-->
+    <!--
+    #########################################################
+    Dependencies: LibStub - All Libraries
+    For Development:
+    Install Ace3 AddOn from CurseForge for CPU/Mem isolation
+    Libraries Embedded On Release
+      - Ace3
+    #########################################################
+    --><!--@end-do-not-package@-->
+
+    <Script file="Libs\Ace3\LibStub\LibStub.lua"/>
+    <Script file="Libs\Ace3\CallbackHandler-1.0\CallbackHandler-1.0.lua"/>
+
+    <Include file='LibPrettyPrint.xml'/>
+
+    <!--@non-debug@
+    <Include file="Ace3.xml"/>
+    @end-non-debug@-->
+
+    <!-- Libraries for Minimap Icon -->
+    <Script file="Libs\LibDBIcon\LibDBIcon-1.0\LibDataBroker-1.1\LibDataBroker-1.1.lua"/>
+    <Script file="Libs\LibDBIcon\LibDBIcon-1.0\LibDBIcon-1.0\LibDBIcon-1.0.lua"/>
+
+    <!--<Include file="Libs\Kapresoft-LibUtil\_Lib.xml"/>-->
+    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\AceLib.lua"/>
+    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\AddonUtil.lua"/>
+    <Script file='Libs\Kapresoft-LibUtil\Lib-2-0\Table.lua'/>
+    <Script file='Libs\Kapresoft-LibUtil\Lib-2-0\String.lua'/>
+    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\AddonInfoUtil.lua"/>
+    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\ConsoleHelperMixin.lua"/>
+    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\SequenceMixin.lua"/>
+
+    <!--
+    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\ColorFormatter.lua"/>
+    <Script file="Libs\Kapresoft-LibUtil\Lib-2-0\GameVersionMixin.lua"/>
+    <Script file='Libs\Kapresoft-LibUtil\Lib-2-0\AceLocaleUtil.lua'/>
+    <Script file='Libs\Kapresoft-LibUtil\Lib-2-0\ModuleUtil.lua'/>
+    -->
+
+
+</Ui>
