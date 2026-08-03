@@ -59,10 +59,7 @@ end
 --[[-----------------------------------------------------------------------------
 Mixins
 -------------------------------------------------------------------------------]]
-
---EventMessagesMixin:Mixin(ns)
-local GVM = LibStub('Kapresoft-GameVersionMixin-2-0')
-local AceLib = LibStub('Kapresoft-AceLib-2-0')
+local GVM, AceLib = ns.O.GameVersionMixin, ns.O.AceLib
 Mixin(ns, GVM, EventMessagesMixin, AceLib)
 
 --[[-----------------------------------------------------------------------------
@@ -74,8 +71,7 @@ local AddonInfoUtil
 --- @return Kapresoft-AddonInfoUtil-2-0
 function ns:AIU()
   if AddonInfoUtil then return AddonInfoUtil end
-  local lib = LibStub('Kapresoft-AddonInfoUtil-2-0')
-  AddonInfoUtil = lib:New(self.addon, self.colorDef, self:IsDev())
+  AddonInfoUtil = self.O.AddonInfoUtil:New(self.addon, self.colorDef, self:IsDev())
   return AddonInfoUtil
 end
 

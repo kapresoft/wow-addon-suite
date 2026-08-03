@@ -15,70 +15,61 @@ embedded-libraries:
 tools-used:
   - DevSuite
   - DebugChatFrame
-  - Addon-Usage
   - Bugsack
   - Bug-Grabber
 
-# Declaring the following dependencies will make curse forge app install these 3rd-party
-# libraries. Need to figure out which is best (embedded or external).
-# in code, check for each of library global var before using
-#optional-dependencies:
-#  - ace3
-#  - libstub
-#  - callbackhandler
-#  - libsharedmedia-3-0
-
-# Files and directories beginning with a dot (such as .git) are automatically ignored, as is the pgkmeta file itself.
-#ignore:
-#  - .git
-#  - .idea
-
-# Resources:
-#  - https://github.com/wowace-mirror
-#  - https://www.wowace.com/projects/ace3
-#  - SVN URLs are still the primary source recommendation
 externals:
-  #  todo: needs refactor: AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil
-  Core/ExtLib/Kapresoft-LibUtil:
-    url: https://github.com/kapresoft/wow-lib-util
-    tag: latest
-  # Sourcing Ace3 addon directly from github
-  # LibStub is included in Ace3 add
-  Core/ExtLib/WowAce/Ace3:
-    url: https://repos.wowace.com/wow/ace3/trunk
-    tag: latest
-  Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0:
-    url: https://repos.wowace.com/wow/libdbicon-1-0/trunk
-    tag: latest
+  AddonSuite/ThirdParty/Libs/LibPrettyPrint: https://github.com/kapresoft/wow-addon-LibPrettyPrint
+  AddonSuite/ThirdParty/Libs/Ace3: https://github.com/WoWUIDev/Ace3
+  AddonSuite/ThirdParty/Libs/LibDBIcon/LibDBIcon-1.0: https://repos.wowace.com/wow/libdbicon-1-0/trunk
+  AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil: https://github.com/kapresoft/wow-lib-util
 
 ignore:
   - "*.sh"
   - "*.md"
   - "*.yaml"
   - "*.yml"
+  - "*.toml"
   - dev
   - doc
   - scripts
-  - Core/ThirdParty/Libs/Kapresoft-LibUtil/dev
-  - Core/ThirdParty/Libs/Kapresoft-LibUtil/External
-  - Core/ThirdParty/Libs/Kapresoft-LibUtil/Lib
-  - Core/ThirdParty/Libs/Kapresoft-LibUtil/_Lib.xml
-  - Core/ThirdParty/Libs/Kapresoft-LibUtil/*.toc
-  - Core/ExtLib/WowAce/LibQTip/LibQTip-1.0/LibStub
-  - Core/ExtLib/WowAce/LibQTip/LibQTip-1.0/LibQTip-1.0.toc
-  - Core/ExtLib/WowAce/Ace3/tests
-  - Core/ExtLib/WowAce/Ace3/Ace3.lua
-  - Core/ExtLib/WowAce/Ace3/Ace3.toc
-  - Core/ExtLib/WowAce/Ace3/Ace3_TBC.toc
-  - Core/ExtLib/WowAce/Ace3/Ace3_Vanilla.toc
-  - Core/ExtLib/WowAce/Ace3/Ace3_Wrath.toc
-  - Core/ExtLib/WowAce/Ace3/Bindings.xml
-  - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/LibDBIcon-1.0/lib.xml
-  - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/LibDBIcon-1.0.toc
-  - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/LibDBIcon-1.0_TBC.toc
-  - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/LibDBIcon-1.0_Vanilla.toc
-  - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/LibDBIcon-1.0_Wrath.toc
-  - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/LibStub
-  - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/CallbackHandler-1.0
-  - Core/ExtLib/WowAce/LibDBIcon/LibDBIcon-1.0/embeds.xml
-  - Core/Lib/Developer
+  - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/*.toc
+  - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/dev
+  - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/External
+  - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/Lib
+  - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/_Lib.xml
+  - AddonSuite/ThirdParty/Libs/Ace3/Ace3.lua
+  - AddonSuite/ThirdParty/Libs/Ace3/Bindings.xml
+  - AddonSuite/ThirdParty/Libs/Ace3/changelog.txt
+  - AddonSuite/ThirdParty/Libs/Ace3/LICENSE.txt
+  - AddonSuite/ThirdParty/Libs/Ace3/*.toc
+  - AddonSuite/ThirdParty/Libs/LibDBIcon/LibDBIcon-1.0/embeds.xml
+  - AddonSuite/ThirdParty/Libs/LibDBIcon/LibDBIcon-1.0/LibDBIcon-1.0/lib.xml
+  - AddonSuite/ThirdParty/Libs/LibDBIcon/LibDBIcon-1.0/CallbackHandler-1.0
+  - AddonSuite/ThirdParty/Libs/LibDBIcon/LibDBIcon-1.0/LibStub
+  - AddonSuite/ThirdParty/Libs/LibPrettyPrint/LICENSE
+  - AddonSuite/ThirdParty/Libs/LibPrettyPrint/*.toc
+  - AddonSuite/ThirdParty/Libs/LibPrettyPrint/dev
+  - AddonSuite/ThirdParty/Libs/LibPrettyPrint/doc
+  - AddonSuite/ThirdParty/Libs/LibPrettyPrint/Assets
+  - AddonSuite/ThirdParty/Libs/LibPrettyPrint/ThirdParty
+  - AddonSuite/ThirdParty/Libs/LibPrettyPrint/LibPrettyPrint.xml
+  - AddonSuite/ThirdParty/Libs/LibPrettyPrint/Libs/Developer/*.xml
+  - AddonSuite/ThirdParty/Libs/LibPrettyPrint/Libs/Developer/Developer*.lua
+
+# REQUIRED for CurseForge packager (non-obvious):
+# The LEFT side MUST be <repo-folder>/<addon-folder>
+#   - <addon-folder> MUST be the folder that contains the .toc files
+# The RIGHT side MUST be the addon name:
+#   - Must match the .toc filename (AddonName.toc)
+#   - Must match `package-as`
+#
+# NOTE:
+# CurseForge release.sh (poorly) relies on `move-folders` for *addon discovery*,
+# not just post-processing. If this does not exactly match
+# <repo>/<addon>, `toc_root_paths` will be empty and packaging WILL fail.
+#
+# ⚠️ Do not change unless you also change the repo/addon layout.
+move-folders:
+  AddonSuite/AddonSuite: AddonSuite
+  

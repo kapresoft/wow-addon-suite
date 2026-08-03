@@ -28,6 +28,7 @@ local LibDataBroker = ns:LibDataBroker()
 local L = ns:GetLocale()
 local minimapName = ns.addon
 local libName = ns.M.MinimapIconControllerMixin()
+local EqualsIgnoreCase = ns.O.String.EqualsIgnoreCase
 
 local cache = { db = nil }
 
@@ -236,7 +237,7 @@ local function Hook_TitanPanelButton_OnShow(self)
   ---@param frame Frame
   hooksecurefunc('TitanPanelButton_OnShow', function(frame)
     local name, buttonName = frame:GetName(), ns.sformat('TitanPanel%sButton', minimapName)
-    if not ns:KO().String.EqualsIgnoreCase(name, buttonName) then return end
+    if not EqualsIgnoreCase(name, buttonName) then return end
 
     frame:SetScript('OnHide', function() OnTitanPanelHide(self) end)
 

@@ -10,9 +10,9 @@ Local Vars
 local ns = select(2, ...)
 
 local O, MSG, API = ns.O, ns.GC.M, ns.O.API
-local AU = LibStub('Kapresoft-AddonUtil-2-0')
+local AU = ns.O.AddonUtil
 local L = ns:GetLocale()
-local String = LibStub('Kapresoft-String-2-0')
+local String = ns.O.String
 local IsAnyOf = String.IsAnyOf
 local DEV_RELOAD_CONFIRM_DLG = 'DEV_RELOAD_CONFIRM'
 

@@ -38,11 +38,11 @@ local CHM = LibStub('Kapresoft-ConsoleHelperMixin-2-0')
 --- @type Kapresoft-ConsoleHelperMixin-2-0
 local ch = CreateAndInitFromMixin(CHM, colorDef); ns.ch = ch
 
-ns.O.TimeUtil = LibStub('Kapresoft-TimeUtil-2-0')
+local TimeUtil = LibStub('Kapresoft-TimeUtil-2-0')
 
 --- Get the timestamp
 --- @return (string|osdate)?
-function ns:ts() return ('[%s]'):format(ns.O.TimeUtil:NowInHoursMinSeconds()) end
+function ns:ts() return ('[%s]'):format(TimeUtil:NowInHoursMinSeconds()) end
 
 --- Register a Namespace Module
 --- @generic T
