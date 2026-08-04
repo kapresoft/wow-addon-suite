@@ -169,10 +169,10 @@ jobs:
           retention-days: ${{ env.artifact_retentionDays }}
       ## ------------------------------------------------ ##
       - name: Upload Build Artifact Checksum File
-        if: ${{ env.uploadBuildArtifacts == 'true' }}
+        if: ${{ env.uploadBuildArtifacts == 'XXtrue' }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env. buildArtifactChecksumFilename }}
+          name: ${{ env.buildArtifactChecksumFilename }}
           path: ${{ env.buildArtifactChecksumFile }}
           retention-days: ${{ env.artifact_retentionDays }}
       ## ------------------------------------------------ ##
@@ -188,7 +188,7 @@ jobs:
           asset_content_type: application/zip
       ## ------------------------------------------------ ##
       - name: Upload Release Artifact Checksum File
-        if: ${{ env.createDraftRelease == 'true' }}
+        if: ${{ env.createDraftRelease == 'XXtrue' }}
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
