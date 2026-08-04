@@ -6,6 +6,11 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      uploadCurseForge:
+        description: 'Upload to CurseForge'
+        default: false
+        type: boolean
 
 env:
   addonName: AddonSuite
@@ -15,6 +20,7 @@ env:
   artifact_retentionDays: 7
   releaseDir: ./.release
   refName: ${{ github.ref_name }}
+  uploadCurseForge: true
 
 jobs:
   build:
@@ -30,11 +36,16 @@ jobs:
       ## ------------------------------------------------ ##
       ## See: https://github.com/actions/github-script
       - name: "Set Env Variable: GITHUB_SHA_SHORT"
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const sha = context.sha.substring(0, 7)
             core.exportVariable('GITHUB_SHA_SHORT', sha)
+      ## ------------------------------------------------ ##
+      - name: "Set ENV for manual triggers (workflow_dispatch)"
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          echo uploadCurseForge="${{ inputs.uploadCurseForge }}" >> $GITHUB_ENV
       ## ------------------------------------------------ ##
       - name: "Set ENV Var Option to Skip Uploads on Branch Builds and refName"
         if: ${{ github.ref_type == 'branch' }}
@@ -46,7 +57,7 @@ jobs:
         run: |
           echo buildBasePath="${releaseDir}/${addonName}" >> $GITHUB_ENV
           echo buildArtifactFilename="${addonName}-${refName}.zip"  >> $GITHUB_ENV
-          echo buildArtifactChecksumFilename="${addonName}-${refName}.zip.md5sum"  >> $GITHUB_ENV
+          echo buildArtifactChecksumFilename="${addonName}-${refName}.zip.sha256sum"  >> $GITHUB_ENV
       ## ------------------------------------------------ ##
       - name: "Set ENV Variable: buildArtifact"
         run: |
@@ -56,6 +67,7 @@ jobs:
       - name: Print Environment Variables
         run: |
           echo HOME=${HOME}
+          echo uploadCurseForge=${uploadCurseForge}
           echo createDraftRelease=${createDraftRelease}
           echo releaseDir=${releaseDir}
           echo refName=${refName}
@@ -71,15 +83,20 @@ jobs:
           echo "All ENV Vars:"
           echo "$(env|sort)"
       ## ------------------------------------------------ ##
+      - name: "Set ENV Variable: Upload to CurseForge"
+        if: ${{ env.uploadCurseForge != 'false' }}
+        run: |
+          echo curseForgeUploadArg="-p ${curseForgeProjectId}" >> $GITHUB_ENV
+      ## ------------------------------------------------ ##
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       ## ------------------------------------------------ ##
       ## see: https://github.com/marketplace/actions/wow-packager
       - uses: BigWigsMods/packager@v2
         env:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
         with:
-          args: -r ${releaseDir} -p ${curseForgeProjectId} ${packagerOptions}
+          args: -r ${releaseDir} ${curseForgeUploadArg} ${packagerOptions}
       ## ------------------------------------------------ ##
       - name: "Verify Build Artifact Exists: ${{ env.buildArtifact }}"
         uses: andstor/file-existence-action@v3
@@ -90,12 +107,12 @@ jobs:
       - name: "Verify: Supporting Scripts Exists"
         uses: andstor/file-existence-action@v3
         with:
-          files: "./dev/md5sum.sh"
+          files: "./dev/sha256.sh"
           fail: true
       ## ------------------------------------------------ ##
       - name: "Setup Build Scripts"
         run: |
-          chmod a+x ./dev/md5sum.sh
+          chmod a+x ./dev/sha256.sh
       ## ------------------------------------------------ ##
       ## Show Directory contents
       - name: "Setup Build Scripts"
@@ -110,7 +127,7 @@ jobs:
       ## ------------------------------------------------ ##
       - name: Check Vars
         run: |
-          echo buildArtifactChecksum="$(./dev/md5sum.sh $buildArtifact)" >> $GITHUB_ENV
+          echo buildArtifactChecksum="$(./dev/sha256.sh $buildArtifact)" >> $GITHUB_ENV
           echo "buildArtifact is $buildArtifact"
           echo "buildArtifactChecksum is $buildArtifactChecksum"
       - name: Create checksum file
@@ -139,13 +156,13 @@ jobs:
             <br><br>
             #### ${{ env.buildArtifactFilename }}
             ```text
-            MD5 ${{ env.buildArtifactChecksum }}
+            sha256:${{ env.buildArtifactChecksum }}
             ```
       ## ------------------------------------------------ ##
       ## https://github.com/actions/upload-artifact
       - name: Upload Build Artifact File
         if: ${{ env.uploadBuildArtifacts == 'true' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.buildArtifactFilename }}
           path: ${{ env.buildArtifact }}
