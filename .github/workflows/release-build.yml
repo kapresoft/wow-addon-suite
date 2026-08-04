@@ -57,12 +57,10 @@ jobs:
         run: |
           echo buildBasePath="${releaseDir}/${addonName}" >> $GITHUB_ENV
           echo buildArtifactFilename="${addonName}-${refName}.zip"  >> $GITHUB_ENV
-          echo buildArtifactChecksumFilename="${addonName}-${refName}.zip.sha256sum"  >> $GITHUB_ENV
       ## ------------------------------------------------ ##
       - name: "Set ENV Variable: buildArtifact"
         run: |
           echo buildArtifact="${releaseDir}/${buildArtifactFilename}" >> $GITHUB_ENV
-          echo buildArtifactChecksumFile="${releaseDir}/${buildArtifactChecksumFilename}" >> $GITHUB_ENV
       ## ------------------------------------------------ ##
       - name: Print Environment Variables
         run: |
@@ -74,10 +72,8 @@ jobs:
           echo packagerOptions=${packagerOptions}
           echo addonName=${addonName}
           echo buildArtifact=${buildArtifact}
-          echo buildArtifactChecksumFile=${buildArtifactChecksumFile}
           echo buildBasePath=${buildBasePath}
           echo buildArtifactFilename=${buildArtifactFilename}
-          echo buildArtifactChecksumFilename=${buildArtifactChecksumFilename}
           echo artifact_retentionDays=${{ env.artifact_retentionDays }}
           echo "------------------------"
           echo "All ENV Vars:"
@@ -130,14 +126,10 @@ jobs:
           echo buildArtifactChecksum="$(./dev/sha256.sh $buildArtifact)" >> $GITHUB_ENV
           echo "buildArtifact is $buildArtifact"
           echo "buildArtifactChecksum is $buildArtifactChecksum"
-      - name: Create checksum file
-        run: |
-          echo "$buildArtifactChecksum" >> $buildArtifactChecksumFile
       ## ------------------------------------------------ ##
       - name: Notices
         run: |
           echo -e "::notice::HOME=${HOME}\n::notice::buildArtifact=${buildArtifact}"
-          echo "::notice::buildArtifactChecksumFile=${buildArtifactChecksumFile}"
           echo "::notice::buildArtifact=${buildArtifact} Checksum=${buildArtifactChecksum}"
 
       - name: Create a draft release
@@ -159,23 +151,6 @@ jobs:
             sha256:${{ env.buildArtifactChecksum }}
             ```
       ## ------------------------------------------------ ##
-      ## https://github.com/actions/upload-artifact
-      - name: Upload Build Artifact File
-        if: ${{ env.uploadBuildArtifacts == 'true' }}
-        uses: actions/upload-artifact@v7
-        with:
-          name: ${{ env.buildArtifactFilename }}
-          path: ${{ env.buildArtifact }}
-          retention-days: ${{ env.artifact_retentionDays }}
-      ## ------------------------------------------------ ##
-      - name: Upload Build Artifact Checksum File
-        if: ${{ env.uploadBuildArtifacts == 'XXtrue' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.buildArtifactChecksumFilename }}
-          path: ${{ env.buildArtifactChecksumFile }}
-          retention-days: ${{ env.artifact_retentionDays }}
-      ## ------------------------------------------------ ##
       - name: Upload Release Artifact
         if: ${{ env.createDraftRelease == 'true' }}
         uses: actions/upload-release-asset@v1
@@ -186,14 +161,4 @@ jobs:
           asset_path: ${{ env.buildArtifact }}
           asset_name: ${{ env.buildArtifactFilename }}
           asset_content_type: application/zip
-      ## ------------------------------------------------ ##
-      - name: Upload Release Artifact Checksum File
-        if: ${{ env.createDraftRelease == 'XXtrue' }}
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_draft_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ${{ env.buildArtifactChecksumFile }}
-          asset_name: ${{ env.buildArtifactChecksumFilename }}
-          asset_content_type: plain/text
+
