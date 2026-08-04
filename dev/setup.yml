@@ -30,9 +30,11 @@ ignore:
   - dev
   - doc
   - ThirdParty-Libs/Kapresoft-LibUtil/dev
-  - ThirdParty-Libs/Kapresoft-LibUtil/External
-  - ThirdParty-Libs/Kapresoft-LibUtil/Lib
-  - ThirdParty-Libs/Kapresoft-LibUtil/_Lib.xml
+  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-1-0
+  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-2-0/Assets
+  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-2-0/ThirdParty
+  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-2-0/LibUtil.lua
+  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-2-0/LibUtil.xml
   - ThirdParty-Libs/Ace3/LibStub/tests
   - ThirdParty-Libs/Ace3/CallbackHandler-1.0/CallbackHandler-1.0.xml
   - ThirdParty-Libs/Ace3/Ace3.lua
