@@ -10,6 +10,7 @@ manual-changelog:
 embedded-libraries:
   - LibStub
   - Ace3
+  - LibUtil
   - LibPrettyPrint
 
 tools-used:
@@ -35,9 +36,11 @@ ignore:
   - scripts
   - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/*.toc
   - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/dev
-  - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/External
-  - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/Lib
-  - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/_Lib.xml
+  - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/Lib-1-0
+  - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/Lib-2-0/Assets
+  - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/Lib-2-0/ThirdParty
+  - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/Lib-2-0/LibUtil.lua
+  - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/Lib-2-0/LibUtil.xml
   - AddonSuite/ThirdParty/Libs/Ace3/Ace3.lua
   - AddonSuite/ThirdParty/Libs/Ace3/Bindings.xml
   - AddonSuite/ThirdParty/Libs/Ace3/changelog.txt
