@@ -148,8 +148,8 @@ end
 
 ---@param name Name
 function o:IsAddOnLibraryType(name)
-  local type = GetAddOnMetadata(name, 'X-Category')
-  return type and EqualsIgnoreCase(type, 'library')
+  local type = GetAddOnMetadata(name, 'Category') or GetAddOnMetadata(name, 'X-Category') or ''
+  return EqualsIgnoreCase(type, 'libraries') or EqualsIgnoreCase(type, 'library')
 end
 
 --- @param callbackFn AddOnCallbackFn
@@ -165,8 +165,7 @@ function o:ForAllAddOns(callbackFn, predicateFn, sortByName)
   for i = 1, addOnCount do
     local info = AU:GetAddOnInfo(i)
     info.sortKey = info.name
-    local type = GetAddOnMetadata(info.name, 'X-Category') or ''
-    if EqualsIgnoreCase(type, 'library') then info.sortKey = '!!A' .. info.name end
+    if self:IsAddOnLibraryType(info.name) then info.sortKey = '!!A' .. info.name end
     table.insert(addOns, info)
     if not sortByName and predicateFn and predicateFn(info) then callbackFn(info) end
   end
