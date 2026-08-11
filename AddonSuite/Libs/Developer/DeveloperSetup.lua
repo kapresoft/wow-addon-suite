@@ -31,7 +31,7 @@ local function resolveModuleName(moduleName)
 end
 
 --- @param prefix string|any
---- @return Gears_TraceFn
+--- @return ADS_TraceFn
 local function traceFn(prefix)
   return function(...)
     local trfn = ns.tr
