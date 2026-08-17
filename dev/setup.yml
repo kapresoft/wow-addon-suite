@@ -6,7 +6,8 @@
 # Note: This will build in ./.release/_setup directory
 package-as: _setup
 # --------------------------
-manual-changelog: CHANGELOG.txt
+
+manual-changelog: dev/changelog-empty.txt
 
 # Use GitHub because svn repos are slower
 # basepath is ${package-as}
@@ -14,10 +15,21 @@ manual-changelog: CHANGELOG.txt
 #  - This is faster: https://github.com/WoWUIDev/Ace3
 #  - But this is the official: https://repos.wowace.com/wow/ace3/trunk
 externals:
-  ThirdParty-Libs/Ace3: https://github.com/WoWUIDev/Ace3
-  ThirdParty-Libs/LibPrettyPrint: https://github.com/kapresoft/wow-addon-LibPrettyPrint
-  ThirdParty-Libs/Kapresoft-LibUtil: https://github.com/kapresoft/wow-lib-util
-  ThirdParty-Libs/LibDBIcon/LibDBIcon-1.0: https://repos.wowace.com/wow/libdbicon-1-0/trunk
+  ThirdParty-Libs/Ace3:
+    url: https://github.com/WoWUIDev/Ace3
+    tag: latest
+  ThirdParty-Libs/LibPrettyPrint:
+    url: https://github.com/kapresoft/wow-addon-LibPrettyPrint
+    tag: latest
+  ThirdParty-Libs/LibTraceKit:
+    url: https://github.com/kapresoft/wow-addon-LibTraceKit
+    tag: latest
+  ThirdParty-Libs/Kapresoft-LibUtil:
+    url: https://github.com/kapresoft/wow-lib-util
+    tag: latest
+  ThirdParty-Libs/LibDBIcon/LibDBIcon-1.0:
+    url: https://repos.wowace.com/wow/libdbicon-1-0/trunk
+    tag: latest
 
 ignore:
   - "*.sh"
@@ -29,12 +41,24 @@ ignore:
   - "*.toml"
   - dev
   - doc
-  - ThirdParty-Libs/Kapresoft-LibUtil/dev
-  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-1-0
-  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-2-0/Assets
-  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-2-0/ThirdParty
-  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-2-0/LibUtil.lua
-  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-2-0/LibUtil.xml
+  - AddonSuite/*.xml
+  - AddonSuite/Assets
+  - AddonSuite/Libs
+  - AddonSuite/ThirdParty/*.xml
+  - ThirdParty-Libs/LibPrettyPrint/dev
+  - ThirdParty-Libs/LibPrettyPrint/dev
+  - ThirdParty-Libs/LibPrettyPrint/doc
+  - ThirdParty-Libs/LibPrettyPrint/*.toc
+  - ThirdParty-Libs/LibPrettyPrint/LibPrettyPrint.xml
+  - ThirdParty-Libs/LibPrettyPrint/LICENSE
+  - ThirdParty-Libs/LibPrettyPrint/Assets
+  - ThirdParty-Libs/LibPrettyPrint/ThirdParty
+  - ThirdParty-Libs/LibPrettyPrint/Libs/Developer
+  - ThirdParty-Libs/LibTraceKit/dev
+  - ThirdParty-Libs/LibTraceKit/doc
+  - ThirdParty-Libs/LibTraceKit/Libs/Assets
+  - ThirdParty-Libs/LibTraceKit/Libs/Developer.lua
+  - ThirdParty-Libs/LibTraceKit/ThirdParty
   - ThirdParty-Libs/Ace3/LibStub/tests
   - ThirdParty-Libs/Ace3/CallbackHandler-1.0/CallbackHandler-1.0.xml
   - ThirdParty-Libs/Ace3/Ace3.lua
@@ -45,15 +69,12 @@ ignore:
   - ThirdParty-Libs/LibDBIcon/LibDBIcon-1.0/LibDBIcon-1.0/lib.xml
   - ThirdParty-Libs/LibDBIcon/LibDBIcon-1.0/CallbackHandler-1.0
   - ThirdParty-Libs/LibDBIcon/LibDBIcon-1.0/LibStub
-  - ThirdParty-Libs/LibPrettyPrint/dev
-  - ThirdParty-Libs/LibPrettyPrint/dev
-  - ThirdParty-Libs/LibPrettyPrint/doc
-  - ThirdParty-Libs/LibPrettyPrint/*.toc
-  - ThirdParty-Libs/LibPrettyPrint/LibPrettyPrint.xml
-  - ThirdParty-Libs/LibPrettyPrint/LICENSE
-  - ThirdParty-Libs/LibPrettyPrint/Assets
-  - ThirdParty-Libs/LibPrettyPrint/ThirdParty
-  - ThirdParty-Libs/LibPrettyPrint/Libs/Developer
+  - ThirdParty-Libs/Kapresoft-LibUtil/dev
+  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-1-0
+  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-2-0/Assets
+  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-2-0/ThirdParty
+  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-2-0/LibUtil.lua
+  - ThirdParty-Libs/Kapresoft-LibUtil/Lib-2-0/LibUtil.xml
 
 # Base path is .release/; Moves Libs to the folder above .release and into
 # the project folders

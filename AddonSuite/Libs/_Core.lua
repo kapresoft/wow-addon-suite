@@ -21,6 +21,7 @@ ns.O = ns.O or {}
 local String = LibStub('Kapresoft-String-2-0')
 local Str_IsBlank = String.IsBlank
 local colorFormatter = LibStub('Kapresoft-ColorFormatter-2-0')
+ns.O.ColorFormatter = colorFormatter
 
 --- @param rgbHex RGBHex?     @Optional
 --- @return cfFn, colorRGBA?

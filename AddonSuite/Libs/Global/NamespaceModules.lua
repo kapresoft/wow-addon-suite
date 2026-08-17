@@ -17,6 +17,8 @@ local M = {
   AddonUtil = {},
   --- @type Kapresoft-AceLib-2-0
   AceLib = {},
+  --- @type Kapresoft-ColorFormatter-2-0
+  ColorFormatter = {},
   --- @type Kapresoft-String-2-0
   String = {},
   --- @type Kapresoft-SequenceMixin-2-0
