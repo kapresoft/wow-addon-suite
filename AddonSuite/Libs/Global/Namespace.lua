@@ -21,14 +21,18 @@ Class: ADS_Namespace
 --- @field GC GlobalConstants
 --- @field locale LocaleInfo
 --- @field LibStub LocalLibStub
+--- @field primaryColor string
+--- @field colorDef Kapresoft-ColorDefinition-2-0
 local ns = kns; ADDON_SUITE_NS = ns
 
 ns.mt = { __tostring = function() return ns.addon .. '::Namespace' end }
 setmetatable(ns, ns.mt)
 
+
 --[[-------------------------------------------------------------------
 Formatter/Printer
 ---------------------------------------------------------------------]]
+local cf = ns.O.ColorFormatter
 local function predicateFn() return ns.IsDev() end
 
 ns.fmt = LibPrettyPrint:Formatter({ show_all = true, depth_limit = 3 })
@@ -36,24 +40,18 @@ fmt = ns.fmt
 ns.printer = LibPrettyPrint:Printer({
   prefix = ns.logName,
   formatter = ns.fmt,
-  prefix_color = '7ACFFB',
-  sub_prefix_color = 'FBEB2D',
+  prefix_color = cf:ToHexRGB(ns.colorDef.primary),
+  sub_prefix_color = cf:ToHexRGB(ns.colorDef.secondary),
 }, predicateFn)
 
 --- @class LogHolder
---- @field printer fun(moduleName:Name) : LibPrettyPrint_PrintFn A simple printer
---- @field tracer fun(moduleName:Name) : TraceFnFormatted A tracer with auto formatting of variables
+--- @field printer fun(moduleName:Name) : PrintFn A simple printer
+--- @field tracer fun(moduleName:Name) : TraceFn A tracer with auto formatting of variables
 
 ns.LogHolder = {}
 do
-  local h = ns.LogHolder
-  local noop = function(_moduleName)
-    return function() end
-  end
-  h.printer = noop
-  h.printer = noop
-  h.tracer = noop
-  h.tracer = noop
+  local h = ns.LogHolder; local noop = function(_moduleName) return function() end end
+  h.printer = noop; h.tracer = noop
 end
 
 --[[-----------------------------------------------------------------------------
@@ -133,8 +131,8 @@ Loggers/Tracers:: NoOp in Official Releases
 --- ```
 --- @see DeveloperSetup.lua
 --- @param moduleName Name  @The module name or any general prefix
---- @return ADS_PrintFn
---- @return ADS_TraceFn
+--- @return PrintFn
+--- @return TraceFn
 function ns:log(moduleName)
   return self.LogHolder.printer(moduleName), self.LogHolder.tracer(moduleName)
 end

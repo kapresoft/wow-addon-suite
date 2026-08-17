@@ -1,10 +1,4 @@
 --[[-----------------------------------------------------------------------------
-Aliases
--------------------------------------------------------------------------------]]
---- @alias ADS_PrintFn LibPrettyPrint_PrintFn @Printer function that outputs plain values to Blizzard Trace UI (like print)
---- @alias ADS_TraceFn fun(...: any) : void   @Printer function that outputs plain values to Blizzard Trace UI (like print)
-
---[[-----------------------------------------------------------------------------
 Callback Functions
 -------------------------------------------------------------------------------]]
 --- @alias AddOnCallbackFn fun(addOn:AddOnInfo) | "function(addOn) print('addOn:', pformat(addOn)) end"

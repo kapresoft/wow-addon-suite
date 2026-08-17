@@ -1,5 +1,8 @@
 --- @type ADS_Namespace
 local ns = select(2, ...)
+--- @type LibTraceKit-1.0
+local LibTraceKit = LibStub('LibTraceKit-1.0')
+assertsafe(type(LibTraceKit) ~= nil, 'Failed to reference LibTraceKit-1.0')
 
 --[[-----------------------------------------------------------------------------
 Debug Flags
@@ -31,12 +34,12 @@ local function resolveModuleName(moduleName)
 end
 
 --- @param prefix string|any
---- @return ADS_TraceFn
+--- @return TraceFn
 local function traceFn(prefix)
-  return function(...)
-    local trfn = ns.tr
-    return trfn(prefix, ...)
-  end
+  local t = LibTraceKit:New(ns.addon, prefix)
+      :WithDelimiter('_')
+      :WithColor(ns.colorDef.primary)
+  return t --[[@as TraceFn ]]
 end
 
 --- @param moduleName Name
