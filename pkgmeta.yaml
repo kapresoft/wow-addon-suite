@@ -9,6 +9,7 @@ manual-changelog:
 
 embedded-libraries:
   - LibStub
+  - LibTraceKit
   - Ace3
   - LibUtil
   - LibPrettyPrint
@@ -20,10 +21,21 @@ tools-used:
   - Bug-Grabber
 
 externals:
-  AddonSuite/ThirdParty/Libs/LibPrettyPrint: https://github.com/kapresoft/wow-addon-LibPrettyPrint
-  AddonSuite/ThirdParty/Libs/Ace3: https://github.com/WoWUIDev/Ace3
-  AddonSuite/ThirdParty/Libs/LibDBIcon/LibDBIcon-1.0: https://repos.wowace.com/wow/libdbicon-1-0/trunk
-  AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil: https://github.com/kapresoft/wow-lib-util
+  AddonSuite/ThirdParty/Libs/LibPrettyPrint:
+    url: https://github.com/kapresoft/wow-addon-LibPrettyPrint
+    tag: latest
+  AddonSuite/ThirdParty/Libs/LibTraceKit:
+    url: https://github.com/kapresoft/wow-addon-LibTraceKit
+    tag: latest
+  AddonSuite/ThirdParty/Libs/Ace3:
+    url: https://github.com/WoWUIDev/Ace3
+    tag: latest
+  AddonSuite/ThirdParty/Libs/LibDBIcon/LibDBIcon-1.0:
+    url: https://repos.wowace.com/wow/libdbicon-1-0/trunk
+    tag: latest
+  AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil:
+    url: https://github.com/kapresoft/wow-lib-util
+    tag: latest
 
 ignore:
   - "*.sh"
@@ -59,6 +71,12 @@ ignore:
   - AddonSuite/ThirdParty/Libs/LibPrettyPrint/LibPrettyPrint.xml
   - AddonSuite/ThirdParty/Libs/LibPrettyPrint/Libs/Developer/*.xml
   - AddonSuite/ThirdParty/Libs/LibPrettyPrint/Libs/Developer/Developer*.lua
+  - AddonSuite/ThirdParty/Libs/LibTraceKit/*.toc
+  - AddonSuite/ThirdParty/Libs/LibTraceKit/dev
+  - AddonSuite/ThirdParty/Libs/LibTraceKit/doc
+  - AddonSuite/ThirdParty/Libs/LibTraceKit/ThirdParty
+  - AddonSuite/ThirdParty/Libs/LibTraceKit/Libs/Assets
+  - AddonSuite/ThirdParty/Libs/LibTraceKit/Libs/Developer.lua
 
 # REQUIRED for CurseForge packager (non-obvious):
 # The LEFT side MUST be <repo-folder>/<addon-folder>
