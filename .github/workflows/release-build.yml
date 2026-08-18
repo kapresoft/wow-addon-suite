@@ -112,7 +112,7 @@ jobs:
         env:
           RELEASE_BODY: ${{ steps.draft_notes_dry_run.outputs.body }}
         run: |
-          printf '%s\n' "$RELEASE_BODY" > dev/changelog-release.txt
+          printf '%s\n' "$RELEASE_BODY" > dev/changelog-release.md
       ## ------------------------------------------------ ##
       ## see: https://github.com/marketplace/actions/wow-packager
       - uses: BigWigsMods/packager@v2
@@ -173,6 +173,7 @@ jobs:
           prerelease: false
           footer: |
             <br><br>
+            <!-- spacer -->
             #### ${{ env.buildArtifactFilename }}
             ```text
             sha256:${{ env.buildArtifactChecksum }}
