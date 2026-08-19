@@ -1,8 +1,6 @@
 package-as: AddonSuite
 # --------------------------
-license-output: LICENSE
-enable-nolib-creation: no
-#enable-toc-creation: yes
+
 manual-changelog:
   filename: dev/changelog-release.md
   markup-type: markdown

@@ -46,6 +46,7 @@ ignore:
   - "*.toml"
   - dev
   - doc
+  - LICENSE
   - AddonSuite/*.xml
   - AddonSuite/Assets
   - AddonSuite/Libs
