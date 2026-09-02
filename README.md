@@ -34,36 +34,19 @@ AddonSuite transforms your World of Warcraft interface management into a seamles
 
 With AddonSuite, the power of customization and efficiency of which addons to load is at your fingertips. By defining and switching between profiles like "Leveling", "Gathering", "Raiding", and "PVP", you ensure that your addon setup is always aligned with your current activity, enhancing both performance and enjoyment in World of Warcraft.
 
-&nbsp;
-
-![pixel-line-500px](https://user-images.githubusercontent.com/1599306/209889477-315aa4bb-1e92-4e5f-b684-7d5296427ada.png)
-
-### Author Notes
-- Please submit bugs and feature requests at [Github/wow-addon-suite/issues](https://github.com/kapresoft/wow-addon-suite/issues)
-- [Milestones](https://github.com/kapresoft/wow-addon-suite/milestones)
-- [Releases](https://github.com/kapresoft/wow-addon-suite/releases)
-- [About the Author (Tony Lagnada)](https://tony.resume.lagnada.com/)
-
 ## AddOn Distribution
 
 **Curse Forge**
 - https://www.curseforge.com/wow/addons/addon-suite
 
-### Donations
+## Donations
 
-As a software engineer, I am passionate about this project and have dedicated a significant amount of time and effort to creating a high-quality product. If you enjoy using this World of Warcraft add-on, please consider supporting me through a donation via Paypal&trade; or the Bitcoin Address provided below. Your support is greatly appreciated. Thank you in advance for your generosity.
+If AddonSuite has made your gameplay easier, consider supporting its development:
 
-**Bitcoin Address**
+- **[Paypal&trade; Donation](https://www.paypal.com/donate/?hosted_button_id=AX58YP3GSGXVU)**
+- **[Bitcoin Donation](https://www.blockchain.com/btc/address/3QQVAwJGkKHMM2oq6CLVWYgfx83TFVwp39)**
 
-[https://www.blockchain.com/btc/address/3QQVAwJGkKHMM2oq6CLVWYgfx83TFVwp39](https://www.blockchain.com/btc/address/3QQVAwJGkKHMM2oq6CLVWYgfx83TFVwp39)
+## About
 
-&nbsp;
-
-![pixel-line-500px](https://user-images.githubusercontent.com/1599306/209889477-315aa4bb-1e92-4e5f-b684-7d5296427ada.png)
-
-### Try My Other Addons
-- [ActionbarPlus](https://www.curseforge.com/wow/addons/actionbarplus)
-- [Dev Suite](https://www.curseforge.com/wow/addons/devsuite)
-- [Saved Dungeons & Raids](https://www.curseforge.com/wow/addons/saved-dungeons-raids)
-- [MacrobarPlus](https://www.curseforge.com/wow/addons/macrobarplus)
-- [Addon Template](https://www.curseforge.com/wow/addons/addon-template)
+- About the Author [(Tony Lagnada)](https://tony.resume.lagnada.com/)
+- My AddOn Portfolio Can Be Found Here [Curse Forge/Kapresoft](https://www.curseforge.com/members/kapresoft/projects)
