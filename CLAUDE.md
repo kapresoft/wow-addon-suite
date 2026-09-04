@@ -20,12 +20,14 @@ w-sync-libs
 #### One-time deploy
 ```shell
 w-deployer -c ./dev/deployer-config.lua
+# alias: w-deployer-default
 ```
 
 #### Continuous Deploy with 'quiet' -q and 'watch' -w mode
 
 ```shell
 w-deployer -c ./dev/deployer-config.lua -qw
+# alias: w-deployer-watch
 ```
 
 ### Release process
