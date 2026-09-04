@@ -17,7 +17,7 @@ Namespace
 local ns = select(2, ...)
 local addonName = ns.addon
 
-local L = ns:AceLocale():NewLocale(addonName, "enUS", not ns:IsDev());
+local L = ns:AceLocale():NewLocale(addonName, "enUS", true, true); if not L then return end
 
 ns.locale.greenIndicator   = '|TInterface\\Common\\Indicator-Green:16:16:0:-1|t'
 ns.locale.checkMark        = '|TInterface\\Buttons\\UI-CheckBox-Check:21:21:0:-1|t'
@@ -49,9 +49,9 @@ L['General']                  = true
 L['General::Desc']            = "General Settings"
 L['General Configuration']    = true
 
-L['General::Enable All::Button']           = 'All'
+L['General::Enable All::Button']           = ALL
 L['General::Enable All::Button::Desc']     = 'Checks all add-ons below.'
-L['General::Disable All::Button']          = 'None'
+L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = 'Unchecks all add-ons below.'
 
 L['Add-Ons::Desc']            = 'To activate or deactivate an addon, check or uncheck its corresponding box. After making your selections, click on |cdf6F97FFReloadUI|r to implement the changes to your configuration.'
@@ -71,9 +71,9 @@ L['Log Level']                = true
 L['Log Level::Desc']          = 'Higher log levels generate more logs:\nLog Levels: ERROR(5), WARN(10), INFO(15), DEBUG(20), FINE(25), FINER(30), FINEST(35), TRACE(50)'
 L['Categories']               = true
 L['Current Profile']          = true
-L['Debugging::Category::Enable All::Button']           = 'All'
+L['Debugging::Category::Enable All::Button']           = ALL
 L['Debugging::Category::Enable All::Button::Desc']     = 'Checks all log categories below. Note that the default category (not shown here) will always be active.'
-L['Debugging::Category::Disable All::Button']          = 'None'
+L['Debugging::Category::Disable All::Button']          = NONE
 L['Debugging::Category::Disable All::Button::Desc']    = 'Unchecks all log categories below. Note that the default category (not shown here) will always be active.'
 
 L['REQUIRES_RELOAD_PROFILE_CHANGED'] = 'Your selected profile\'s addon changes require a UI reload to take effect. This will enable checked addons and disable unchecked ones.\n\nReload now?'

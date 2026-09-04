@@ -114,6 +114,12 @@ function ns:LibDBIcon() return LibStub('LibDBIcon-1.0') end
 --- @param startingSequence number|nil Optional starting positive index
 function ns:CreateSequence(startingSequence) return SequenceMixin.New(startingSequence) end
 
+--- Registers a non-default locale. Always isDefault=false, silent=true.
+--- @see AceLocale-3.0.NewLocale
+--- @param locale string Name of the locale to register, e.g. 'deDE', 'frFR', etc.
+--- @return table<string, boolean|string>? locale Locale table to add localizations to, or nil if the current locale is not required.
+function ns:NewLocale(locale) return self.O.AceLib:AceLocale():NewLocale(self.addon, locale, false, true) end
+
 --- @return table<string, string>
 function ns:GetLocale() return self.O.AceLib:AceLocale():GetLocale(self.addon, true) end
 

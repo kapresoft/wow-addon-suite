@@ -15,8 +15,7 @@
     <Script file="API\AddOnDependencyUtil.lua" />
     <Script file="API\API.lua" />
 
-    <Script file="Locales\enUS.lua"/>
-    <Script file="Locales\Localization.lua"/>
+    <Include file="Locales\_Locales.xml"/>
 
     <Frame name="AddonSuiteFrame" parentKey="AddonSuite" parent="UIParent" />
 
