@@ -18,9 +18,8 @@ Namespace
 -------------------------------------------------------------------------------]]
 --- @type ADS_Namespace
 local ns = select(2, ...)
-local addonName = ns.addon
 
-local L = LibStub("AceLocale-3.0"):NewLocale(addonName, "ruRU"); if not L then return end
+local L = ns:NewLocale("ruRU"); if not L then return end
 
 ns.locale.greenIndicator   = '|TInterface\\Common\\Indicator-Green:16:16:0:-1|t'
 ns.locale.checkMark        = '|TInterface\\Buttons\\UI-CheckBox-Check:21:21:0:-1|t'
@@ -52,9 +51,9 @@ L['General']                  = 'Общие'
 L['General::Desc']            = "Общие настройки"
 L['General Configuration']    = 'Общие настройки'
 
-L['General::Enable All::Button']           = 'Все'
+L['General::Enable All::Button']           = ALL
 L['General::Enable All::Button::Desc']     = 'Отметить все аддоны ниже.'
-L['General::Disable All::Button']          = 'Ничего'
+L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = 'Снять отметку со всех аддонов ниже.'
 
 L['Add-Ons::Desc']            = 'Чтобы включить или выключить аддон, отметьте или снимите галочку напротив него. После выбора нажмите |cdf6F97FFПерезагрузить|r, чтобы изменения вступили в силу.'
@@ -74,12 +73,12 @@ L['Log Level']                = 'Уровень логов'
 L['Log Level::Desc']          = 'Более высокий уровень логов создаёт больше записей:\nУровни: ERROR(5), WARN(10), INFO(15), DEBUG(20), FINE(25), FINER(30), FINEST(35), TRACE(50)'
 L['Categories']               = 'Категории'
 L['Current Profile']          = 'Текущий профиль'
-L['Debugging::Category::Enable All::Button']           = 'Все'
+L['Debugging::Category::Enable All::Button']           = ALL
 L['Debugging::Category::Enable All::Button::Desc']     = 'Отметить все категории логов ниже. Обратите внимание, что категория по умолчанию (не показана здесь) всегда активна.'
-L['Debugging::Category::Disable All::Button']          = 'Ничего'
+L['Debugging::Category::Disable All::Button']          = NONE
 L['Debugging::Category::Disable All::Button::Desc']    = 'Снять отметку со всех категорий логов ниже. Обратите внимание, что категория по умолчанию (не показана здесь) всегда активна.'
 
-L['REQUIRES_RELOAD_PROFILE_CHANGED'] = 'Изменения выбранного профиля требуют пере”перезагрузки интерфейса. Это включит отмеченные аддоны и отключит снятые.\n\nПерезагрузить сейчас?'
+L['REQUIRES_RELOAD_PROFILE_CHANGED'] = 'Изменения выбранного профиля требуют перезагрузки интерфейса. Это включит отмеченные аддоны и отключит снятые.\n\nПерезагрузить сейчас?'
 
 L['Prompt me to Reload UI::Desc'] = 'Включите эту опцию, чтобы получать запрос на перезагрузку интерфейса при закрытии окна настроек, если были внесены изменения, требующие включения/отключения аддонов.'
 L['Prompt me to Reload UI']       = 'Спрашивать о перезагрузке при необходимости'
@@ -102,7 +101,7 @@ L['Open minimap settings'] = 'Открыть настройки миникарт
 L['View available commands']      = 'Просмотр доступных команд'
 L['Open settings']                = 'Открыть настройки'
 L['Command Lines']                = 'Командные строки'
-L['Currently set to switch profiles %s a confirmation prompt.'] = 'Сейчас смена профилей происходит %s подтверждения.'
+L['Currently set to switch profiles %s a confirmation prompt.'] = 'Сейчас смена профилей происходит %s.'
 
 L['Add to Favorite']              = 'Добавить в избранное'
 L['Add to Favorite::Desc']        = "Включите, чтобы текущий профиль отображался в меню смены профилей миникарты (левый клик). Отключите, чтобы скрыть профиль из меню."
@@ -117,8 +116,8 @@ L['Reloads UI with confirmation']    = 'Перезагружает интерф�
 L['Reloads UI without confirmation'] = 'Перезагружает интерфейс без подтверждения'
 
 L['Select profile to activate'] = 'Выберите профиль для активации'
-L['without']                    = 'без'
-L['with']                       = 'с'
+L['without']                    = 'без подтверждения'
+L['with']                       = 'с подтверждением'
 L['confirmation']               = 'подтверждения'
 L['No Confirmation']            = 'Без подтверждения'
 L['Profile is out of sync']     = 'Профиль не синхронизирован, требуется перезагрузка.'
@@ -137,7 +136,7 @@ L['Enabled (After Reload)']  = 'Включён (после перезагруз�
 L['Disabled (After Reload)'] = 'Отключён (после перезагрузки)'
 
 L['Limit Profile Name Characters']       = 'Ограничить длину имени профиля...'
-L['Limit Profile Name Characters::Desc'] = 'Установите максимальное количество символов для отображения имени профиля справа от иконки в |cdf6F97FFTitan Panel|r. Если имя длиннее, оно будет обрезано и завершится многоточием («...»)). Диапазон: 5–20 символов.'
+L['Limit Profile Name Characters::Desc'] = 'Установите максимальное количество символов для отображения имени профиля справа от иконки в |cdf6F97FFTitan Panel|r. Если имя длиннее, оно будет обрезано и завершится многоточием («...»). Диапазон: 5–20 символов.'
 
 L['Show Profile Name']            = 'Показывать имя профиля'
 L['Show Profile Name::Desc']      = 'Включите, чтобы имя текущего профиля отображалось справа от иконки в |cdf6F97FFTitan Panel|r.'
