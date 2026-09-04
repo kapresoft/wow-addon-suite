@@ -47,6 +47,7 @@ ignore:
   - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/*.toc
   - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/dev
   - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/Lib-1-0
+  - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/Lib-2-0/Annotations
   - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/Lib-2-0/Assets
   - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/Lib-2-0/ThirdParty
   - AddonSuite/ThirdParty/Libs/Kapresoft-LibUtil/Lib-2-0/LibUtil.lua
@@ -57,6 +58,7 @@ ignore:
   - AddonSuite/ThirdParty/Libs/Ace3/LICENSE.txt
   - AddonSuite/ThirdParty/Libs/Ace3/*.toc
   - AddonSuite/ThirdParty/Libs/LibDBIcon/LibDBIcon-1.0/embeds.xml
+  - AddonSuite/ThirdParty/Libs/LibDBIcon/LibDBIcon-1.0/*.toc
   - AddonSuite/ThirdParty/Libs/LibDBIcon/LibDBIcon-1.0/LibDBIcon-1.0/lib.xml
   - AddonSuite/ThirdParty/Libs/LibDBIcon/LibDBIcon-1.0/CallbackHandler-1.0
   - AddonSuite/ThirdParty/Libs/LibDBIcon/LibDBIcon-1.0/LibStub
@@ -67,6 +69,7 @@ ignore:
   - AddonSuite/ThirdParty/Libs/LibPrettyPrint/Assets
   - AddonSuite/ThirdParty/Libs/LibPrettyPrint/ThirdParty
   - AddonSuite/ThirdParty/Libs/LibPrettyPrint/LibPrettyPrint.xml
+  - AddonSuite/ThirdParty/Libs/LibPrettyPrint/Libs/Annotations
   - AddonSuite/ThirdParty/Libs/LibPrettyPrint/Libs/Developer/*.xml
   - AddonSuite/ThirdParty/Libs/LibPrettyPrint/Libs/Developer/Developer*.lua
   - AddonSuite/ThirdParty/Libs/LibTraceKit/*.toc
