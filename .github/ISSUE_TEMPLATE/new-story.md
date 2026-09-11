@@ -11,11 +11,12 @@ Don't forget to apply labels:
   - Size: S / M / L / XL
 ---
 
-## Story
-As a World of Warcraft player, I would like to [details]
-so that [fill in the blanks]
+# Story
+>As a World of Warcraft player, I would like to [details]
+>so that [fill in the blanks]
 
 ## Details
 [describe additional items here]
 
-
+## Screenshots
+[screenshots if available]     
