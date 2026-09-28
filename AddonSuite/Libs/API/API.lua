@@ -17,7 +17,7 @@ local O, M = ns.O, ns.M
 local AU, String = O.AddonUtil, O.String
 local IsAnyOfString, EqualsIgnoreCase = String.IsAnyOf, String.EqualsIgnoreCase
 
-local excludedAddOns = { ns.addon, 'DebugChatFrame' }
+local excludedAddOns = { ns.addon }
 local sformat = ns.sformat
 
 local function depUtil() return O.AddOnDependencyUtil end
