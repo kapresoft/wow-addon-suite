@@ -4,77 +4,51 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-AddonSuite is a World of Warcraft addon manager: it lets players toggle groups of other addons on/off per Ace3 profile, so different addon sets can be swapped in for different gameplay scenarios (raiding, questing, etc.), with a minimap icon for quick profile switching. It supports all WoW versions (Retail, Classic, TBC, Wrath).
+AddonSuite is a World of Warcraft addon manager: players toggle groups of other addons on/off per Ace3 profile, so different addon sets can be swapped in for different gameplay (raiding, questing, etc.), with a minimap icon for quick profile switching. It supports every WoW client (Retail, Classic Era, TBC, Wrath, Cata, Mists).
 
 ## Build & Release
 
-### Pull external library dependencies
-
-```shell
-cd <project-dir>
-w-sync-libs
-```
-
-### Deployment to local WoW installs
-
-#### One-time deploy
-```shell
-w-deployer -c ./dev/deployer-config.lua
-# alias: w-deployer-default
-```
-
-#### Continuous Deploy with 'quiet' -q and 'watch' -w mode
-
-```shell
-w-deployer -c ./dev/deployer-config.lua -qw
-# alias: w-deployer-watch
-```
-
-### Release process
-1. Create pull requests
-2. Create tag to publish--an automated github action will push any tag created
-3. Verify CurseForge build is green, then publish the GitHub draft release
-
-There are no automated tests. Validation is done in-game.
+See "Build & Release (WoW addons)" in the global `~/.claude/CLAUDE.md`.
 
 ## Architecture
 
 ### Load order
 
-`AddonSuite.toc` loads `Core\_Core.xml`, which in turn includes (in order): `_ExtLib.xml` (Ace3/LibDataBroker), `_Core.lua`, dev-only `Lib\Developer\_DeveloperComponents.xml`, `Global\_Global.xml`, `Lib\_Lib.xml`, dev-only `Lib\Developer\_Developer.xml`, then `Core\AddonSuite.lua` (the addon entry point/`OnInitialize`-equivalent, registered via `LibStub:NewAddon`). Per-flavor folders (`Retail/`, `TBC/`, `Vanilla/`, `Wrath/`) each hold a thin `_<Flavor>.xml` that just re-includes `Core\AddonSuite.lua` -- flavor branching happens inside the shared Lua, not via separate per-flavor Lua files (contrast with DebugChatFrame's `ns.gameVersion`-per-file pattern).
+The addon lives in the `AddonSuite/` subfolder. A single `AddonSuite.toc` lists every client in its `## Interface:` line and loads `ThirdParty\ThirdParty.xml`, then `Libs\_Libs.xml`. `_Libs.xml` loads, in order: `_Core.lua`, `Global/`, dev-only `DeveloperSetup.lua`, `API/`, `Locales/`, `Modules/`, dev-only `Developer.lua`, and finally `AddonSuite.lua` (the entry point: `AceAddon:NewAddon`, `OnInitialize`). Add new files to `_Libs.xml`. Client differences are handled inside the shared Lua.
+
+Embedded libs (Ace3, LibDataBroker/LibDBIcon, LibPrettyPrint, LibTraceKit, Kapresoft-LibUtil modules) load from `ThirdParty/ThirdParty.xml`.
 
 ### Namespace & module registry
 
-`Core/Global/Namespace.lua` defines the central `ns` object; modules register into `ns.O`, accessed anywhere via `ns.O.ModuleName`. Global constants live on `ns.GC` (and `ns.GC.C` for a nested constants group) -- same `ns.O`/`ns.GC` convention as DevSuite.
+`Libs/Global/Namespace.lua` defines the central `ns` object; `NamespaceModules.lua` registers the Kapresoft-LibUtil modules (via `Kapresoft-ModuleUtil-2-0`). Modules register into `ns.O` and are accessed via `ns.O.ModuleName`. Global constants live on `ns.GC` (`GlobalConstants.lua`), with `ns.GC.C` and `ns.GC.M` (message names) groups; same convention as DevSuite.
 
-### Key modules (`Core/Lib/` and `Core/Global/`)
+### Key files (`AddonSuite/Libs/`)
 
 | File | Role |
 |---|---|
-| `Global/SynchronizedAddOns.lua` | Tracks/syncs which addons belong to which managed group |
 | `Global/DefaultAddOnDatabase.lua` | Default AceDB shape for addon-group state |
-| `Global/CategoryLoggerMixin.lua` | Per-category logger mixin |
-| `Global/EventMessagesMixin.lua` | Message/event constants and helpers |
-| `Lib/AddOnStateController.lua` | Enable/disable state control for managed addons |
-| `Lib/MainController.lua` | Top-level wiring |
-| `Lib/OptionsAddonsMixin.lua` / `OptionsMinimapMixin.lua` / `OptionsMixin.lua` | Options dialog panels (addon list, minimap icon, general) |
-| `Lib/MinimapIconControllerMixin.lua` | Minimap icon (LibDataBroker-based) |
-| `Lib/ConfigDialogController.lua` / `AceConfigDialogUtil.lua` | AceConfig dialog wiring |
-| `Lib/AceDbInitializerMixin.lua` | AceDB setup/init |
-| `Lib/Developer/` | Dev-only utilities -- excluded from packaging (see below) |
+| `Global/EventMessagesMixin.lua` | Message/event helpers |
+| `API/API.lua`, `API/AddOnDependencyUtil.lua` | Public API and addon dependency helpers |
+| `Modules/SynchronizedAddOns.lua` | Tracks/syncs which addons belong to which managed group |
+| `Modules/AddOnStateController.lua` | Enable/disable state control for managed addons |
+| `Modules/MainController.lua` | Top-level wiring |
+| `Modules/Options*Mixin.lua`, `OptionsUtilMixin.lua` | Options dialog panels (addon list, minimap icon, general) |
+| `Modules/MinimapIconControllerMixin.lua` | Minimap icon (LibDataBroker/LibDBIcon) |
+| `Modules/ConfigDialogController.lua`, `AceConfigDialogUtil.lua` | AceConfig dialog wiring |
+| `Modules/AceDbInitializerMixin.lua` | AceDB setup/init |
+| `Developer/` | Dev-only utilities (see below) |
 
 ### Dev-only code
 
-Wrap dev-only Lua/XML with `--@do-not-package@` / `--@end-do-not-package@` tokens (see `Core/_Core.xml`'s `Lib\Developer\_DeveloperComponents.xml`/`_Developer.xml` includes) -- same convention as AddonSuite's sibling repos DebugChatFrame and DevSuite. The BigWigsMods packager strips these blocks in release builds.
+Wrap dev-only Lua/XML includes in `--@do-not-package@` / `--@end-do-not-package@` (see the `Developer` includes in `Libs/_Libs.xml`), same as DebugChatFrame and DevSuite. The packager strips these blocks in release builds.
 
 ## Key conventions
 
-- **Mixin-based OOP** -- composition via `Mixin()`/`CreateFromMixins()`, not inheritance chains. Keep mixins focused on a single concern.
-- **No unit test framework** -- test in-game. Use `/fstack` to inspect frames, `/dump` to inspect values.
-- **EmmyLua annotations** -- the codebase uses EmmyLua (`---@param`, `---@return`, `---@class`) for IDE type checking. Maintain these on public APIs.
-- **SavedVariables**: `ADDON_SUITE_DB` (account), `ADDON_SUITE_CHARACTER_DB` (per-character), `ADDON_SUITE_LOG_LEVEL`/`ADDON_SUITE_DEBUG_MODE`/`ADDON_SUITE_DEBUG_ENABLED_CATEGORIES` (debug state) -- see `AddonSuite.toc`.
-- **OptionalDeps, not RequiredDeps**: only `Ace3` is declared, and even that is optional -- guard accordingly rather than assuming Ace3 libs are always present.
-- **Addon-management is the core domain** -- changes to `SynchronizedAddOns.lua`/`AddOnStateController.lua` affect real enable/disable state of the user's other addons; treat these paths with the same care as anything else that mutates state outside this addon's own scope.
+- **Mixin-based OOP:** composition via `Mixin()`/`CreateFromMixins()`, not inheritance chains. Keep mixins focused on a single concern.
+- **Testing in game:** `/fstack` to inspect frames, `/dump` to inspect values.
+- **SavedVariables:** `ADDON_SUITE_DB` (account), `ADDON_SUITE_CHARACTER_DB` (per-character), `ADDON_SUITE_LOG_LEVEL`/`ADDON_SUITE_DEBUG_MODE`/`ADDON_SUITE_DEBUG_ENABLED_CATEGORIES` (debug state); see `AddonSuite.toc`.
+- **OptionalDeps:** `Ace3, DevSuite`. Ace3 is embedded, so it's always available; DevSuite may be absent.
+- **Addon management is the core domain:** changes to `SynchronizedAddOns.lua`/`AddOnStateController.lua` change the real enable/disable state of the user's other addons. Treat these paths with the care due to anything that mutates state outside this addon.
 
 ## Code style
 
