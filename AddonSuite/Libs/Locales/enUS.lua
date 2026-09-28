@@ -119,3 +119,5 @@ L['Titan Panel Settings']         = true
 L['Show Out of Sync Count']       = true
 L['Show Out of Sync Count::Desc'] = 'Enable this setting to display the number of addons in |cdf6F97FFTitan Panel|r that are currently out of sync with the active profile.'
 L['Lib:']                         = true
+L['Load on demand (loaded)']      = true
+L['Load on demand (not loaded)']  = true

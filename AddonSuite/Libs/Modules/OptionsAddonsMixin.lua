@@ -34,6 +34,7 @@ local IsOptionsVisible = false
 local fVersion = ns:ColorFn(BLUE_FONT_COLOR)
 local fDisabled = ns:ColorFn(LIGHTGRAY_FONT_COLOR)
 local fLib = ns:ColorFn(LIGHTBLUE_FONT_COLOR)
+local fLabel = ns:ColorFn(YELLOW_FONT_COLOR)
 
 --[[-----------------------------------------------------------------------------
 OnAddOnEnabled
@@ -283,6 +284,15 @@ local function TitleWithVersion(name, title)
     return title .. ' ' .. fVersion(version)
 end
 
+--- @param name AddOnName
+--- @return string @Empty unless the addon is load on bdemand
+local function LoadOnDemandLine(name)
+    if not API:IsAddOnLoadOnDemand(name) then return '' end
+    local key = API:IsAddOnLoaded(name) and 'Load on demand (loaded)'
+            or 'Load on demand (not loaded)'
+    return '\n\n' .. fLabel(L[key])
+end
+
 --- @param name AddOnName The AddOn Index or Name
 --- @return string
 function o.GetDesc(name)
@@ -291,7 +301,7 @@ function o.GetDesc(name)
     local desc     = info.desc
     local label    = ''
 
-    desc = TitleWithVersion(name, info.title) .. '\n\n' .. desc
+    desc = TitleWithVersion(name, info.title) .. '\n\n' .. desc .. LoadOnDemandLine(name)
     if depsInfo:HasDependencies() then
         label = label .. '\n\n' .. depsInfo:GetDependencyLabel()
     end
