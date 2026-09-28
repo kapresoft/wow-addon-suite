@@ -10,7 +10,6 @@ Local Vars
 local ns = select(2, ...)
 
 local O, MSG, API = ns.O, ns.GC.M, ns.O.API
-local AU = ns.O.AddonUtil
 local L = ns:GetLocale()
 local String = ns.O.String
 local IsAnyOf = String.IsAnyOf
@@ -81,8 +80,8 @@ end
 --- @class AddOnStateCodes
 local AddOnStateCodes = {
   NOT_INSTALLED = 0,
-  ENABLED_BUT_NOT_LOADED = 1,
-  DISABLED_BUT_LOADED = 2,
+  CHECKED_BUT_NOT_LOADED = 1,
+  LOADED_BUT_NOT_CHECKED = 2,
   LOAD_ON_DEMAND = 3,
   NO_ACTION_REQUIRED = 4,
 }
@@ -96,22 +95,22 @@ do
   function asc:Get(code) return c4(_names[code] or 'UNKNOWN') end
 end
 
---- Checks if an addon is enabled but requires a restart or is load on demand.
---- @param name AddOnName The name of the addon to check.
---- @return boolean, number True if the addon requires a restart, the code, and a message.
-local function CheckAddonState(name)
+--- Compares the profile's checkbox to the addon's loaded state.
+--- @param name AddOnName
+--- @param checked boolean  @Profile value, not WoW's enabled flag
+--- @return boolean, number @Whether a reload is required, and the state code
+local function CheckAddonState(name, checked)
   local _name = C_AddOns_GetAddOnInfo(name)
   if not _name then return false, AddOnStateCodes.NOT_INSTALLED end
-  local enabled = AU:IsAddOnEnabled(name)
   local loaded = API:IsAddOnLoaded(name)
   local loadOnDemand = API:IsAddOnLoadOnDemand(name)
 
   if loadOnDemand then
     return false, AddOnStateCodes.LOAD_ON_DEMAND
-  elseif enabled and not loaded then
-    return true, AddOnStateCodes.ENABLED_BUT_NOT_LOADED
-  elseif not enabled and loaded then
-    return true, AddOnStateCodes.DISABLED_BUT_LOADED
+  elseif checked and not loaded then
+    return true, AddOnStateCodes.CHECKED_BUT_NOT_LOADED
+  elseif not checked and loaded then
+    return true, AddOnStateCodes.LOADED_BUT_NOT_CHECKED
   else
     return false, AddOnStateCodes.NO_ACTION_REQUIRED
   end
@@ -352,21 +351,22 @@ local function ASCMethods()
     return addOnState
   end
 
-  --- @return CheckedState The state of the addOn checkboxes compared to the Enabled state of the addOn
+  --- @return CheckedState @Profile checkboxes compared to each addon's loaded state
   function o:GetCheckedState()
     local state = CheckedStateMixin:New()
+    local enabledAddons = ns:profile().enabledAddons
     API:ForEachAddOn(function(info)
       local n = info.name
-      local requiresRestart, status = CheckAddonState(n)
+      local requiresRestart, status = CheckAddonState(n, enabledAddons[n] == true)
       --@do-not-package@
       if ns:IsDev() then _DebugCheckedState(info, requiresRestart, status) end
       --@end-do-not-package@
       if AddOnStateCodes.LOAD_ON_DEMAND == status then return state end
 
       local depsInfo = API:GetDependencyDetails(n)
-      if AddOnStateCodes.ENABLED_BUT_NOT_LOADED == status and depsInfo:CanBeEnabled() then
+      if AddOnStateCodes.CHECKED_BUT_NOT_LOADED == status and depsInfo:CanBeEnabled() then
         table.insert(state.checkedButNotLoaded, n)
-      elseif AddOnStateCodes.DISABLED_BUT_LOADED == status then
+      elseif AddOnStateCodes.LOADED_BUT_NOT_CHECKED == status then
         table.insert(state.loadedButNotChecked, n)
       end
     end)
