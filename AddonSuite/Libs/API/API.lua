@@ -140,6 +140,14 @@ end
 --- @boolean
 function o:IsAddOnLoaded(indexOrName) return IsAddOnLoaded(indexOrName) end
 
+--- @param name Name
+--- @return string? @nil if the .toc has no Version
+function o:GetAddOnVersion(name)
+  local version = GetAddOnMetadata(name, 'Version')
+  if version == '' then return nil end
+  return version
+end
+
 --  TODO: New Option to "Sort By Index", checked by default, else sort by name
 --- @param callbackFn AddOnCallbackFn
 function o:ForEachAddOn(callbackFn)
