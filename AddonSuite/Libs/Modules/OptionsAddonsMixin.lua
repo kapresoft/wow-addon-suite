@@ -274,6 +274,15 @@ function o.GetDisplayName(indexOrName)
     return (ADU:CanEnableByProfile(name) and name) or fDisabled(name)
 end
 
+--- @param name AddOnName
+--- @param title string
+--- @return string
+local function TitleWithVersion(name, title)
+    local version = API:GetAddOnVersion(name)
+    if not version then return title end
+    return title .. ' ' .. fVersion(version)
+end
+
 --- @param name AddOnName The AddOn Index or Name
 --- @return string
 function o.GetDesc(name)
@@ -282,7 +291,7 @@ function o.GetDesc(name)
     local desc     = info.desc
     local label    = ''
 
-    desc = info.title .. '\n\n' .. desc
+    desc = TitleWithVersion(name, info.title) .. '\n\n' .. desc
     if depsInfo:HasDependencies() then
         label = label .. '\n\n' .. depsInfo:GetDependencyLabel()
     end
