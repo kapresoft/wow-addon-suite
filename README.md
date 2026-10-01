@@ -1,6 +1,4 @@
-|  |  |
-|--------|----------|
-|[![Branch Build](https://github.com/kapresoft/wow-addon-suite/actions/workflows/dev-build.yml/badge.svg)](https://github.com/kapresoft/wow-addon-suite/actions/workflows/dev-build.yml)| [![Release Build](https://github.com/kapresoft/wow-addon-suite/actions/workflows/release-build.yml/badge.svg)](https://github.com/kapresoft/wow-addon-suite/actions/workflows/release-build.yml)|
+[![Release Build](https://github.com/kapresoft/wow-addon-suite/actions/workflows/release-build.yml/badge.svg)](https://github.com/kapresoft/wow-addon-suite/actions/workflows/release-build.yml)
 
 
 # AddonSuite
