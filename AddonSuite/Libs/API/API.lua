@@ -40,6 +40,14 @@ local function developerAddOnsPredicateFn(info)
   return include
 end
 
+--- @param text string
+--- @return string @text without trailing |n line breaks
+local function TrimTrailingBreaks(text)
+  local trimmed = text
+  while trimmed:sub(-2) == '|n' do trimmed = trimmed:sub(1, -3) end
+  return trimmed
+end
+
 --[[-----------------------------------------------------------------------------
 AddOn Dependencies Cache
 -------------------------------------------------------------------------------]]
@@ -51,22 +59,6 @@ AddOnCache
 -------------------------------------------------------------------------------]]
 --- @type table<Index, AddOnName>
 local LocalCache = { info = {} }
-
-do
-  local c = LocalCache
-  local function pfn(n) return ns.sformat(libName .. '::Cache:: %s', n) end
-  --- @param name AddOnName
-  --- @return AddOnInfoDetail
-  function c:GetInfo(name)
-    if self.info[name] == nil then
-      --- @type AddOnInfoDetail
-      local info = AU:GetAddOnInfo(name)
-      info.desc = string.gsub(info.notes or '', "[\|n]+$", "")
-      self.info[name] = info
-    end
-    return self.info[name]
-  end
-end
 
 --- @param index Index The AddOnIndex
 --- @return AddOnName, boolean, Enabled
@@ -89,7 +81,7 @@ function o:GetAddOnInfo(indexOrName)
   if c.info[name] == nil then
     --- @type AddOnInfoDetail
     local info = AU:GetAddOnInfo(name)
-    info.desc = string.gsub(info.notes or '', '[|n]+$', '')
+    info.desc = TrimTrailingBreaks(info.notes or '')
     c.info[name] = info
   end
   return c.info[name]

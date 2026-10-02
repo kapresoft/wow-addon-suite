@@ -43,7 +43,8 @@ local LocalCache = {
   dependencyDetails = {},
 }
 
-local c = LocalCache; do
+local c = LocalCache
+do
   ---@param reference Name Informational parameter to display the referenceID of the caller.
   function c:Flush(reference)
     if IsTableEmpty(self.dependencyDetails) then return end
@@ -57,7 +58,8 @@ end
 Type: AddOnDependencyDetailsMixin
 -------------------------------------------------------------------------------]]
 --- @class AddOnDependencyDetailsMixin
-local AddOnDependencyDetailsMixin = {}; do
+local AddOnDependencyDetailsMixin = {}
+do
   --- @type AddOnDependencyDetailsMixin
   local D = AddOnDependencyDetailsMixin
 
