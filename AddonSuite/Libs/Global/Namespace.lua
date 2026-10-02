@@ -28,7 +28,6 @@ local ns = kns; ADDON_SUITE_NS = ns
 ns.mt = { __tostring = function() return ns.addon .. '::Namespace' end }
 setmetatable(ns, ns.mt)
 
-
 --[[-------------------------------------------------------------------
 Formatter/Printer
 ---------------------------------------------------------------------]]
@@ -50,8 +49,12 @@ ns.printer = LibPrettyPrint:Printer({
 
 ns.LogHolder = {}
 do
-  local h = ns.LogHolder; local noop = function(_moduleName) return function() end end
-  h.printer = noop; h.tracer = noop
+  local h = ns.LogHolder
+  local noop = function(_moduleName)
+    return function() end
+  end
+  h.printer = noop
+  h.tracer = noop
 end
 
 --[[-----------------------------------------------------------------------------
@@ -118,7 +121,9 @@ function ns:CreateSequence(startingSequence) return SequenceMixin.New(startingSe
 --- @see AceLocale-3.0.NewLocale
 --- @param locale string Name of the locale to register, e.g. 'deDE', 'frFR', etc.
 --- @return table<string, boolean|string>? locale Locale table to add localizations to, or nil if the current locale is not required.
-function ns:NewLocale(locale) return self.O.AceLib:AceLocale():NewLocale(self.addon, locale, false, true) end
+function ns:NewLocale(locale)
+  return self.O.AceLib:AceLocale():NewLocale(self.addon, locale, false, true)
+end
 
 --- @return table<string, string>
 function ns:GetLocale() return self.O.AceLib:AceLocale():GetLocale(self.addon, true) end
