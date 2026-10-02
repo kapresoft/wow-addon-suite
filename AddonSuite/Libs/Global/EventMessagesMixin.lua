@@ -32,6 +32,8 @@ function o:OnAddOnReady(callbackFn) self:E():RegisterMessage(MSG.OnAddOnReady, c
 function o:OnAddOnEnabled(callbackFn) self:E():RegisterMessage(MSG.OnAddOnEnabled, callbackFn) end
 
 --- @param callbackFn fun() | 'function() print("hello") end'
-function o:OnBeforeInitialize(callbackFn) self:E():RegisterMessage(MSG.OnBeforeInitialize, callbackFn) end
+function o:OnBeforeInitialize(callbackFn)
+  self:E():RegisterMessage(MSG.OnBeforeInitialize, callbackFn)
+end
 --- @param callbackFn fun() | 'function() print("hello") end'
 function o:OnAfterInitialize(callbackFn) self:E():RegisterMessage(MSG.OnAfterInitialize, callbackFn) end
