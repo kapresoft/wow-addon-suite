@@ -32,9 +32,7 @@ local sformat, unpack = ns.sformat, unpack
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
-function o:OnEnable()
-  self:SendMessage(GC.M.OnAddOnEnabled, ns.addon)
-end
+function o:OnEnable() self:SendMessage(GC.M.OnAddOnEnabled, ns.addon) end
 
 function o:OnInitialize()
   self:SendMessage(GC.M.OnBeforeInitialize, ns.addon)
@@ -137,9 +135,15 @@ function o:OpenConfig(group)
   if frame then
     if not self:IsHooked(frame, 'OnHide') then
       local success, msg = pcall(function()
-        self:HookScript(frame, 'OnHide', function() self:OnHide(frame, self.configDialogWidget:GetUserData('appName')) end )
+        self:HookScript(
+          frame,
+          'OnHide',
+          function() self:OnHide(frame, self.configDialogWidget:GetUserData('appName')) end
+        )
       end)
-      if success ~= true then ns.tr('hooked=', self:IsHooked(frame, 'OnHide'), 'onHideHookFailed:', msg) end
+      if success ~= true then
+        ns.tr('hooked=', self:IsHooked(frame, 'OnHide'), 'onHideHookFailed:', msg)
+      end
     end
   end
 end

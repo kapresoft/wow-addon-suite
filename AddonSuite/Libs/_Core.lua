@@ -29,9 +29,9 @@ function ns:ColorFn(rgbHex) return colorFormatter:ColorFn(rgbHex) end
 
 --- @type Kapresoft-ColorDefinition-2-0
 local colorDef = {
-    primary   = CreateColorFromRGBHexString('7ACFFB'),
-    secondary = CreateColorFromRGBHexString('fbeb2d'),
-    tertiary  = CreateColorFromRGBHexString('ffffff'),
+  primary = CreateColorFromRGBHexString('7ACFFB'),
+  secondary = CreateColorFromRGBHexString('fbeb2d'),
+  tertiary = CreateColorFromRGBHexString('ffffff'),
 }; ns.colorDef = colorDef
 
 local primaryC = ns:ColorFn(ns.colorDef.primary)
@@ -63,13 +63,18 @@ end
 --- @param subPrefix? string Defaults to the addOn name
 function ns:CreateLogPrefix(module, subPrefix)
   if not subPrefix then
-  return string.format(
-          ns.ch:T('{{') .. '%s::%s' .. ns.ch:T('}}:'),
-          ns.ch:P(ns.logName), ns.ch:S(module))
+    return string.format(
+      ns.ch:T('{{') .. '%s::%s' .. ns.ch:T('}}:'),
+      ns.ch:P(ns.logName),
+      ns.ch:S(module)
+    )
   end
   return string.format(
-          ns.ch:T('{{') .. '%s::%s::%s' .. ns.ch:T('}}:'),
-          ns.ch:P(ns.logName), ns.ch:S(module), ns.ch:S(subPrefix))
+    ns.ch:T('{{') .. '%s::%s::%s' .. ns.ch:T('}}:'),
+    ns.ch:P(ns.logName),
+    ns.ch:S(module),
+    ns.ch:S(subPrefix)
+  )
 end
 
 function ns.tr(prefix, ...)
@@ -87,12 +92,12 @@ Type: DebugSettingsFlag
 --- @class DebugSettingsFlag
 --- @see GlobalDeveloper
 local flag = {
-    --- Enable developer mode: logging and debug tab settings
-    developer = false,
-    --- Enables the DebugChatFrame log console
-    enableLogConsole = false,
-    --- Enable selection of chat frame tab
-    selectLogConsoleTab = false,
+  --- Enable developer mode: logging and debug tab settings
+  developer = false,
+  --- Enables the DebugChatFrame log console
+  enableLogConsole = false,
+  --- Enable selection of chat frame tab
+  selectLogConsoleTab = false,
 }
 
 --[[-----------------------------------------------------------------------------
@@ -100,7 +105,7 @@ Type: DebugSettings
 --- Make sure to match this structure in GlobalDeveloper (which is not packaged in releases)
 -------------------------------------------------------------------------------]]
 --- @class DebugSettings
-ns.debug = { flag = flag, alwaysEnabledAddOns = {}, }
+ns.debug = { flag = flag, alwaysEnabledAddOns = {} }
 
 --[[-----------------------------------------------------------------------------
 Namespace Methods
@@ -112,4 +117,3 @@ function ns:IsDev()
   --@end-do-not-package@
   return ns.debug.flag.developer == true
 end
-
