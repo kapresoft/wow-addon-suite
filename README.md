@@ -2,7 +2,7 @@
 
 
 # AddonSuite
-> A [World of Warcraft](https://worldofwarcraft.com/) AddOn 
+> ▶ A [World of Warcraft](https://worldofwarcraft.com/) AddOn 
 
 ![download-count](https://cf.way2muchnoise.eu/full_785236_downloads.svg?badge_style=for_the_badge) ![supported-wow-versions](https://cf.way2muchnoise.eu/versions/World%20of%20Warcraft%20Versions_785236_all.svg?badge_style=for_the_badge)
 
