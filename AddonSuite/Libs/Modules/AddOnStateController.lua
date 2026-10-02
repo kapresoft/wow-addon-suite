@@ -219,7 +219,6 @@ local function CheckedStateMethods()
   function o:IsInSync() return #self.checkedButNotLoaded <= 0 and #self.loadedButNotChecked <= 0 end
 end; CheckedStateMethods()
 
-
 --[[-----------------------------------------------------------------------------
 Mixin: AddOnStateDataMixin
 -------------------------------------------------------------------------------]]
