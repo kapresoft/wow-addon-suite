@@ -253,7 +253,11 @@ end
 --- @param maxLength number The maximum allowed length of the string before truncation.
 --- @return string The potentially truncated string.
 local function TruncateStringWithEllipses(str, maxLength)
-  assert(type(str) == 'string', 'TruncateStringWithEllipses(str, maxLength): str must be a string', 2)
+  assert(
+    type(str) == 'string',
+    'TruncateStringWithEllipses(str, maxLength): str must be a string',
+    2
+  )
   assert(
     type(maxLength) == 'number' and maxLength > 0,
     'TruncateStringWithEllipses(str, maxLength): maxLength must be a number greater than zero'

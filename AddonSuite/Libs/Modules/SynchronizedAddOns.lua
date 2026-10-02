@@ -81,5 +81,3 @@ function o:ForEachSyncdAddOn(name, callbackFn)
     callbackFn(syncdAddOn)
   end
 end
-
-
