@@ -10,7 +10,7 @@
 
 ## IconTexture: Interface/AddOns/AddonSuite/Assets/addon-icon.tga
 
-## OptionalDeps: Ace3, DevSuite
+## OptionalDeps: Ace3, LibPrettyPrint, LibTraceKit, LibUtil, DevSuite
 
 ## Category-enUS: AddOn Managers
 ## Category-deDE: AddOn-Verwaltung
