@@ -11,6 +11,13 @@ local SyncData = {
 
   --- @type table<string, table<number, AddOnName>>
   items = {
+    ['ActionbarPlus'] = {
+      'ActionbarPlus-Core',
+      'ActionbarPlus-BarsUI',
+      'ActionbarPlus-OptionsUI',
+      'ActionbarPlus-Masque',
+      'ActionbarPlus-ArcLayout',
+    },
     ['AtlasLootClassic'] = {
       'AtlasLootClassic_Collections',
       'AtlasLootClassic_Crafting',
@@ -28,6 +35,7 @@ local SyncData = {
       'BagBrother',
       'Bagnon_Config',
       'Bagnon_Bank',
+      'Bagnon_GuildBank',
       'Bagnon_RequiredLevel',
       'Bagnon_ItemInfo',
       'Bagnon_Scrap',
@@ -45,10 +53,50 @@ local SyncData = {
     },
     ['DBM-Core'] = { 'DBM-GUI', 'DBM-VPVEM', 'DBM-StatusBarTimers' },
     ['GatherMate2'] = { 'GatherMate2Marker' },
+    ['Gears'] = { 'Gears-OptionsUI', 'LibIconPicker' },
     ['ItemRack'] = { 'ItemRackOptions' },
+    ['LuaDevKit'] = {
+      'LuaDevKit-CodeEditor',
+      'LuaDevKit-Settings',
+      'SharedMediaFontsMono',
+    },
+    ['Masque'] = {
+      'Masque_Apathy',
+      'Masque_Caith',
+      'Masque_Cirque',
+      'Masque_Entropy',
+      'Masque_Fusion',
+      'Masque_Gears',
+      'Masque_Raeli',
+      'Masque_Serenity',
+      'Masque_Stylo',
+    },
+    ['Questie'] = { 'QuestieDB' },
     ['Scrap'] = { 'Scrap_Config', 'Scrap_Merchant', 'Bagnon_Scrap' },
     ['ShadowedUnitFrames'] = { 'ShadowedUF_Options' },
-    ['TitanClassic'] = { 'TitanVolume', 'TitanXP' },
+    ['Titan'] = {
+      'TitanAlts',
+      'TitanAmmo',
+      'TitanBag',
+      'TitanClassic',
+      'TitanClock',
+      'TitanGold',
+      'TitanLocation',
+      'TitanLootType',
+      'TitanPerformance',
+      'TitanPost',
+      'TitanRegen',
+      'TitanRepair',
+      'TitanUI',
+      'TitanVolume',
+      'TitanXP',
+    },
+    ['WeakAuras'] = {
+      'WeakAurasArchive',
+      'WeakAurasModelPaths',
+      'WeakAurasOptions',
+      'WeakAurasTemplates',
+    },
   },
 }
 
