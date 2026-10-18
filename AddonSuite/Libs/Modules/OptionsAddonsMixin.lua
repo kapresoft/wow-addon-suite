@@ -31,6 +31,8 @@ local libPrefix = L['Lib:'] .. ' '
 --- @type boolean
 local IsOptionsVisible = false
 
+local ADDON_ROW_ARG = 'AddonSuite.AddOnRow'
+
 local fVersion = ns:ColorFn(BLUE_FONT_COLOR)
 local fDisabled = ns:ColorFn(LIGHTGRAY_FONT_COLOR)
 local fLib = ns:ColorFn(LIGHTBLUE_FONT_COLOR)
@@ -384,6 +386,7 @@ function o:CreateAddOnCheckList()
       order = order:next(),
       type = 'toggle',
       width = 1.3,
+      arg = ADDON_ROW_ARG,
       get = o.CreateGetFn(name),
     }
     local opt = options[name]
@@ -428,3 +431,4 @@ AU:OnOpenAndClose(
   function(msgName, appName, container) IsOptionsVisible = true end,
   function(msgName, appName) IsOptionsVisible = false end
 )
+AU:AnchorTooltipToRow(ns.addon, ADDON_ROW_ARG)

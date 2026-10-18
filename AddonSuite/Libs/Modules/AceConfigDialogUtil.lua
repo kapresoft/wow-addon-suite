@@ -26,6 +26,26 @@ local function GetAceFrame(addonName)
   return aceFrameObj and aceFrameObj.frame
 end
 
+--- @param tooltip GameTooltip
+--- @param addonName Name
+--- @param arg any
+--- @return boolean @True if owned by an option of addonName carrying arg
+local function IsOptionTooltip(tooltip, addonName, arg)
+  local owner = tooltip:GetOwner()
+  local widget = owner and owner.obj
+  local user = widget and widget.GetUserDataTable and widget:GetUserDataTable()
+  if not (user and user.option) then return false end
+  return user.appName == addonName and user.option.arg == arg
+end
+
+--- The tooltip template clamps it to the screen
+--- @param tooltip GameTooltip
+local function AnchorToRow(tooltip)
+  tooltip:SetAnchorType('ANCHOR_NONE')
+  tooltip:ClearAllPoints()
+  tooltip:SetPoint('BOTTOMLEFT', tooltip:GetOwner(), 'TOPRIGHT', -50, 50)
+end
+
 --[[-----------------------------------------------------------------------------
 Mixin Methods
 -------------------------------------------------------------------------------]]
@@ -76,5 +96,17 @@ function o:OnOpenAndClose(addonName, onOpenHandlerFn, onCloseHandlerFn)
     end)
 
     f[isHooked] = true
+  end)
+end
+
+--- Moves AceConfigDialog's tooltip to the top right of the hovered row.
+--- The tooltip is shared by every addon, so only options of addonName
+--- whose `arg` equals the given arg are moved.
+--- @param addonName string @The AceConfig app name
+--- @param arg any
+function o:AnchorTooltipToRow(addonName, arg)
+  hooksecurefunc(ACD.tooltip, 'Show', function(tooltip)
+    if not IsOptionTooltip(tooltip, addonName, arg) then return end
+    AnchorToRow(tooltip)
   end)
 end
