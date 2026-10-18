@@ -31,8 +31,8 @@ local SyncData = {
     ['!BugGrabber'] = { 'BugSack' },
     ['VuhDo'] = { 'VuhDoOptions' },
     ['BadBoy'] = { 'BadBoy_Ignore', 'BadBoy_Levels' },
-    ['Bagnon'] = {
-      'BagBrother',
+    ['BagBrother'] = {
+      'Bagnon',
       'Bagnon_Config',
       'Bagnon_Bank',
       'Bagnon_GuildBank',
