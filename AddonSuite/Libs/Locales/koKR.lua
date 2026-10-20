@@ -11,7 +11,6 @@ Locale Entries
 -------------------------------------------------------------------------------]]
 
 L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG"]                  = '설정 창'
-L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG_MINIMAP"]          = '설정 창 : 미니맵'
 
 L['%s version %s by %s is loaded.']        = '%s 버전 %s (%s 제작)이(가) 로드되었습니다.'
 L['Type %s or %s for available commands.'] = '사용 가능한 명령어를 보려면 %s 또는 %s 를 입력하세요.'
@@ -73,7 +72,6 @@ L['Hide Minimap Icon TitanPanel']       = 'TitanPanel에 추가 시 미니맵 �
 L['Hide Minimap Icon TitanPanel::Desc'] = 'TitanPanel에 추가되었을 때 미니맵에 표시되는 애드온 아이콘을 숨깁니다.'
 
 L['View or switch profiles']      = '프로필 보기 또는 전환'
-L['Open minimap settings'] = '미니맵 설정 열기'
 L['View available commands']      = '사용 가능한 명령어 보기'
 L['Open settings']                = '설정 열기'
 L['Command Lines']                = '명령줄'
@@ -81,8 +79,6 @@ L['Currently set to switch profiles %s a confirmation prompt.'] = '현재 프로
 
 L['Add to Favorite']              = '즐겨찾기에 추가'
 L['Add to Favorite::Desc']        = "이 옵션을 활성화하면 좌클릭으로 여는 미니맵 프로필 전환 메뉴에 현재 프로필이 표시됩니다. 비활성화하면 메뉴에서 프로필이 숨겨집니다."
-L['Minimap']                      = '미니맵'
-L['Minimap::Desc']                = "미니맵 옵션"
 
 L['Favorite Profiles']            = '즐겨찾는 프로필'
 L['Favorite Profiles::Desc']      = '좌클릭으로 여는 미니맵 메뉴에 표시할 즐겨찾는 프로필을 선택하세요. 이 메뉴를 통해 애드온 세트 간에 빠르게 전환할 수 있습니다.'
@@ -101,7 +97,6 @@ L['Click Key To Sync']          = 'ALT+좌클릭을 눌러 동기화 후 새로�
 L['ALT-LEFT-Click']             = 'ALT+좌클릭'
 L['LEFT-Click']                 = '좌클릭'
 L['RIGHT-Click']                = '우클릭'
-L['SHIFT-RIGHT-Click']          = 'SHIFT+우클릭'
 
 L['Profile Sync Status Indicator']       = '프로필 동기화 상태 표시기'
 L['Profile Sync Status Indicator::Desc'] = '이 옵션을 활성화하면 미니맵 아이콘에 |cfdE64750색상|r 코드를 사용하여 프로필이 동기화되었는지 또는 업데이트가 필요한지를 시각적으로 표시합니다.'

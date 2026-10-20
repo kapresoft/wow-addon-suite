@@ -11,7 +11,6 @@ Locale Entries
 -------------------------------------------------------------------------------]]
 
 L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG"]                  = 'Optionsfenster'
-L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG_MINIMAP"]          = 'Optionsfenster: Minikarte'
 
 L['%s version %s by %s is loaded.']        = '%s Version %s von %s wurde geladen.'
 L['Type %s or %s for available commands.'] = 'Gib %s oder %s ein, um verfügbare Befehle anzuzeigen.'
@@ -73,7 +72,6 @@ L['Hide Minimap Icon TitanPanel']       = 'Minikarten-Symbol bei TitanPanel-Inte
 L['Hide Minimap Icon TitanPanel::Desc'] = 'Verbirgt das Minikarten-Symbol des Add-Ons, wenn es zu TitanPanel hinzugefügt wurde.'
 
 L['View or switch profiles']      = 'Profile anzeigen oder wechseln'
-L['Open minimap settings'] = 'Minikarten-Einstellungen öffnen'
 L['View available commands']      = 'Verfügbare Befehle anzeigen'
 L['Open settings']                = 'Einstellungen öffnen'
 L['Command Lines']                = 'Befehlszeilen'
@@ -81,8 +79,6 @@ L['Currently set to switch profiles %s a confirmation prompt.'] = 'Profilwechsel
 
 L['Add to Favorite']              = 'Zu Favoriten hinzufügen'
 L['Add to Favorite::Desc']        = "Aktiviere diese Option, damit das aktuelle Profil im Minikarten-Profilwechselmenü (Linksklick) angezeigt wird. Deaktivieren, um das Profil aus dem Menü auszublenden."
-L['Minimap']                      = 'Minikarte'
-L['Minimap::Desc']                = "Minikarten-Einstellungen"
 
 L['Favorite Profiles']            = 'Favoritenprofile'
 L['Favorite Profiles::Desc']      = 'Wähle Favoritenprofile für das Minikarten-Menü (Linksklick) aus. Über dieses Menü kannst du schnell zwischen Add-On-Sets wechseln.'
@@ -101,7 +97,6 @@ L['Click Key To Sync']          = 'ALT+Linksklick, um zu synchronisieren und neu
 L['ALT-LEFT-Click']             = 'ALT+Linksklick'
 L['LEFT-Click']                 = 'Linksklick'
 L['RIGHT-Click']                = 'Rechtsklick'
-L['SHIFT-RIGHT-Click']          = 'SHIFT+Rechtsklick'
 
 L['Profile Sync Status Indicator']       = 'Profil-Synchronisationsanzeige'
 L['Profile Sync Status Indicator::Desc'] = 'Aktiviere diese Option, um |cfdE64750farbliche|r Kennzeichnung am Minikarten-Symbol zu verwenden, die anzeigt, ob dein Profil synchron ist oder eine Aktualisierung benötigt.'

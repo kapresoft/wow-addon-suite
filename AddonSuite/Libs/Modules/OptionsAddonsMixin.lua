@@ -22,6 +22,7 @@ local AceEvent = ns:AceEvent()
 local AceConfigRegistry = ns:AceConfigRegistry()
 local API, ACU, ADU = O.API, ns:ACU(), O.AddOnDependencyUtil
 local OptionsTitanPanelMixin = O.OptionsTitanPanelMixin
+local OptionsFavoritesMixin = O.OptionsFavoritesMixin
 local ActionLabel, FavoriteDropdown = O.ActionLabelWidget, O.FavoriteDropdownWidget
 
 local libName = M.OptionsAddonsMixin()
@@ -188,6 +189,7 @@ function o:CreateAddOnsGroup()
   local order = self.order
   local addOnsTab = self:CreateAddOnsTab()
   local optionsTab = self:CreateOptionsTab()
+  local favoritesTab = OptionsFavoritesMixin:New(self.mainOptions):CreateTab()
   local titanPanelTab = OptionsTitanPanelMixin:New(self.mainOptions):CreateTab()
   ---@type AceConfigOption
   local group = {
@@ -196,7 +198,12 @@ function o:CreateAddOnsGroup()
     desc = L['General::Desc'],
     order = order:next(),
     childGroups = 'tab',
-    args = { addons = addOnsTab, titanPanel = titanPanelTab, options = optionsTab },
+    args = {
+      addons = addOnsTab,
+      options = optionsTab,
+      favorites = favoritesTab,
+      titanPanel = titanPanelTab,
+    },
   }
   return group
 end

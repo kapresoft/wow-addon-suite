@@ -34,8 +34,8 @@
     <Script file="Modules\AceDbInitializerMixin.lua" />
     <Script file="Modules\OptionsUtilMixin.lua" />
     <Script file="Modules\OptionsTitanPanelMixin.lua" />
+    <Script file="Modules\OptionsFavoritesMixin.lua" />
     <Script file="Modules\OptionsAddonsMixin.lua" />
-    <Script file="Modules\OptionsMinimapMixin.lua" />
     <Script file="Modules\MinimapIconControllerMixin.lua" />
     <Script file="Modules\AddOnStateController.lua" />
     <Script file="Modules\OptionsMixin.lua" />

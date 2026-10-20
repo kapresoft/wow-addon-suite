@@ -11,7 +11,6 @@ Locale Entries
 -------------------------------------------------------------------------------]]
 
 L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG"]                  = 'Finestra delle opzioni'
-L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG_MINIMAP"]          = 'Finestra delle opzioni: Minimappa'
 
 L['%s version %s by %s is loaded.']        = '%s versione %s di %s è stato caricato.'
 L['Type %s or %s for available commands.'] = 'Digita %s o %s per i comandi disponibili.'
@@ -73,7 +72,6 @@ L['Hide Minimap Icon TitanPanel']       = 'Nascondi icona minimappa quando aggiu
 L['Hide Minimap Icon TitanPanel::Desc'] = 'Nasconde l\'icona dell\'addon sulla minimappa quando viene aggiunta a TitanPanel.'
 
 L['View or switch profiles']      = 'Visualizza o cambia profilo'
-L['Open minimap settings'] = 'Apri le impostazioni della minimappa'
 L['View available commands']      = 'Visualizza i comandi disponibili'
 L['Open settings']                = 'Apri le opzioni'
 L['Command Lines']                = 'Righe di comando'
@@ -81,8 +79,6 @@ L['Currently set to switch profiles %s a confirmation prompt.'] = 'Il cambio di 
 
 L['Add to Favorite']              = 'Aggiungi ai preferiti'
 L['Add to Favorite::Desc']        = "Attiva questa opzione per mostrare il profilo attuale nel menu di cambio profilo della minimappa (clic sinistro). Disattiva per nascondere il profilo dal menu."
-L['Minimap']                      = 'Minimappa'
-L['Minimap::Desc']                = "Opzioni della minimappa"
 
 L['Favorite Profiles']            = 'Profili preferiti'
 L['Favorite Profiles::Desc']      = 'Seleziona i profili preferiti per il menu della minimappa (clic sinistro). Questo menu consente di passare rapidamente tra set di addon.'
@@ -101,7 +97,6 @@ L['Click Key To Sync']          = 'Premi ALT+clic sinistro per sincronizzare e r
 L['ALT-LEFT-Click']             = 'ALT+clic sinistro'
 L['LEFT-Click']                 = 'Clic sinistro'
 L['RIGHT-Click']                = 'Clic destro'
-L['SHIFT-RIGHT-Click']          = 'MAIUSC+clic destro'
 
 L['Profile Sync Status Indicator']       = 'Indicatore di stato di sincronizzazione del profilo'
 L['Profile Sync Status Indicator::Desc'] = 'Attiva questa opzione per usare una codifica a |cfdE64750colori|r sull\'icona della minimappa, che indica visivamente se il profilo è sincronizzato o necessita di un aggiornamento.'

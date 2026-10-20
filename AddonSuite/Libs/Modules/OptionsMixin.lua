@@ -8,7 +8,7 @@ local O, GC, M = ns.O, ns.GC, ns.M
 local API, L = O.API, ns:AceLocale()
 local AceConfig, AceConfigDialog = ns:AceConfig(), ns:AceConfigDialog()
 local AceDBOptions = ns:AceDBOptions()
-local OptionsAddonsMixin, OptionsMinimapMixin = O.OptionsAddonsMixin, O.OptionsMinimapMixin
+local OptionsAddonsMixin = O.OptionsAddonsMixin
 
 --[[-----------------------------------------------------------------------------
 New Instance
@@ -53,7 +53,6 @@ function o:CreateOptions()
     type = 'group',
     args = {
       general = OptionsAddonsMixin:New(self):CreateAddOnsGroup(),
-      minimap = OptionsMinimapMixin:New(self):CreateOptions(),
     },
   }
   return options

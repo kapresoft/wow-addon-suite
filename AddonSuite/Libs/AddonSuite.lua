@@ -115,13 +115,14 @@ function o:CloseConfig()
   AceConfigDialog:Close(ns.addon)
 end
 
----@param group string|nil | "'debugging'" | "'profiles'" | "'minimap'"
-function o:OpenConfig(group)
-  if group and AceConfigDialog.OpenFrames[ns.addon] then
-    return AceConfigDialog:SelectGroup(ns.addon, group or 'general')
+--- @param ... string @Group path, e.g. 'general', 'addons'; General if none
+function o:OpenConfig(...)
+  local path = { ... }
+  if #path > 0 and AceConfigDialog.OpenFrames[ns.addon] then
+    return AceConfigDialog:SelectGroup(ns.addon, unpack(path))
   end
   AceConfigDialog:Open(ns.addon)
-  self:DialogGlitchHack(group)
+  self:DialogGlitchHack(#path > 0 and path or { 'general' })
 
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
   self.configDialogWidget = AceConfigDialog.OpenFrames[ns.addon]
@@ -149,17 +150,16 @@ function o:OpenConfig(group)
 end
 function o:OpenConfigDebugging() self:OpenConfig('debugging') end
 function o:OpenConfigProfiles() self:OpenConfig('profiles') end
-function o:OpenConfigMinimapProfileMenu() self:OpenConfig('minimap') end
+function o:OpenConfigManageAddOns() self:OpenConfig('general', 'addons') end
 --- This hacks solves the range UI notch not positioning properly
----@param group string|nil | "'debugging'" | "'profiles'" | "'minimap'"
-function o:DialogGlitchHack(group)
+--- @param path string[] @Group path to select
+function o:DialogGlitchHack(path)
   AceConfigDialog:SelectGroup(ns.addon, 'debugging')
   AceConfigDialog:Open(ns.addon)
   C_Timer.After(0.01, function()
     AceConfigDialog:ConfigTableChanged('anyEvent', ns.addon)
-    AceConfigDialog:SelectGroup(ns.addon, group or 'general')
+    AceConfigDialog:SelectGroup(ns.addon, unpack(path))
   end)
 end
 --- @see Bindings.xml
 function o.BINDING_ADDON_SUITE_OPTIONS_DLG() o:OpenConfig() end
-function o.BINDING_ADDON_SUITE_OPTIONS_DLG_MINIMAP() o:OpenConfigMinimapProfileMenu() end
