@@ -23,6 +23,8 @@ L['Current::Symbol::Minimap']   = ns.locale.checkMark
 
 L['General']                  = 'Generale'
 L['General::Desc']            = "Impostazioni generali"
+L['Manage Add-Ons']           = 'Gestisci addon'
+L['Options']                  = 'Opzioni'
 L['General Configuration']    = 'Impostazioni generali'
 
 L['General::Enable All::Button']           = ALL
@@ -30,12 +32,12 @@ L['General::Enable All::Button::Desc']     = 'Seleziona tutti gli addon sottosta
 L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = 'Deseleziona tutti gli addon sottostanti.'
 
-L['Add-Ons::Desc']            = 'Per attivare o disattivare un addon, seleziona o deseleziona la relativa casella. Successivamente, fai clic su |cdf6F97FFRicarica interfaccia|r per applicare le modifiche.'
+L['Add-Ons::Desc']            = 'Seleziona gli addon che questo profilo deve caricare, quindi fai clic sul pulsante di ricarica per applicare le modifiche.'
 L['Reload UI']         = 'Ricarica interfaccia'
 L['Reload UI::Desc']   = 'Applica e ricarica immediatamente |cfdE64750senza conferma.|r'
 L['Sync with Profile and Reload'] = 'Sincronizza con il profilo e ricarica'
-L['Select Profile']           = 'Seleziona profilo'
-L['Select Profile::Desc']     = 'Seleziona un profilo da attivare. Ti verrà chiesto di ricaricare l\'interfaccia. Questi profili vengono gestiti nella scheda Profili.'
+L['Profile']                  = 'Profilo'
+L['Profile::Desc']            = 'Seleziona un profilo da attivare. Ti verrà chiesto di ricaricare l\'interfaccia. Questi profili vengono gestiti nella scheda Profili.'
 
 L['Global Setting']           = 'Impostazione globale'
 L['Character Setting']        = 'Impostazione del personaggio'
@@ -114,7 +116,7 @@ L['Limit Profile Name Characters::Desc'] = 'Imposta il numero massimo di caratte
 
 L['Show Profile Name']            = 'Mostra il nome del profilo'
 L['Show Profile Name::Desc']      = 'Attiva questa opzione per mostrare il nome del profilo attuale subito a destra dell\'icona in |cdf6F97FFTitan Panel|r.'
-L['Titan Panel Settings']         = 'Impostazioni Titan Panel'
+L['Titan Panel']                  = 'Titan Panel'
 L['Show Out of Sync Count']       = 'Mostra il conteggio degli addon non sincronizzati'
 L['Show Out of Sync Count::Desc'] = 'Attiva questa impostazione per mostrare in |cdf6F97FFTitan Panel|r il numero di addon attualmente non sincronizzati con il profilo attivo.'
 L['Lib:']                         = 'Libr.:'

@@ -23,6 +23,8 @@ L['Current::Symbol::Minimap']   = ns.locale.checkMark
 
 L['General']                  = '常规'
 L['General::Desc']            = "常规设置"
+L['Manage Add-Ons']           = '管理插件'
+L['Options']                  = '选项'
 L['General Configuration']    = '常规设置'
 
 L['General::Enable All::Button']           = ALL
@@ -30,12 +32,12 @@ L['General::Enable All::Button::Desc']     = '勾选下方所有插件。'
 L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = '取消勾选下方所有插件。'
 
-L['Add-Ons::Desc']            = '要启用或禁用插件，请勾选或取消勾选对应的复选框。选择完成后，点击 |cdf6F97FF重新加载界面|r 以应用更改。'
+L['Add-Ons::Desc']            = '勾选此配置文件需要加载的插件，然后点击重新加载按钮以应用更改。'
 L['Reload UI']         = '重新加载界面'
 L['Reload UI::Desc']   = '|cfdE64750无需确认|r，立即应用并重新加载。'
 L['Sync with Profile and Reload'] = '与配置文件同步并重新加载'
-L['Select Profile']           = '选择配置文件'
-L['Select Profile::Desc']     = '选择要激活的配置文件。系统会提示你重新加载界面。请注意，这些配置文件在“配置文件”选项卡中管理。'
+L['Profile']                  = '配置文件'
+L['Profile::Desc']            = '选择要激活的配置文件。系统会提示你重新加载界面。请注意，这些配置文件在“配置文件”选项卡中管理。'
 
 L['Global Setting']           = '全局设置'
 L['Character Setting']        = '角色设置'
@@ -114,7 +116,7 @@ L['Limit Profile Name Characters::Desc'] = '设置在 |cdf6F97FFTitan Panel|r �
 
 L['Show Profile Name']            = '显示配置文件名称'
 L['Show Profile Name::Desc']      = '启用此选项后，会在 |cdf6F97FFTitan Panel|r 中图标右侧显示当前配置文件的名称。'
-L['Titan Panel Settings']         = 'Titan Panel 设置'
+L['Titan Panel']                  = 'Titan Panel'
 L['Show Out of Sync Count']       = '显示未同步插件数量'
 L['Show Out of Sync Count::Desc'] = '启用此设置后，会在 |cdf6F97FFTitan Panel|r 中显示当前与激活配置文件不同步的插件数量。'
 L['Lib:']                         = '库：'

@@ -23,6 +23,8 @@ L['Current::Symbol::Minimap']   = ns.locale.checkMark
 
 L['General']                  = 'Allgemein'
 L['General::Desc']            = "Allgemeine Einstellungen"
+L['Manage Add-Ons']           = 'Add-Ons verwalten'
+L['Options']                  = 'Optionen'
 L['General Configuration']    = 'Allgemeine Einstellungen'
 
 L['General::Enable All::Button']           = ALL
@@ -30,12 +32,12 @@ L['General::Enable All::Button::Desc']     = 'Aktiviert alle Add-Ons unten.'
 L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = 'Deaktiviert alle Add-Ons unten.'
 
-L['Add-Ons::Desc']            = 'Um ein Add-On zu aktivieren oder zu deaktivieren, setze oder entferne das entsprechende Häkchen. Klicke danach auf |cdf6F97FFUI neu laden|r, um die Änderungen zu übernehmen.'
+L['Add-Ons::Desc']            = 'Setze ein Häkchen bei den Add-Ons, die dieses Profil laden soll, und klicke dann auf die Schaltfläche zum Neuladen, um die Änderungen zu übernehmen.'
 L['Reload UI']         = 'UI neu laden'
 L['Reload UI::Desc']   = 'Sofort übernehmen und neu laden |cfdE64750ohne Bestätigung.|r'
 L['Sync with Profile and Reload'] = 'Mit Profil synchronisieren und neu laden'
-L['Select Profile']           = 'Profil auswählen'
-L['Select Profile::Desc']     = 'Wähle ein Profil zur Aktivierung aus. Du wirst aufgefordert, die UI neu zu laden. Diese Profile werden im Reiter "Profile" verwaltet.'
+L['Profile']                  = 'Profil'
+L['Profile::Desc']            = 'Wähle ein Profil zur Aktivierung aus. Du wirst aufgefordert, die UI neu zu laden. Diese Profile werden im Reiter "Profile" verwaltet.'
 
 L['Global Setting']           = 'Globale Einstellung'
 L['Character Setting']        = 'Charaktereinstellung'
@@ -114,7 +116,7 @@ L['Limit Profile Name Characters::Desc'] = 'Lege die maximale Zeichenanzahl für
 
 L['Show Profile Name']            = 'Profilname anzeigen'
 L['Show Profile Name::Desc']      = 'Aktiviere diese Option, um den Namen des aktuellen Profils rechts neben dem Symbol in |cdf6F97FFTitan Panel|r anzuzeigen.'
-L['Titan Panel Settings']         = 'Titan-Panel-Einstellungen'
+L['Titan Panel']                  = 'Titan Panel'
 L['Show Out of Sync Count']       = 'Anzahl nicht synchroner Add-Ons anzeigen'
 L['Show Out of Sync Count::Desc'] = 'Aktiviere diese Einstellung, um in |cdf6F97FFTitan Panel|r die Anzahl der Add-Ons anzuzeigen, die derzeit nicht mit dem aktiven Profil synchron sind.'
 L['Lib:']                         = 'Bibl.:'
