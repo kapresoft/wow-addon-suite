@@ -208,6 +208,8 @@ function o:CreateAddOnsGroup()
   return group
 end
 
+--- The add-on list is a child group so it scrolls on its own;
+--- Ace only wraps groups without child groups in a scroll frame.
 --- @return AceConfigOption
 function o:CreateAddOnsTab()
   local order = self.order:next()
@@ -215,6 +217,7 @@ function o:CreateAddOnsTab()
     type = 'group',
     name = L['Manage Add-Ons'],
     order = order,
+    childGroups = 'tab',
     args = self:CreateAddOnsOptions(),
   }
 end
@@ -291,20 +294,25 @@ function o:CreateAddOnsOptions()
     dialogControl = ActionLabel.Type,
     arg = {
       actions = { self:CreateEnableAllAction(), self:CreateDisableAllAction() },
+      -- Onto the Add-Ons tab strip, next to the rows they act on
+      actionsAnchor = 'below',
+      layout = { action = { x = -8, y = -7 } },
     } --[[@as ADS_Ace3WidgetArg]],
   })
-  options.spacer1c = ACU:CreateSpacer(order:next())
 
-  local addOnCount = GetNumAddOns()
-  if addOnCount <= 0 then
-    options['no_addon_found'] = {
+  --- @type table<string, AceConfigOption>
+  local list = {}
+  options.addonList = { type = 'group', name = L['Add-Ons'], order = order:next(), args = list }
+  self.addonsOptions = list
+
+  if GetNumAddOns() <= 0 then
+    list['no_addon_found'] = {
       name = '\n\nNo Add-Ons were detected',
       type = 'description',
       order = order:next(),
     }
     return options
   end
-  self.addonsOptions = options
 
   self:CreateAddOnCheckList()
 

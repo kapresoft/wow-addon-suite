@@ -2,6 +2,8 @@
 ActionLabel Widget
 A description with icon buttons pinned right: [text ...] [a] [b].
 Each button comes from the option's `arg.actions`, in order.
+`arg.actionsAnchor = 'below'` hangs the buttons under the text instead,
+e.g. onto the tab strip of a tab group that follows it.
 Use via `dialogControl = O.ActionLabelWidget.Type` on a 'description' option.
 -------------------------------------------------------------------------------]]
 --- @type ADS_Namespace
@@ -67,6 +69,16 @@ local function ShowButton(button, action, size)
   button:Show()
 end
 
+--- @param self table
+--- @param button Button
+--- @param size ADS_Ace3WidgetAction
+local function PinRight(self, button, size)
+  if CONFIG:ActionsAnchor(self) == 'below' then
+    return button:SetPoint('TOPRIGHT', self.frame, 'BOTTOMRIGHT', size.x, size.y)
+  end
+  button:SetPoint('RIGHT', self.frame, 'RIGHT', size.x, size.y)
+end
+
 --- Lays buttons out right to left, last action pinned right
 --- @param self table
 --- @return number @Width the buttons take, gaps included
@@ -83,7 +95,7 @@ local function LayoutButtons(self)
       button:SetPoint('RIGHT', anchor, 'LEFT', -BUTTON_GAP, 0)
       used = used + BUTTON_GAP
     else
-      button:SetPoint('RIGHT')
+      PinRight(self, button, size)
     end
     anchor, used = button, used + size.width
   end
@@ -98,6 +110,11 @@ end
 --- @param width number
 local function ApplyLayout(self, width)
   local used = LayoutButtons(self)
+  -- Buttons hung below take no room on the text's row
+  if CONFIG:ActionsAnchor(self) == 'below' then
+    self.label:SetWidth(width)
+    return self:SetHeight(self.label:GetStringHeight())
+  end
   local gap = used > 0 and TEXT_GAP or 0
   self.label:SetWidth(width - used - gap)
   local height = math.max(self.label:GetStringHeight(), CONFIG:Layout(self).action.height)

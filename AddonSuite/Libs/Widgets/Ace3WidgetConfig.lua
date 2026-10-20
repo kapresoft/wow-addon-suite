@@ -15,6 +15,7 @@ Types
 --- @field favorite? ADS_Ace3WidgetFavoriteArg
 --- @field reload? ADS_Ace3WidgetReloadArg
 --- @field actions? ADS_Ace3WidgetActionArg[] @ActionLabel buttons, left to right
+--- @field actionsAnchor? 'right'|'below'     @ActionLabel buttons beside or under the text
 
 --- Binds a FavoriteDropdown's star; separate from the option's get/set
 --- @class ADS_Ace3WidgetFavoriteArg
@@ -55,7 +56,10 @@ Types
 
 --- @class ADS_Ace3WidgetCheckbox : ADS_Ace3WidgetSize
 
+--- Offsets move the button group from its anchor
 --- @class ADS_Ace3WidgetAction : ADS_Ace3WidgetSize
+--- @field x? number @px
+--- @field y? number @px
 
 --- Width excludes the value label
 --- @class ADS_Ace3WidgetSlider : ADS_Ace3WidgetSize
@@ -85,7 +89,7 @@ local DEFAULT_LAYOUT = {
   dropdown = { width = 260, height = 30 },
   star = { width = 18, height = 18 },
   checkbox = { width = 30, height = 30 },
-  action = { width = 20, height = 20 },
+  action = { width = 20, height = 20, x = 0, y = 0 },
   slider = { width = 220, height = 19 },
   tooltip = { x = 20, y = 20 },
 }
@@ -148,4 +152,11 @@ end
 function o:ActionsArg(widget)
   local arg = ArgFor(widget)
   return type(arg) == 'table' and arg.actions or {}
+end
+
+--- @param widget AceGUIWidget
+--- @return 'right'|'below'
+function o:ActionsAnchor(widget)
+  local arg = ArgFor(widget)
+  return type(arg) == 'table' and arg.actionsAnchor or 'right'
 end

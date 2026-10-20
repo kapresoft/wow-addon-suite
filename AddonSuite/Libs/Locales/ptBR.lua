@@ -31,6 +31,7 @@ L['General::Enable All::Button::Desc']     = 'Marca todos os addons abaixo.'
 L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = 'Desmarca todos os addons abaixo.'
 
+L['Add-Ons']                  = 'Addons'
 L['Add-Ons::Desc']            = 'Marque os addons que este perfil deve carregar e depois clique no botão de recarregar para aplicar as alterações.'
 L['Reload UI']         = 'Recarregar interface'
 L['Reload UI::Desc']   = 'Aplica e recarrega imediatamente |cfdE64750sem confirmação.|r'
