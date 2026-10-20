@@ -400,7 +400,7 @@ function o:UpdateOutOfSyncIndicator(inSync, details)
   local iconT = d.icon
   if not iconT then return end
   if inSync then
-    d.text = self:GetProfileName()
+    d.text = self:GetProfileName() or ''
     return self:ChangeIcon(icon)
   end
   self:ChangeIcon(iconRed)
@@ -420,6 +420,7 @@ function o:GetTitanPluginText()
   return count
 end
 
+--- @return string? @nil when Show Profile Name is off
 function o:GetProfileName()
   local val = minimap().titan_panel.show_profile_name == true
   if val == true then
