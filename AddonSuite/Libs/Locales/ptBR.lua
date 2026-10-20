@@ -23,6 +23,8 @@ L['Current::Symbol::Minimap']   = ns.locale.checkMark
 
 L['General']                  = 'Geral'
 L['General::Desc']            = "Configurações gerais"
+L['Manage Add-Ons']           = 'Gerenciar addons'
+L['Options']                  = 'Opções'
 L['General Configuration']    = 'Configurações gerais'
 
 L['General::Enable All::Button']           = ALL
@@ -30,12 +32,12 @@ L['General::Enable All::Button::Desc']     = 'Marca todos os addons abaixo.'
 L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = 'Desmarca todos os addons abaixo.'
 
-L['Add-Ons::Desc']            = 'Para ativar ou desativar um addon, marque ou desmarque a caixa correspondente. Depois, clique em |cdf6F97FFRecarregar interface|r para aplicar as alterações.'
+L['Add-Ons::Desc']            = 'Marque os addons que este perfil deve carregar e depois clique no botão de recarregar para aplicar as alterações.'
 L['Reload UI']         = 'Recarregar interface'
 L['Reload UI::Desc']   = 'Aplica e recarrega imediatamente |cfdE64750sem confirmação.|r'
 L['Sync with Profile and Reload'] = 'Sincronizar com o perfil e recarregar'
-L['Select Profile']           = 'Selecionar perfil'
-L['Select Profile::Desc']     = 'Selecione um perfil para ativar. Você será solicitado a recarregar a interface. Esses perfis são gerenciados na aba Perfis.'
+L['Profile']                  = 'Perfil'
+L['Profile::Desc']            = 'Selecione um perfil para ativar. Você será solicitado a recarregar a interface. Esses perfis são gerenciados na aba Perfis.'
 
 L['Global Setting']           = 'Configuração global'
 L['Character Setting']        = 'Configuração do personagem'
@@ -114,7 +116,7 @@ L['Limit Profile Name Characters::Desc'] = 'Define o número máximo de caracter
 
 L['Show Profile Name']            = 'Mostrar nome do perfil'
 L['Show Profile Name::Desc']      = 'Ative esta opção para exibir o nome do perfil atual logo à direita do ícone no |cdf6F97FFTitan Panel|r.'
-L['Titan Panel Settings']         = 'Configurações do Titan Panel'
+L['Titan Panel']                  = 'Titan Panel'
 L['Show Out of Sync Count']       = 'Mostrar contagem de addons fora de sincronia'
 L['Show Out of Sync Count::Desc'] = 'Ative esta configuração para exibir no |cdf6F97FFTitan Panel|r a quantidade de addons atualmente fora de sincronia com o perfil ativo.'
 L['Lib:']                         = 'Bibl.:'

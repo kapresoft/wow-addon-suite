@@ -23,6 +23,8 @@ L['Current::Symbol::Minimap']   = ns.locale.checkMark
 
 L['General']                  = '일반'
 L['General::Desc']            = "일반 설정"
+L['Manage Add-Ons']           = '애드온 관리'
+L['Options']                  = '옵션'
 L['General Configuration']    = '일반 설정'
 
 L['General::Enable All::Button']           = ALL
@@ -30,12 +32,12 @@ L['General::Enable All::Button::Desc']     = '아래의 모든 애드온을 체�
 L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = '아래의 모든 애드온 체크를 해제합니다.'
 
-L['Add-Ons::Desc']            = '애드온을 활성화하거나 비활성화하려면 해당 확인란을 선택하거나 해제하세요. 선택 후 |cdf6F97FFUI 새로고침|r을 클릭하면 변경 사항이 적용됩니다.'
+L['Add-Ons::Desc']            = '이 프로필에서 불러올 애드온을 선택한 다음 새로고침 버튼을 클릭하여 변경 사항을 적용하세요.'
 L['Reload UI']         = 'UI 새로고침'
 L['Reload UI::Desc']   = '|cfdE64750확인 없이|r 즉시 적용하고 새로고침합니다.'
 L['Sync with Profile and Reload'] = '프로필과 동기화 후 새로고침'
-L['Select Profile']           = '프로필 선택'
-L['Select Profile::Desc']     = '활성화할 프로필을 선택하세요. UI를 새로고침하라는 메시지가 표시됩니다. 이 프로필들은 프로필 탭에서 관리됩니다.'
+L['Profile']                  = '프로필'
+L['Profile::Desc']            = '활성화할 프로필을 선택하세요. UI를 새로고침하라는 메시지가 표시됩니다. 이 프로필들은 프로필 탭에서 관리됩니다.'
 
 L['Global Setting']           = '전역 설정'
 L['Character Setting']        = '캐릭터 설정'
@@ -114,7 +116,7 @@ L['Limit Profile Name Characters::Desc'] = '|cdf6F97FFTitan Panel|r에서 애드
 
 L['Show Profile Name']            = '프로필 이름 표시'
 L['Show Profile Name::Desc']      = '이 옵션을 활성화하면 |cdf6F97FFTitan Panel|r의 아이콘 바로 오른쪽에 현재 프로필 이름이 표시됩니다.'
-L['Titan Panel Settings']         = 'Titan Panel 설정'
+L['Titan Panel']                  = 'Titan Panel'
 L['Show Out of Sync Count']       = '동기화되지 않은 애드온 수 표시'
 L['Show Out of Sync Count::Desc'] = '이 설정을 활성화하면 |cdf6F97FFTitan Panel|r에 현재 활성 프로필과 동기화되지 않은 애드온 수가 표시됩니다.'
 L['Lib:']                         = '라이브러리:'

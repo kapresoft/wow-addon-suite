@@ -3,6 +3,12 @@ Local Vars
 -------------------------------------------------------------------------------]]
 --- @type ADS_Namespace
 local ns = select(2, ...)
+local ACU = ns:ACU()
+local SettingsCheckbox = ns.O.SettingsCheckboxWidget
+
+--- Shared label column so settings rows line up across tabs
+--- @type ADS_Ace3WidgetArg
+local SETTINGS_ROW_ARG = { layout = { label = { width = 300 } } }
 
 --[[-----------------------------------------------------------------------------
 New Instance
@@ -32,6 +38,32 @@ local o = S
 --- @private
 --- @param optionsMixin OptionsMixin
 function o:Init(optionsMixin) self.optionsMixin = optionsMixin end
+
+--- A full-width global option on the shared settings label column
+--- @param localeKey string
+--- @param option AceConfigOption @Must set its own dialogControl
+--- @return AceConfigOption
+function o:SettingsRow(localeKey, option)
+  option.width = 'full'
+  option.arg = SETTINGS_ROW_ARG
+  return ACU:CreateGlobalOption(localeKey, option)
+end
+
+--- A global toggle drawn with the modern Settings checkbox
+--- @param localeKey string
+--- @param order number
+--- @param get fun(): boolean
+--- @param set fun(info: table, value: boolean)
+--- @return AceConfigOption
+function o:SettingsCheckbox(localeKey, order, get, set)
+  return self:SettingsRow(localeKey, {
+    type = 'toggle',
+    dialogControl = SettingsCheckbox.Type,
+    order = order,
+    get = get,
+    set = set,
+  })
+end
 
 --- @see GlobalConstants#M for Message names
 --- @param optionalVal any|nil

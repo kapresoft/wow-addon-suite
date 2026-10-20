@@ -3,7 +3,7 @@ Local Vars
 -------------------------------------------------------------------------------]]
 --- @type ADS_Namespace
 local ns = select(2, ...)
-local M, MSG, ACU = ns.M, ns.GC.M, ns:ACU()
+local M, MSG = ns.M, ns.GC.M
 local L = ns:GetLocale()
 local sformat = ns.sformat
 
@@ -67,42 +67,7 @@ end
 function o:CreateSubGroup()
   local options = self.options
   local order = self.order
-  local minimap = ns:minimap()
 
-  local hideMinimapIcon = ACU:CreateGlobalOption('Hide Minimap Icon', {
-    order = self.order:next(),
-    type = 'toggle',
-    width = 2.0,
-    get = function() return minimap.hide == true end,
-    set = function(_, v)
-      minimap.hide = (v == true)
-      self:SendMessage(MSG.OnToggleMinimapIcon, libName)
-    end,
-  })
-
-  local syncStatusIndicator = ACU:CreateGlobalOption('Profile Sync Status Indicator', {
-    order = order:next(),
-    type = 'toggle',
-    width = 1.3,
-    get = function() return minimap.sync_status_indicator == true end,
-    set = function(_, v) minimap.sync_status_indicator = (v == true) end,
-  })
-
-  local confirmReloads = ACU:CreateGlobalOption('Confirm Reloads When Switching Profiles', {
-    order = order:next(),
-    type = 'toggle',
-    width = 2.0,
-    get = function() return minimap.confirm_reloads == true end,
-    set = function(_, v) minimap.confirm_reloads = (v == true) end,
-  })
-
-  options.hideMinimapIcon = hideMinimapIcon
-  options.syncStatusIndicator = syncStatusIndicator
-  options.confirmReloads = confirmReloads
-
-  self:CreateTitanPanelOptions(options, order, L)
-
-  options.spacer1 = { type = 'description', name = sp, width = 'full', order = order:next() }
   --- @type AceConfigOption
   options.h3 = {
     type = 'header',
@@ -124,68 +89,6 @@ function o:CreateSubGroup()
   self:RegisterCallbacks()
 
   return options
-end
-
-function o:CreateTitanPanelOptions()
-  local options = self.options
-  local order = self.order
-  local minimap = ns:minimap()
-
-  options.h2 = {
-    type = 'header',
-    name = h1(L['Titan Panel Settings']),
-    descStyle = 'inline',
-    order = order:next(),
-  }
-  options.TP_hideMinimapIconWhenInTitanPanel =
-    ACU:CreateGlobalOption('Hide Minimap Icon TitanPanel', {
-      order = self.order:next(),
-      type = 'toggle',
-      width = 2.0,
-      get = function() return minimap.hide_when_titan_panel_added == true end,
-      set = function(_, v)
-        minimap.hide_when_titan_panel_added = (v == true)
-        self:SendMessage(MSG.OnToggleMinimapIconTitanPanel, libName)
-      end,
-    })
-  options.TP_showOutOfSyncCount = ACU:CreateGlobalOption('Show Out of Sync Count', {
-    order = self.order:next(),
-    type = 'toggle',
-    width = 2.0,
-    get = function() return minimap.titan_panel.show_out_of_sync_count == true end,
-    set = function(_, v)
-      minimap.titan_panel.show_out_of_sync_count = (v == true)
-      self:SendMessage(MSG.OnUpdateMinimapState, libName)
-    end,
-  })
-  options.TP_showProfileName = ACU:CreateGlobalOption('Show Profile Name', {
-    order = self.order:next(),
-    type = 'toggle',
-    width = 2.0,
-    get = function() return minimap.titan_panel.show_profile_name == true end,
-    set = function(_, v)
-      local val = v == true
-      options.TP_maxProfileName.disabled = val ~= true
-      minimap.titan_panel.show_profile_name = val
-      self:SendMessage(MSG.OnUpdateMinimapState, libName)
-    end,
-  })
-  options.TP_maxProfileName = ACU:CreateGlobalOption('Limit Profile Name Characters', {
-    disabled = options.TP_showProfileName.get() ~= true,
-    type = 'range',
-    order = self.order:next(),
-    step = 1,
-    min = 1,
-    max = 50,
-    softMin = 5,
-    softMax = 20,
-    width = 1.3,
-    get = function() return minimap.titan_panel.profile_name_max_chars end,
-    set = function(_, v)
-      minimap.titan_panel.profile_name_max_chars = v
-      self:SendMessage(MSG.OnUpdateMinimapState, libName)
-    end,
-  })
 end
 
 function o:GetProfileKeys()

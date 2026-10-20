@@ -19,7 +19,10 @@ local ns = select(2, ...)
 local O, GC, M, MSG = ns.O, ns.GC, ns.M, ns.GC.M
 local String = ns.O.String
 local AceEvent = ns:AceEvent()
+local AceConfigRegistry = ns:AceConfigRegistry()
 local API, ACU, ADU = O.API, ns:ACU(), O.AddOnDependencyUtil
+local OptionsTitanPanelMixin = O.OptionsTitanPanelMixin
+local ActionLabel, FavoriteDropdown = O.ActionLabelWidget, O.FavoriteDropdownWidget
 
 local libName = M.OptionsAddonsMixin()
 local p, t = ns:log(libName)
@@ -182,54 +185,93 @@ end
 
 --- @return AceConfigOption
 function o:CreateAddOnsGroup()
+  local order = self.order
+  local addOnsTab = self:CreateAddOnsTab()
+  local optionsTab = self:CreateOptionsTab()
+  local titanPanelTab = OptionsTitanPanelMixin:New(self.mainOptions):CreateTab()
   ---@type AceConfigOption
   local group = {
     type = 'group',
     name = L['General'],
     desc = L['General::Desc'],
-    order = self.order:next(),
-    args = self:CreateAddOnsOptions(),
+    order = order:next(),
+    childGroups = 'tab',
+    args = { addons = addOnsTab, titanPanel = titanPanelTab, options = optionsTab },
   }
   return group
 end
 
 --- @return AceConfigOption
+function o:CreateAddOnsTab()
+  local order = self.order:next()
+  return {
+    type = 'group',
+    name = L['Manage Add-Ons'],
+    order = order,
+    args = self:CreateAddOnsOptions(),
+  }
+end
+
+--- Global toggles, separate from the add-on rows
+--- @return AceConfigOption
+function o:CreateOptionsTab()
+  local order, util, minimap = self.order, self.util, ns:minimap()
+
+  local function HideIconGet() return minimap.hide == true end
+  local function HideIconSet(_, v)
+    minimap.hide = (v == true)
+    AceEvent:SendMessage(MSG.OnToggleMinimapIcon, libName)
+  end
+  local function SyncIndicatorGet() return minimap.sync_status_indicator == true end
+  local function SyncIndicatorSet(_, v) minimap.sync_status_indicator = (v == true) end
+  local function ConfirmReloadsGet() return minimap.confirm_reloads == true end
+  local function ConfirmReloadsSet(_, v) minimap.confirm_reloads = (v == true) end
+
+  local options = {
+    syncAddOnStates = util:SettingsCheckbox(
+      'Prompt me to Reload UI',
+      order:next(),
+      util:GlobalGet('sync_addon_states'),
+      util:GlobalSet('sync_addon_states')
+    ),
+    hideMinimapIcon = util:SettingsCheckbox(
+      'Hide Minimap Icon',
+      order:next(),
+      HideIconGet,
+      HideIconSet
+    ),
+    syncStatusIndicator = util:SettingsCheckbox(
+      'Profile Sync Status Indicator',
+      order:next(),
+      SyncIndicatorGet,
+      SyncIndicatorSet
+    ),
+    confirmReloads = util:SettingsCheckbox(
+      'Confirm Reloads When Switching Profiles',
+      order:next(),
+      ConfirmReloadsGet,
+      ConfirmReloadsSet
+    ),
+  }
+  return { type = 'group', name = L['Options'], order = order:next(), args = options }
+end
+
+--- @return AceConfigOption
 function o:CreateAddOnsOptions()
   local order = self.order
-  local util = self.util
   local ps = CreateProfileSelect()
-
-  local versionLabel = GC.C.FRIENDLY_NAME .. fVersion(' v' .. GC:GetAddonInfo())
 
   --- @type table<string, AceConfigOption>
   local options = {
-    showInQuickProfileSwitchMenu = ACU:CreateGlobalOption('Add to Favorite', {
-      order = order:next(),
-      type = 'toggle',
-      width = 'normal',
-      get = util:QuickProfileMenuGet(),
-      set = util:QuickProfileMenuSet(),
-    }),
-    syncAddOnStates = ACU:CreateGlobalOption('Prompt me to Reload UI', {
-      order = order:next(),
-      type = 'toggle',
-      width = 3.0,
-      get = util:GlobalGet('sync_addon_states'),
-      set = util:GlobalSet('sync_addon_states'),
-    }),
-    spacer1b = ACU:CreateSpacer(order:next()),
-    reloadUI = ACU:CreateOption('Reload UI', {
-      name = L['Reload UI'],
-      desc = L['Reload UI::Desc'],
-      type = 'execute',
-      order = order:next(),
-      width = 0.7,
-      func = function() util:SendEventMessage(GC.M.OnApplyAndRestart, libName) end,
-    }),
-    profileSelection = ACU:CreateCharOption('Select Profile', {
+    profileSelection = ACU:CreateCharOption('Profile', {
       type = 'select',
-      width = 'normal',
+      dialogControl = FavoriteDropdown.Type,
+      width = 'full',
       order = order:next(),
+      arg = {
+        favorite = self:CreateFavoriteArg(),
+        reload = self:CreateReloadArg(),
+      } --[[@as ADS_Ace3WidgetArg]],
       values = ps.kvPairs,
       sorting = ps.sorting,
       get = ps.get,
@@ -237,12 +279,12 @@ function o:CreateAddOnsOptions()
     }),
   }
 
-  options.spacer1 = ACU:CreateSpacer({ order = order:next(), width = 0.5 })
-  options.enable_all = self:CreateEnableAll()
-  options.disable_all = self:CreateDisableAll()
-  options.spacer3 = ACU:CreateLabel('Add-Ons::Desc', {
+  options.addonsHeader = ACU:CreateLabel('Add-Ons::Desc', {
     order = order:next(),
-    width = 3.5,
+    dialogControl = ActionLabel.Type,
+    arg = {
+      actions = { self:CreateEnableAllAction(), self:CreateDisableAllAction() },
+    } --[[@as ADS_Ace3WidgetArg]],
   })
   options.spacer1c = ACU:CreateSpacer(order:next())
 
@@ -299,7 +341,7 @@ local function TitleWithVersion(name, title)
 end
 
 --- @param name AddOnName
---- @return string @Empty unless the addon is load on bdemand
+--- @return string @Empty unless the addon is load on demand
 local function LoadOnDemandLine(name)
   if not API:IsAddOnLoadOnDemand(name) then return '' end
   local key = API:IsAddOnLoaded(name) and 'Load on demand (loaded)' or 'Load on demand (not loaded)'
@@ -396,32 +438,74 @@ function o:CreateAddOnCheckList()
   end)
 end
 
-function o:CreateEnableAll()
-  return ACU:CreateOption('General::Enable All::Button', {
-    type = 'execute',
-    order = self.order:next(),
-    width = 'half',
-    func = function()
-      self:ForEachToggle(function(opt) opt.set({ isBulkOperation = true }, true) end)
+--- Binds the profile row's star to the current profile's favorite flag
+--- @return ADS_Ace3WidgetFavoriteArg
+function o:CreateFavoriteArg()
+  local get, set = self.util:QuickProfileMenuGet(), self.util:QuickProfileMenuSet()
+  return {
+    get = function() return get() == true end,
+    set = function(value) set(nil, value) end,
+    isFavorite = function(profile) return ns:db().char.showInQuickProfileMenu[profile] == true end,
+    tooltip = function(tooltip)
+      tooltip:SetText(L['Add to Favorite'], NORMAL_FONT_COLOR:GetRGB())
+      tooltip:AddLine(L['Add to Favorite::Desc'], 1, 1, 1, true)
     end,
-  })
+  }
 end
 
-function o:CreateDisableAll()
-  return ACU:CreateOption('General::Disable All::Button', {
-    type = 'execute',
-    order = self.order:next(),
-    width = 'half',
-    func = function()
-      self:ForEachToggle(function(opt) opt.set({ isBulkOperation = true }, false) end)
+--- Binds the profile row's reload button to Reload UI
+--- @return ADS_Ace3WidgetReloadArg
+function o:CreateReloadArg()
+  return {
+    onClick = function() self.util:SendEventMessage(GC.M.OnApplyAndRestart, libName) end,
+    tooltip = function(tooltip)
+      tooltip:SetText(L['Reload UI'], NORMAL_FONT_COLOR:GetRGB())
+      tooltip:AddLine(L['Reload UI::Desc'], 1, 1, 1, true)
     end,
-  })
+  }
+end
+
+--- @param localeKey string
+--- @return fun(tooltip: GameTooltip)
+local function ActionTooltip(localeKey)
+  return function(tooltip)
+    tooltip:SetText(L[localeKey], NORMAL_FONT_COLOR:GetRGB())
+    tooltip:AddLine(L[localeKey .. '::Desc'], 1, 1, 1, true)
+  end
+end
+
+--- A checked box; checks every add-on row
+--- @return ADS_Ace3WidgetActionArg
+function o:CreateEnableAllAction()
+  return {
+    atlas = 'checkbox-minimal',
+    overlay = 'checkmark-minimal',
+    onClick = function() self:SetAllToggles(true) end,
+    tooltip = ActionTooltip('General::Enable All::Button'),
+  }
+end
+
+--- An empty box; unchecks every add-on row
+--- @return ADS_Ace3WidgetActionArg
+function o:CreateDisableAllAction()
+  return {
+    atlas = 'checkbox-minimal',
+    onClick = function() self:SetAllToggles(false) end,
+    tooltip = ActionTooltip('General::Disable All::Button'),
+  }
+end
+
+--- Header icons bypass Ace's execute path, so refresh by hand
+--- @param value boolean
+function o:SetAllToggles(value)
+  self:ForEachToggle(function(opt) opt.set({ isBulkOperation = true }, value) end)
+  AceConfigRegistry:NotifyChange(ns.addon)
 end
 
 --- @param applyFn fun(option:AceConfigOption) | "function(option) end"
 function o:ForEachToggle(applyFn)
   for _, option in pairs(self.addonsOptions) do
-    if option.type == 'toggle' then applyFn(option) end
+    if option.type == 'toggle' and option.arg == ADDON_ROW_ARG then applyFn(option) end
   end
 end
 

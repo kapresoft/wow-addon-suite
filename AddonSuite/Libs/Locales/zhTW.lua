@@ -23,6 +23,8 @@ L['Current::Symbol::Minimap']   = ns.locale.checkMark
 
 L['General']                  = '一般'
 L['General::Desc']            = "一般設定"
+L['Manage Add-Ons']           = '管理外掛程式'
+L['Options']                  = '選項'
 L['General Configuration']    = '一般設定'
 
 L['General::Enable All::Button']           = ALL
@@ -30,12 +32,12 @@ L['General::Enable All::Button::Desc']     = '勾選下方所有外掛程式。'
 L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = '取消勾選下方所有外掛程式。'
 
-L['Add-Ons::Desc']            = '要啟用或停用外掛程式，請勾選或取消勾選對應的核取方塊。選擇完成後，點擊 |cdf6F97FF重新載入介面|r 以套用變更。'
+L['Add-Ons::Desc']            = '勾選此設定檔需要載入的外掛程式，然後點擊重新載入按鈕以套用變更。'
 L['Reload UI']         = '重新載入介面'
 L['Reload UI::Desc']   = '|cfdE64750無需確認|r，立即套用並重新載入。'
 L['Sync with Profile and Reload'] = '與設定檔同步並重新載入'
-L['Select Profile']           = '選擇設定檔'
-L['Select Profile::Desc']     = '選擇要啟用的設定檔。系統會提示你重新載入介面。請注意，這些設定檔會在「設定檔」分頁中管理。'
+L['Profile']                  = '設定檔'
+L['Profile::Desc']            = '選擇要啟用的設定檔。系統會提示你重新載入介面。請注意，這些設定檔會在「設定檔」分頁中管理。'
 
 L['Global Setting']           = '全域設定'
 L['Character Setting']        = '角色設定'
@@ -114,7 +116,7 @@ L['Limit Profile Name Characters::Desc'] = '設定在 |cdf6F97FFTitan Panel|r �
 
 L['Show Profile Name']            = '顯示設定檔名稱'
 L['Show Profile Name::Desc']      = '啟用此選項後，會在 |cdf6F97FFTitan Panel|r 中圖示右側顯示目前設定檔的名稱。'
-L['Titan Panel Settings']         = 'Titan Panel 設定'
+L['Titan Panel']                  = 'Titan Panel'
 L['Show Out of Sync Count']       = '顯示未同步外掛程式數量'
 L['Show Out of Sync Count::Desc'] = '啟用此設定後，會在 |cdf6F97FFTitan Panel|r 中顯示目前與啟用設定檔不同步的外掛程式數量。'
 L['Lib:']                         = '函式庫：'

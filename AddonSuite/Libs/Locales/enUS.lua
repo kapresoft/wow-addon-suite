@@ -24,6 +24,8 @@ L['Current::Symbol::Minimap']   = ns.locale.checkMark
 
 L['General']                  = true
 L['General::Desc']            = "General Settings"
+L['Manage Add-Ons']           = true
+L['Options']                  = true
 L['General Configuration']    = true
 
 L['General::Enable All::Button']           = ALL
@@ -31,12 +33,12 @@ L['General::Enable All::Button::Desc']     = 'Checks all add-ons below.'
 L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = 'Unchecks all add-ons below.'
 
-L['Add-Ons::Desc']            = 'To activate or deactivate an addon, check or uncheck its corresponding box. After making your selections, click on |cdf6F97FFReloadUI|r to implement the changes to your configuration.'
+L['Add-Ons::Desc']            = 'Check the add-ons this profile should load, then click the reload button to apply.'
 L['Reload UI']         = true
 L['Reload UI::Desc']   = 'Apply and Reload Immediately with |cfdE64750No Confirmation.|r'
 L['Sync with Profile and Reload'] = 'Sync with Profile and Reload'
-L['Select Profile']           = true
-L['Select Profile::Desc']     = 'Select a profile to activate.  You will be prompted to reload the UI.  Note that these profiles are managed on the Profiles tab.'
+L['Profile']                  = true
+L['Profile::Desc']            = 'Select a profile to activate.  You will be prompted to reload the UI.  Note that these profiles are managed on the Profiles tab.'
 
 L['Global Setting']           = 'Global Setting'
 L['Character Setting']        = 'Character Setting'
@@ -115,7 +117,7 @@ L['Limit Profile Name Characters::Desc'] = 'Set the maximum number of characters
 
 L['Show Profile Name']            = true
 L['Show Profile Name::Desc']      = 'Enable this option to display the current profile name directly to the right of the icon in |cdf6F97FFTitan Panel|r. When selected, it allows you to quickly see which profile is active.'
-L['Titan Panel Settings']         = true
+L['Titan Panel']                  = true
 L['Show Out of Sync Count']       = true
 L['Show Out of Sync Count::Desc'] = 'Enable this setting to display the number of addons in |cdf6F97FFTitan Panel|r that are currently out of sync with the active profile.'
 L['Lib:']                         = true
