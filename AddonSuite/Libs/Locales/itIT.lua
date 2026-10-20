@@ -31,6 +31,7 @@ L['General::Enable All::Button::Desc']     = 'Seleziona tutti gli addon sottosta
 L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = 'Deseleziona tutti gli addon sottostanti.'
 
+L['Add-Ons']                  = 'Addon'
 L['Add-Ons::Desc']            = 'Seleziona gli addon che questo profilo deve caricare, quindi fai clic sul pulsante di ricarica per applicare le modifiche.'
 L['Reload UI']         = 'Ricarica interfaccia'
 L['Reload UI::Desc']   = 'Applica e ricarica immediatamente |cfdE64750senza conferma.|r'

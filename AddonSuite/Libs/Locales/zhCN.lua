@@ -31,6 +31,7 @@ L['General::Enable All::Button::Desc']     = '勾选下方所有插件。'
 L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = '取消勾选下方所有插件。'
 
+L['Add-Ons']                  = '插件'
 L['Add-Ons::Desc']            = '勾选此配置文件需要加载的插件，然后点击重新加载按钮以应用更改。'
 L['Reload UI']         = '重新加载界面'
 L['Reload UI::Desc']   = '|cfdE64750无需确认|r，立即应用并重新加载。'

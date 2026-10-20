@@ -31,6 +31,7 @@ L['General::Enable All::Button::Desc']     = '아래의 모든 애드온을 체�
 L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = '아래의 모든 애드온 체크를 해제합니다.'
 
+L['Add-Ons']                  = '애드온'
 L['Add-Ons::Desc']            = '이 프로필에서 불러올 애드온을 선택한 다음 새로고침 버튼을 클릭하여 변경 사항을 적용하세요.'
 L['Reload UI']         = 'UI 새로고침'
 L['Reload UI::Desc']   = '|cfdE64750확인 없이|r 즉시 적용하고 새로고침합니다.'

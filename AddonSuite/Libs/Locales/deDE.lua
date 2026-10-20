@@ -31,6 +31,7 @@ L['General::Enable All::Button::Desc']     = 'Aktiviert alle Add-Ons unten.'
 L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = 'Deaktiviert alle Add-Ons unten.'
 
+L['Add-Ons']                  = 'Add-Ons'
 L['Add-Ons::Desc']            = 'Setze ein Häkchen bei den Add-Ons, die dieses Profil laden soll, und klicke dann auf die Schaltfläche zum Neuladen, um die Änderungen zu übernehmen.'
 L['Reload UI']         = 'UI neu laden'
 L['Reload UI::Desc']   = 'Sofort übernehmen und neu laden |cfdE64750ohne Bestätigung.|r'

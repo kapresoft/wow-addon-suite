@@ -32,6 +32,7 @@ L['General::Enable All::Button::Desc']     = 'Checks all add-ons below.'
 L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = 'Unchecks all add-ons below.'
 
+L['Add-Ons']                  = true
 L['Add-Ons::Desc']            = 'Check the add-ons this profile should load, then click the reload button to apply.'
 L['Reload UI']         = true
 L['Reload UI::Desc']   = 'Apply and Reload Immediately with |cfdE64750No Confirmation.|r'

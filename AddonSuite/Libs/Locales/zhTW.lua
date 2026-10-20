@@ -31,6 +31,7 @@ L['General::Enable All::Button::Desc']     = '勾選下方所有外掛程式。'
 L['General::Disable All::Button']          = NONE
 L['General::Disable All::Button::Desc']    = '取消勾選下方所有外掛程式。'
 
+L['Add-Ons']                  = '外掛程式'
 L['Add-Ons::Desc']            = '勾選此設定檔需要載入的外掛程式，然後點擊重新載入按鈕以套用變更。'
 L['Reload UI']         = '重新載入介面'
 L['Reload UI::Desc']   = '|cfdE64750無需確認|r，立即套用並重新載入。'
