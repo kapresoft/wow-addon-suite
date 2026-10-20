@@ -12,7 +12,6 @@ Locale Entries
 -------------------------------------------------------------------------------]]
 
 L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG"]                  = 'Options Dialog'
-L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG_MINIMAP"]          = 'Options Dialog : Minimap'
 
 L['%s version %s by %s is loaded.']        = true
 L['Type %s or %s for available commands.'] = true
@@ -74,7 +73,6 @@ L['Hide Minimap Icon TitanPanel']       = 'Hide Minimap Icon When Added to Titan
 L['Hide Minimap Icon TitanPanel::Desc'] = 'Toggles the visibility of the addon\'s minimap icon when added to a TitanPanel, hiding it from view when enabled.'
 
 L['View or switch profiles']      = true
-L['Open minimap settings'] = true
 L['View available commands']      = true
 L['Open settings']                = true
 L['Command Lines']                = true
@@ -82,8 +80,6 @@ L['Currently set to switch profiles %s a confirmation prompt.'] = true
 
 L['Add to Favorite']              = true
 L['Add to Favorite::Desc']        = "Enable this option to display the current profile in the minimap profile switch menu accessible with a LEFT-click, allowing for easy access. Disable to hide the profile from the menu."
-L['Minimap']                      = true
-L['Minimap::Desc']                = "Minimap Options"
 
 L['Favorite Profiles']            = 'Favorite Profiles'
 L['Favorite Profiles::Desc']      = 'Select favorite profiles for the minimap menu, accessible with a LEFT-click. This menu lets you quickly switch between profiles to easily manage your addon sets.'
@@ -102,7 +98,6 @@ L['Click Key To Sync']          = 'Press ALT-LEFT-Click to sync profile and relo
 L['ALT-LEFT-Click']             = true
 L['LEFT-Click']                 = true
 L['RIGHT-Click']                = true
-L['SHIFT-RIGHT-Click']          = true
 
 L['Profile Sync Status Indicator']       = true
 L['Profile Sync Status Indicator::Desc'] = 'Enable this option to use |cfdE64750color|r coding on the minimap icon, visually indicating when your profile is synced or needs an update. This provides a quick and easy way to check your profile\'s status at a glance.'

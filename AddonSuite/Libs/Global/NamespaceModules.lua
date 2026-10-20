@@ -70,8 +70,8 @@ local M = {
   OptionsAddonsMixin = {},
   --- @type OptionsMixin
   OptionsMixin = {},
-  --- @type OptionsMinimapMixin
-  OptionsMinimapMixin = {},
+  --- @type OptionsFavoritesMixin
+  OptionsFavoritesMixin = {},
   --- @type OptionsTitanPanelMixin
   OptionsTitanPanelMixin = {},
   --- @type OptionsUtil

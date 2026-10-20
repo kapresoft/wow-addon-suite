@@ -186,8 +186,6 @@ local function OnTooltipShow(self, tooltip)
   end
   tooltip:AddDoubleLine(ns.ch:S(L['LEFT-Click']), ns.ch:T(L['View or switch profiles']))
   tooltip:AddDoubleLine(ns.ch:S(L['RIGHT-Click']), ns.ch:T(L['Open settings']))
-
-  tooltip:AddDoubleLine(ns.ch:S(L['SHIFT-RIGHT-Click']), ns.ch:T(L['Open minimap settings']))
   tooltip:AddLine(' ')
   tooltip:AddLine(commandLines)
   local cmdLine = ns.sformat('/%s or /%s', C.CONSOLE_COMMAND_NAME, C.CONSOLE_COMMAND_SHORT)
@@ -226,9 +224,7 @@ local function OnClick(self, buttonFrame, button)
     end
     ShowMenu(self)
   elseif button == 'RightButton' then
-    local tab = 'general'
-    if IsShiftKeyDown() then tab = 'minimap' end
-    ns:a():OpenConfig(tab)
+    ns:a():OpenConfigManageAddOns()
   end
 end
 

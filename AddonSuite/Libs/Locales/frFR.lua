@@ -11,7 +11,6 @@ Locale Entries
 -------------------------------------------------------------------------------]]
 
 L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG"]                  = 'Fenêtre d\'options'
-L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG_MINIMAP"]          = 'Fenêtre d\'options : Minicarte'
 
 L['%s version %s by %s is loaded.']        = '%s version %s par %s est chargé.'
 L['Type %s or %s for available commands.'] = 'Tapez %s ou %s pour voir les commandes disponibles.'
@@ -73,7 +72,6 @@ L['Hide Minimap Icon TitanPanel']       = 'Masquer l\'icône de la minicarte lor
 L['Hide Minimap Icon TitanPanel::Desc'] = 'Masque l\'icône de l\'addon sur la minicarte lorsqu\'elle est ajoutée à TitanPanel.'
 
 L['View or switch profiles']      = 'Voir ou changer de profil'
-L['Open minimap settings'] = 'Ouvrir les paramètres de la minicarte'
 L['View available commands']      = 'Voir les commandes disponibles'
 L['Open settings']                = 'Ouvrir les options'
 L['Command Lines']                = 'Lignes de commande'
@@ -81,8 +79,6 @@ L['Currently set to switch profiles %s a confirmation prompt.'] = 'Le changement
 
 L['Add to Favorite']              = 'Ajouter aux favoris'
 L['Add to Favorite::Desc']        = "Activez cette option pour afficher le profil actuel dans le menu de changement de profil de la minicarte (clic gauche). Désactivez pour masquer le profil du menu."
-L['Minimap']                      = 'Minicarte'
-L['Minimap::Desc']                = "Options de la minicarte"
 
 L['Favorite Profiles']            = 'Profils favoris'
 L['Favorite Profiles::Desc']      = 'Sélectionnez les profils favoris pour le menu de la minicarte (clic gauche). Ce menu permet de basculer rapidement entre les ensembles d\'addons.'
@@ -101,7 +97,6 @@ L['Click Key To Sync']          = 'Appuyez sur ALT+clic gauche pour synchroniser
 L['ALT-LEFT-Click']             = 'ALT+clic gauche'
 L['LEFT-Click']                 = 'Clic gauche'
 L['RIGHT-Click']                = 'Clic droit'
-L['SHIFT-RIGHT-Click']          = 'MAJ+clic droit'
 
 L['Profile Sync Status Indicator']       = 'Indicateur d\'état de synchronisation du profil'
 L['Profile Sync Status Indicator::Desc'] = 'Activez cette option pour utiliser un code |cfdE64750couleur|r sur l\'icône de la minicarte, indiquant visuellement si votre profil est synchronisé ou nécessite une mise à jour.'

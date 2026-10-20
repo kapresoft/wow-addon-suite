@@ -11,7 +11,6 @@ Locale Entries
 -------------------------------------------------------------------------------]]
 
 L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG"]                  = 'Окно настроек'
-L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG_MINIMAP"]          = 'Окно настроек : Миникарта'
 
 L['%s version %s by %s is loaded.']        = '%s версия %s от %s загружен.'
 L['Type %s or %s for available commands.'] = 'Введите %s или %s для списка команд.'
@@ -73,7 +72,6 @@ L['Hide Minimap Icon TitanPanel']       = 'Скрывать иконку мин�
 L['Hide Minimap Icon TitanPanel::Desc'] = 'Скрывать иконку аддона у миникарты, когда она добавлена в TitanPanel.'
 
 L['View or switch profiles']      = 'Просмотр или смена профилей'
-L['Open minimap settings'] = 'Открыть настройки миникарты'
 L['View available commands']      = 'Просмотр доступных команд'
 L['Open settings']                = 'Открыть настройки'
 L['Command Lines']                = 'Командные строки'
@@ -81,8 +79,6 @@ L['Currently set to switch profiles %s a confirmation prompt.'] = 'Сейчас 
 
 L['Add to Favorite']              = 'Добавить в избранное'
 L['Add to Favorite::Desc']        = "Включите, чтобы текущий профиль отображался в меню смены профилей миникарты (левый клик). Отключите, чтобы скрыть профиль из меню."
-L['Minimap']                      = 'Миникарта'
-L['Minimap::Desc']                = "Настройки миникарты"
 
 L['Favorite Profiles']            = 'Избранные профили'
 L['Favorite Profiles::Desc']      = 'Выберите избранные профили для меню миникарты (левый клик). Это меню позволяет быстро переключаться между наборами аддонов.'
@@ -101,7 +97,6 @@ L['Click Key To Sync']          = 'Нажмите ALT+ЛКМ для синхро
 L['ALT-LEFT-Click']             = 'ALT+ЛКМ'
 L['LEFT-Click']                 = 'ЛКМ'
 L['RIGHT-Click']                = 'ПКМ'
-L['SHIFT-RIGHT-Click']          = 'SHIFT+ПКМ'
 
 L['Profile Sync Status Indicator']       = 'Индикатор состояния синхронизации профиля'
 L['Profile Sync Status Indicator::Desc'] = 'Включите, чтобы использовать |cfdE64750цветовую|r индикацию на иконке миникарты, показывающую, синхронизирован ли профиль или требует обновления.'

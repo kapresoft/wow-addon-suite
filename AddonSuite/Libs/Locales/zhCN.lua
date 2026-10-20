@@ -11,7 +11,6 @@ Locale Entries
 -------------------------------------------------------------------------------]]
 
 L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG"]                  = '选项窗口'
-L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG_MINIMAP"]          = '选项窗口：小地图'
 
 L['%s version %s by %s is loaded.']        = '%s 版本 %s（由 %s 制作）已加载。'
 L['Type %s or %s for available commands.'] = '输入 %s 或 %s 查看可用命令。'
@@ -73,7 +72,6 @@ L['Hide Minimap Icon TitanPanel']       = '添加到 TitanPanel 时隐藏小地�
 L['Hide Minimap Icon TitanPanel::Desc'] = '当插件被添加到 TitanPanel 时，隐藏其小地图图标。'
 
 L['View or switch profiles']      = '查看或切换配置文件'
-L['Open minimap settings'] = '打开小地图设置'
 L['View available commands']      = '查看可用命令'
 L['Open settings']                = '打开选项'
 L['Command Lines']                = '命令行'
@@ -81,8 +79,6 @@ L['Currently set to switch profiles %s a confirmation prompt.'] = '当前配置�
 
 L['Add to Favorite']              = '添加到收藏'
 L['Add to Favorite::Desc']        = "启用此选项后，当前配置文件将显示在小地图配置文件切换菜单（左键单击）中。禁用则会在菜单中隐藏该配置文件。"
-L['Minimap']                      = '小地图'
-L['Minimap::Desc']                = "小地图选项"
 
 L['Favorite Profiles']            = '收藏的配置文件'
 L['Favorite Profiles::Desc']      = '选择要显示在小地图菜单（左键单击）中的收藏配置文件。此菜单可让你快速切换插件组合。'
@@ -101,7 +97,6 @@ L['Click Key To Sync']          = '按 ALT+左键 以同步并重新加载'
 L['ALT-LEFT-Click']             = 'ALT+左键'
 L['LEFT-Click']                 = '左键'
 L['RIGHT-Click']                = '右键'
-L['SHIFT-RIGHT-Click']          = 'SHIFT+右键'
 
 L['Profile Sync Status Indicator']       = '配置文件同步状态指示器'
 L['Profile Sync Status Indicator::Desc'] = '启用此选项后，会在小地图图标上使用|cfdE64750颜色|r标识，直观显示配置文件是否已同步或需要更新。'

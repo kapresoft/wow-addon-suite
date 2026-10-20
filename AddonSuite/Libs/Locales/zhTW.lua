@@ -11,7 +11,6 @@ Locale Entries
 -------------------------------------------------------------------------------]]
 
 L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG"]                  = '選項視窗'
-L["BINDING_NAME_ADDON_SUITE_OPTIONS_DLG_MINIMAP"]          = '選項視窗：小地圖'
 
 L['%s version %s by %s is loaded.']        = '%s 版本 %s（由 %s 製作）已載入。'
 L['Type %s or %s for available commands.'] = '輸入 %s 或 %s 以查看可用指令。'
@@ -73,7 +72,6 @@ L['Hide Minimap Icon TitanPanel']       = '加入 TitanPanel 時隱藏小地圖�
 L['Hide Minimap Icon TitanPanel::Desc'] = '當外掛程式加入 TitanPanel 時，隱藏其小地圖圖示。'
 
 L['View or switch profiles']      = '檢視或切換設定檔'
-L['Open minimap settings'] = '開啟小地圖設定'
 L['View available commands']      = '檢視可用指令'
 L['Open settings']                = '開啟選項'
 L['Command Lines']                = '指令列'
@@ -81,8 +79,6 @@ L['Currently set to switch profiles %s a confirmation prompt.'] = '目前設定�
 
 L['Add to Favorite']              = '加入最愛'
 L['Add to Favorite::Desc']        = "啟用此選項後，目前設定檔會顯示在小地圖設定檔切換選單（按左鍵）中。停用則會在選單中隱藏該設定檔。"
-L['Minimap']                      = '小地圖'
-L['Minimap::Desc']                = "小地圖選項"
 
 L['Favorite Profiles']            = '最愛設定檔'
 L['Favorite Profiles::Desc']      = '選擇要顯示在小地圖選單（按左鍵）中的最愛設定檔。此選單可讓你快速切換外掛程式組合。'
@@ -101,7 +97,6 @@ L['Click Key To Sync']          = '按 ALT+左鍵 以同步並重新載入'
 L['ALT-LEFT-Click']             = 'ALT+左鍵'
 L['LEFT-Click']                 = '左鍵'
 L['RIGHT-Click']                = '右鍵'
-L['SHIFT-RIGHT-Click']          = 'SHIFT+右鍵'
 
 L['Profile Sync Status Indicator']       = '設定檔同步狀態指示器'
 L['Profile Sync Status Indicator::Desc'] = '啟用此選項後，會在小地圖圖示上使用|cfdE64750顏色|r標示，直覺顯示設定檔是否已同步或需要更新。'
