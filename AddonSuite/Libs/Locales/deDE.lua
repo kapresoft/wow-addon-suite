@@ -118,3 +118,9 @@ L['Show Out of Sync Count::Desc'] = 'Aktiviere diese Einstellung, um in |cdf6F97
 L['Lib:']                         = 'Bibl.:'
 L['Load on demand (loaded)']      = 'Bei Bedarf laden (geladen)'
 L['Load on demand (not loaded)']  = 'Bei Bedarf laden (nicht geladen)'
+
+L['Profile::HelpTip']           = 'Wähle hier das Profil zum Bearbeiten'
+L['Favorite::HelpTip']          = 'Markiere dieses Profil, um es dem Minikarten-Menü hinzuzufügen'
+L['Reload::HelpTip']            = 'Neu laden, um die markierten Add-Ons zu laden'
+L['Check All::HelpTip']         = 'Alle Add-Ons markieren oder abwählen'
+L['Favorite Profiles::HelpTip'] = 'Wähle hier deine Favoritenprofile'

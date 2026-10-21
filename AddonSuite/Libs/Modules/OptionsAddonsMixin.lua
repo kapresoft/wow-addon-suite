@@ -23,6 +23,7 @@ local AceConfigRegistry = ns:AceConfigRegistry()
 local API, ACU, ADU = O.API, ns:ACU(), O.AddOnDependencyUtil
 local OptionsTitanPanelMixin = O.OptionsTitanPanelMixin
 local OptionsFavoritesMixin = O.OptionsFavoritesMixin
+local HelpTour = O.HelpTour
 local ActionLabel, FavoriteDropdown = O.ActionLabelWidget, O.FavoriteDropdownWidget
 
 local libName = M.OptionsAddonsMixin()
@@ -79,6 +80,7 @@ local function CreateProfileSelect()
   --- @param val string The profile name selected
   local function SetCurrentProfile(info, val)
     ns:db():SetProfile(val)
+    HelpTour:CompleteStep('ProfileDropdown')
     AceEvent:SendMessage(MSG.OnUpdateMinimapState, libName)
   end
   --- Get the Profile names to be used for the select values
@@ -281,6 +283,7 @@ function o:CreateAddOnsOptions()
       arg = {
         favorite = self:CreateFavoriteArg(),
         reload = self:CreateReloadArg(),
+        helpTip = 'Profile',
       } --[[@as ADS_Ace3WidgetArg]],
       values = ps.kvPairs,
       sorting = ps.sorting,
@@ -297,6 +300,7 @@ function o:CreateAddOnsOptions()
       -- Onto the Add-Ons tab strip, next to the rows they act on
       actionsAnchor = 'below',
       layout = { action = { x = -8, y = -7 } },
+      helpTip = 'AddOnsHeader',
     } --[[@as ADS_Ace3WidgetArg]],
   })
 
@@ -459,7 +463,10 @@ function o:CreateFavoriteArg()
   local get, set = self.util:QuickProfileMenuGet(), self.util:QuickProfileMenuSet()
   return {
     get = function() return get() == true end,
-    set = function(value) set(nil, value) end,
+    set = function(value)
+      set(nil, value)
+      HelpTour:CompleteStep('FavoriteStar')
+    end,
     isFavorite = function(profile) return ns:db().char.showInQuickProfileMenu[profile] == true end,
     tooltip = function(tooltip)
       tooltip:SetText(L['Add to Favorite'], NORMAL_FONT_COLOR:GetRGB())
@@ -472,7 +479,10 @@ end
 --- @return ADS_Ace3WidgetReloadArg
 function o:CreateReloadArg()
   return {
-    onClick = function() self.util:SendEventMessage(GC.M.OnApplyAndRestart, libName) end,
+    onClick = function()
+      HelpTour:CompleteStep('ReloadButton')
+      self.util:SendEventMessage(GC.M.OnApplyAndRestart, libName)
+    end,
     tooltip = function(tooltip)
       tooltip:SetText(L['Reload UI'], NORMAL_FONT_COLOR:GetRGB())
       tooltip:AddLine(L['Reload UI::Desc'], 1, 1, 1, true)
@@ -513,6 +523,7 @@ end
 --- Header icons bypass Ace's execute path, so refresh by hand
 --- @param value boolean
 function o:SetAllToggles(value)
+  HelpTour:CompleteStep('CheckAllNone')
   self:ForEachToggle(function(opt) opt.set({ isBulkOperation = true }, value) end)
   AceConfigRegistry:NotifyChange(ns.addon)
 end

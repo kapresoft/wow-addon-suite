@@ -24,6 +24,7 @@
     <Script file="Widgets\SettingsCheckboxWidget.lua"/>
     <Script file="Widgets\StepperSliderWidget.lua"/>
     <Script file="Widgets\ActionLabelWidget.lua"/>
+    <Include file="Modules\HelpTips\HelpTips.xml"/>
 
     <Frame name="AddonSuiteFrame" parentKey="AddonSuite" parent="UIParent" />
 

@@ -118,3 +118,9 @@ L['Show Out of Sync Count::Desc'] = 'Activez ce paramètre pour afficher dans |c
 L['Lib:']                         = 'Bibl. :'
 L['Load on demand (loaded)']      = 'Chargement à la demande (chargé)'
 L['Load on demand (not loaded)']  = 'Chargement à la demande (non chargé)'
+
+L['Profile::HelpTip']           = 'Choisissez ici le profil à modifier'
+L['Favorite::HelpTip']          = 'Ajoutez ce profil aux favoris pour le voir dans le menu de la minicarte'
+L['Reload::HelpTip']            = 'Rechargez pour charger les addons cochés'
+L['Check All::HelpTip']         = 'Cochez ou décochez tous les addons'
+L['Favorite Profiles::HelpTip'] = 'Choisissez vos profils favoris ici'

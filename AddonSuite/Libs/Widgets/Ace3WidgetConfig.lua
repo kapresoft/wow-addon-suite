@@ -16,6 +16,7 @@ Types
 --- @field reload? ADS_Ace3WidgetReloadArg
 --- @field actions? ADS_Ace3WidgetActionArg[] @ActionLabel buttons, left to right
 --- @field actionsAnchor? 'right'|'below'     @ActionLabel buttons beside or under the text
+--- @field helpTip? string                     @Help tour finds this option's widget by it
 
 --- Binds a FavoriteDropdown's star; separate from the option's get/set
 --- @class ADS_Ace3WidgetFavoriteArg

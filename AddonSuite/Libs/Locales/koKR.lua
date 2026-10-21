@@ -118,3 +118,9 @@ L['Show Out of Sync Count::Desc'] = '이 설정을 활성화하면 |cdf6F97FFTit
 L['Lib:']                         = '라이브러리:'
 L['Load on demand (loaded)']      = '필요 시 로드 (로드됨)'
 L['Load on demand (not loaded)']  = '필요 시 로드 (로드되지 않음)'
+
+L['Profile::HelpTip']           = '여기에서 편집할 프로필을 선택하세요'
+L['Favorite::HelpTip']          = '이 프로필을 즐겨찾기에 추가하면 미니맵 메뉴에 표시됩니다'
+L['Reload::HelpTip']            = '새로고침하여 선택한 애드온을 불러옵니다'
+L['Check All::HelpTip']         = '모든 애드온을 선택하거나 해제합니다'
+L['Favorite Profiles::HelpTip'] = '여기에서 즐겨찾는 프로필을 선택하세요'
