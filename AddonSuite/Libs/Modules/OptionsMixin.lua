@@ -8,6 +8,8 @@ local O, GC, M = ns.O, ns.GC, ns.M
 local API, L = O.API, ns:AceLocale()
 local AceConfig, AceConfigDialog = ns:AceConfig(), ns:AceConfigDialog()
 local AceDBOptions = ns:AceDBOptions()
+local AceGUI = ns:AceGUI()
+local HelpTour = O.HelpTour
 local OptionsAddonsMixin = O.OptionsAddonsMixin
 
 --[[-----------------------------------------------------------------------------
@@ -83,6 +85,36 @@ local function UnlockCategoryDividerOnOpen(_, appName)
   end)
 end
 
+--- @type ADS_HelpTip?
+local helpTip
+
+--- @return ADS_HelpTip
+local function HelpTip()
+  helpTip = helpTip or CreateFrame('Frame', nil, UIParent, 'ADS_HelpTipTemplate')
+  return helpTip
+end
+
+--- @return string? @Key of the General tab on screen
+local function SelectedGeneralTab()
+  local status = AceConfigDialog:GetStatusTable(ns.addon, { 'general' })
+  return status.groups and status.groups.selected
+end
+
+--- Every Open rebuilds the widgets, so re-pick the tour step after it.
+--- @param appName string
+local function ShowHelpTourOnOpen(_, appName)
+  if appName ~= ns.addon then return end
+  local dialog = AceConfigDialog.OpenFrames[appName]
+  if not dialog or dialog:GetUserData('helpTourPending') then return end
+  dialog:SetUserData('helpTourPending', true)
+  C_Timer.After(0.1, function()
+    dialog:SetUserData('helpTourPending', nil)
+    if AceConfigDialog.OpenFrames[appName] ~= dialog then return end
+    if SelectedGeneralTab() == 'favorites' then HelpTour:CompleteStep('FavoritesTab') end
+    HelpTour:OnHostShown('Settings', dialog, HelpTip())
+  end)
+end
+
 function o:InitOptions()
   local options = self:CreateOptions()
   -- This creates the Profiles Tab/Section in Settings UI
@@ -91,6 +123,9 @@ function o:InitOptions()
   AceConfig:RegisterOptionsTable(ns.addon, options, { GC.C.CONSOLE_COMMAND_OPTIONS })
   SetCategoryTreeWidth()
   hooksecurefunc(AceConfigDialog, 'Open', UnlockCategoryDividerOnOpen)
+  hooksecurefunc(AceConfigDialog, 'Open', ShowHelpTourOnOpen)
+  -- Closing releases the dialog; its widget is pooled and reused
+  hooksecurefunc(AceGUI, 'Release', function(_, widget) HelpTour:OnHostHidden(widget) end)
   if API:GetUIScale() > 1.0 then return end
 
   AceConfigDialog:SetDefaultSize(ns.addon, 950, 600)

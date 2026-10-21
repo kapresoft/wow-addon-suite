@@ -118,3 +118,9 @@ L['Show Out of Sync Count::Desc'] = '啟用此設定後，會在 |cdf6F97FFTitan
 L['Lib:']                         = '函式庫：'
 L['Load on demand (loaded)']      = '按需載入（已載入）'
 L['Load on demand (not loaded)']  = '按需載入（未載入）'
+
+L['Profile::HelpTip']           = '在此選擇要編輯的設定檔'
+L['Favorite::HelpTip']          = '將此設定檔加入最愛以顯示在小地圖選單中'
+L['Reload::HelpTip']            = '重新載入以載入勾選的外掛程式'
+L['Check All::HelpTip']         = '勾選或取消勾選所有外掛程式'
+L['Favorite Profiles::HelpTip'] = '在此選擇你的最愛設定檔'

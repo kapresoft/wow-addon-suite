@@ -118,3 +118,9 @@ L['Show Out of Sync Count::Desc'] = '启用此设置后，会在 |cdf6F97FFTitan
 L['Lib:']                         = '库：'
 L['Load on demand (loaded)']      = '按需加载（已加载）'
 L['Load on demand (not loaded)']  = '按需加载（未加载）'
+
+L['Profile::HelpTip']           = '在此选择要编辑的配置文件'
+L['Favorite::HelpTip']          = '收藏此配置文件以将其加入小地图菜单'
+L['Reload::HelpTip']            = '重新加载以载入勾选的插件'
+L['Check All::HelpTip']         = '勾选或取消勾选所有插件'
+L['Favorite Profiles::HelpTip'] = '在此选择你收藏的配置文件'

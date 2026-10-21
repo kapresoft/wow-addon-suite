@@ -26,8 +26,11 @@ Type: Profile_Global_Config
 -------------------------------------------------------------------------------]]
 --- @class Profile_Global_Config : AceDB_Global
 --- @field minimap Minimap
+--- @field helpTipsDismissed table<string, boolean> @Help tour step keys already seen
+--- @field tourBaseline number?                     @Set on first open; see HelpTour
 local DefaultGlobal = {
   sync_addon_states = false,
+  helpTipsDismissed = {},
   minimap = minimap,
 }
 

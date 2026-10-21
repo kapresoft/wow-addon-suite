@@ -119,3 +119,9 @@ L['Show Out of Sync Count::Desc'] = 'Enable this setting to display the number o
 L['Lib:']                         = true
 L['Load on demand (loaded)']      = true
 L['Load on demand (not loaded)']  = true
+
+L['Profile::HelpTip']           = 'Pick the profile to edit here'
+L['Favorite::HelpTip']          = 'Star this profile to add it to the minimap menu'
+L['Reload::HelpTip']            = 'Reload to load the checked add-ons'
+L['Check All::HelpTip']         = 'Check or uncheck every add-on'
+L['Favorite Profiles::HelpTip'] = 'Choose your favorite profiles here'

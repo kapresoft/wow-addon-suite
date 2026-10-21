@@ -118,3 +118,9 @@ L['Show Out of Sync Count::Desc'] = 'Activa este ajuste para mostrar en |cdf6F97
 L['Lib:']                         = 'Bibl.:'
 L['Load on demand (loaded)']      = 'Carga bajo demanda (cargado)'
 L['Load on demand (not loaded)']  = 'Carga bajo demanda (no cargado)'
+
+L['Profile::HelpTip']           = 'Elige aquí el perfil que quieres editar'
+L['Favorite::HelpTip']          = 'Marca este perfil con la estrella para agregarlo al menú del minimapa'
+L['Reload::HelpTip']            = 'Recarga para cargar los addons marcados'
+L['Check All::HelpTip']         = 'Marca o desmarca todos los addons'
+L['Favorite Profiles::HelpTip'] = 'Elige aquí tus perfiles favoritos'
