@@ -28,12 +28,14 @@ L['Options']                  = true
 L['General Configuration']    = true
 
 L['General::Enable All::Button']           = ALL
-L['General::Enable All::Button::Desc']     = 'Checks all add-ons below.'
+L['General::Enable All::Button::Desc']     = 'Checks every add-on shown below.'
 L['General::Disable All::Button']          = NONE
-L['General::Disable All::Button::Desc']    = 'Unchecks all add-ons below.'
+L['General::Disable All::Button::Desc']    = 'Unchecks every add-on shown below.'
 
 L['Add-Ons']                  = true
 L['Add-Ons::Desc']            = 'Check the add-ons this profile should load, then click the reload button to apply.'
+L['Add-Ons::Search']          = SEARCH
+L['Add-Ons::No Matches']      = 'No add-ons match your search.'
 L['Reload UI']         = true
 L['Reload UI::Desc']   = 'Apply and Reload Immediately with |cfdE64750No Confirmation.|r'
 L['Sync with Profile and Reload'] = 'Sync with Profile and Reload'
@@ -124,4 +126,5 @@ L['Profile::HelpTip']           = 'Pick the profile to edit here'
 L['Favorite::HelpTip']          = 'Star this profile to add it to the minimap menu'
 L['Reload::HelpTip']            = 'Reload to load the checked add-ons'
 L['Check All::HelpTip']         = 'Check or uncheck every add-on'
+L['Search::HelpTip']            = 'Type here to filter the add-on list'
 L['Favorite Profiles::HelpTip'] = 'Choose your favorite profiles here'

@@ -27,12 +27,14 @@ L['Options']                  = '选项'
 L['General Configuration']    = '常规设置'
 
 L['General::Enable All::Button']           = ALL
-L['General::Enable All::Button::Desc']     = '勾选下方所有插件。'
+L['General::Enable All::Button::Desc']     = '勾选下方显示的所有插件。'
 L['General::Disable All::Button']          = NONE
-L['General::Disable All::Button::Desc']    = '取消勾选下方所有插件。'
+L['General::Disable All::Button::Desc']    = '取消勾选下方显示的所有插件。'
 
 L['Add-Ons']                  = '插件'
 L['Add-Ons::Desc']            = '勾选此配置文件需要加载的插件，然后点击重新加载按钮以应用更改。'
+L['Add-Ons::Search']          = SEARCH
+L['Add-Ons::No Matches']      = '没有与搜索匹配的插件。'
 L['Reload UI']         = '重新加载界面'
 L['Reload UI::Desc']   = '|cfdE64750无需确认|r，立即应用并重新加载。'
 L['Sync with Profile and Reload'] = '与配置文件同步并重新加载'
@@ -123,4 +125,5 @@ L['Profile::HelpTip']           = '在此选择要编辑的配置文件'
 L['Favorite::HelpTip']          = '收藏此配置文件以将其加入小地图菜单'
 L['Reload::HelpTip']            = '重新加载以载入勾选的插件'
 L['Check All::HelpTip']         = '勾选或取消勾选所有插件'
+L['Search::HelpTip']            = '在此输入以筛选插件列表'
 L['Favorite Profiles::HelpTip'] = '在此选择你收藏的配置文件'

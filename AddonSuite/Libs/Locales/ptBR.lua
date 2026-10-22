@@ -27,12 +27,14 @@ L['Options']                  = 'Opções'
 L['General Configuration']    = 'Configurações gerais'
 
 L['General::Enable All::Button']           = ALL
-L['General::Enable All::Button::Desc']     = 'Marca todos os addons abaixo.'
+L['General::Enable All::Button::Desc']     = 'Marca todos os addons mostrados abaixo.'
 L['General::Disable All::Button']          = NONE
-L['General::Disable All::Button::Desc']    = 'Desmarca todos os addons abaixo.'
+L['General::Disable All::Button::Desc']    = 'Desmarca todos os addons mostrados abaixo.'
 
 L['Add-Ons']                  = 'Addons'
 L['Add-Ons::Desc']            = 'Marque os addons que este perfil deve carregar e depois clique no botão de recarregar para aplicar as alterações.'
+L['Add-Ons::Search']          = SEARCH
+L['Add-Ons::No Matches']      = 'Nenhum addon corresponde à sua pesquisa.'
 L['Reload UI']         = 'Recarregar interface'
 L['Reload UI::Desc']   = 'Aplica e recarrega imediatamente |cfdE64750sem confirmação.|r'
 L['Sync with Profile and Reload'] = 'Sincronizar com o perfil e recarregar'
@@ -123,4 +125,5 @@ L['Profile::HelpTip']           = 'Escolha aqui o perfil a editar'
 L['Favorite::HelpTip']          = 'Marque este perfil com a estrela para adicioná-lo ao menu do minimapa'
 L['Reload::HelpTip']            = 'Recarregue para carregar os addons marcados'
 L['Check All::HelpTip']         = 'Marque ou desmarque todos os addons'
+L['Search::HelpTip']            = 'Digite aqui para filtrar a lista de addons'
 L['Favorite Profiles::HelpTip'] = 'Escolha aqui seus perfis favoritos'

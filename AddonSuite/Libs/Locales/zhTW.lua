@@ -27,12 +27,14 @@ L['Options']                  = '選項'
 L['General Configuration']    = '一般設定'
 
 L['General::Enable All::Button']           = ALL
-L['General::Enable All::Button::Desc']     = '勾選下方所有外掛程式。'
+L['General::Enable All::Button::Desc']     = '勾選下方顯示的所有外掛程式。'
 L['General::Disable All::Button']          = NONE
-L['General::Disable All::Button::Desc']    = '取消勾選下方所有外掛程式。'
+L['General::Disable All::Button::Desc']    = '取消勾選下方顯示的所有外掛程式。'
 
 L['Add-Ons']                  = '外掛程式'
 L['Add-Ons::Desc']            = '勾選此設定檔需要載入的外掛程式，然後點擊重新載入按鈕以套用變更。'
+L['Add-Ons::Search']          = SEARCH
+L['Add-Ons::No Matches']      = '沒有符合搜尋的外掛程式。'
 L['Reload UI']         = '重新載入介面'
 L['Reload UI::Desc']   = '|cfdE64750無需確認|r，立即套用並重新載入。'
 L['Sync with Profile and Reload'] = '與設定檔同步並重新載入'
@@ -123,4 +125,5 @@ L['Profile::HelpTip']           = '在此選擇要編輯的設定檔'
 L['Favorite::HelpTip']          = '將此設定檔加入最愛以顯示在小地圖選單中'
 L['Reload::HelpTip']            = '重新載入以載入勾選的外掛程式'
 L['Check All::HelpTip']         = '勾選或取消勾選所有外掛程式'
+L['Search::HelpTip']            = '在此輸入以篩選外掛程式列表'
 L['Favorite Profiles::HelpTip'] = '在此選擇你的最愛設定檔'

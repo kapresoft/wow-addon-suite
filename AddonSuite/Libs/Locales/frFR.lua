@@ -27,12 +27,14 @@ L['Options']                  = 'Options'
 L['General Configuration']    = 'Paramètres généraux'
 
 L['General::Enable All::Button']           = ALL
-L['General::Enable All::Button::Desc']     = 'Coche tous les addons ci-dessous.'
+L['General::Enable All::Button::Desc']     = 'Coche tous les addons affichés ci-dessous.'
 L['General::Disable All::Button']          = NONE
-L['General::Disable All::Button::Desc']    = 'Décoche tous les addons ci-dessous.'
+L['General::Disable All::Button::Desc']    = 'Décoche tous les addons affichés ci-dessous.'
 
 L['Add-Ons']                  = 'Addons'
 L['Add-Ons::Desc']            = 'Cochez les addons que ce profil doit charger, puis cliquez sur le bouton de rechargement pour appliquer les modifications.'
+L['Add-Ons::Search']          = SEARCH
+L['Add-Ons::No Matches']      = 'Aucun addon ne correspond à votre recherche.'
 L['Reload UI']         = 'Recharger l\'interface'
 L['Reload UI::Desc']   = 'Applique et recharge immédiatement |cfdE64750sans confirmation.|r'
 L['Sync with Profile and Reload'] = 'Synchroniser avec le profil et recharger'
@@ -123,4 +125,5 @@ L['Profile::HelpTip']           = 'Choisissez ici le profil à modifier'
 L['Favorite::HelpTip']          = 'Ajoutez ce profil aux favoris pour le voir dans le menu de la minicarte'
 L['Reload::HelpTip']            = 'Rechargez pour charger les addons cochés'
 L['Check All::HelpTip']         = 'Cochez ou décochez tous les addons'
+L['Search::HelpTip']            = 'Tapez ici pour filtrer la liste des addons'
 L['Favorite Profiles::HelpTip'] = 'Choisissez vos profils favoris ici'

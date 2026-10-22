@@ -27,12 +27,14 @@ L['Options']                  = 'Параметры'
 L['General Configuration']    = 'Общие настройки'
 
 L['General::Enable All::Button']           = ALL
-L['General::Enable All::Button::Desc']     = 'Отметить все аддоны ниже.'
+L['General::Enable All::Button::Desc']     = 'Отметить все показанные ниже аддоны.'
 L['General::Disable All::Button']          = NONE
-L['General::Disable All::Button::Desc']    = 'Снять отметку со всех аддонов ниже.'
+L['General::Disable All::Button::Desc']    = 'Снять отметку со всех показанных ниже аддонов.'
 
 L['Add-Ons']                  = 'Аддоны'
 L['Add-Ons::Desc']            = 'Отметьте аддоны, которые должен загружать этот профиль, затем нажмите кнопку перезагрузки, чтобы применить изменения.'
+L['Add-Ons::Search']          = SEARCH
+L['Add-Ons::No Matches']      = 'Нет аддонов, соответствующих запросу.'
 L['Reload UI']         = 'Перезагрузить интерфейс'
 L['Reload UI::Desc']   = 'Применить и перезагрузить немедленно |cfdE64750без подтверждения.|r'
 L['Sync with Profile and Reload'] = 'Синхронизировать с профилем и перезагрузить'
@@ -123,4 +125,5 @@ L['Profile::HelpTip']           = 'Выберите здесь профиль д
 L['Favorite::HelpTip']          = 'Добавьте этот профиль в избранное, чтобы он появился в меню миникарты'
 L['Reload::HelpTip']            = 'Перезагрузите, чтобы загрузить отмеченные аддоны'
 L['Check All::HelpTip']         = 'Отметить или снять отметку со всех аддонов'
+L['Search::HelpTip']            = 'Введите текст, чтобы отфильтровать список аддонов'
 L['Favorite Profiles::HelpTip'] = 'Выберите здесь избранные профили'

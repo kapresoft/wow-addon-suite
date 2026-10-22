@@ -46,6 +46,8 @@ local M = {
   ActionLabelWidget = {},
   --- @type ADS_FavoriteDropdownWidget
   FavoriteDropdownWidget = {},
+  --- @type ADS_SearchBoxWidget
+  SearchBoxWidget = {},
   --- @type ADS_SettingsCheckboxWidget
   SettingsCheckboxWidget = {},
   --- @type ADS_StepperDropdownWidget
