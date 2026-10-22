@@ -27,12 +27,14 @@ L['Options']                  = 'Opzioni'
 L['General Configuration']    = 'Impostazioni generali'
 
 L['General::Enable All::Button']           = ALL
-L['General::Enable All::Button::Desc']     = 'Seleziona tutti gli addon sottostanti.'
+L['General::Enable All::Button::Desc']     = 'Seleziona tutti gli addon mostrati sotto.'
 L['General::Disable All::Button']          = NONE
-L['General::Disable All::Button::Desc']    = 'Deseleziona tutti gli addon sottostanti.'
+L['General::Disable All::Button::Desc']    = 'Deseleziona tutti gli addon mostrati sotto.'
 
 L['Add-Ons']                  = 'Addon'
 L['Add-Ons::Desc']            = 'Seleziona gli addon che questo profilo deve caricare, quindi fai clic sul pulsante di ricarica per applicare le modifiche.'
+L['Add-Ons::Search']          = SEARCH
+L['Add-Ons::No Matches']      = 'Nessun addon corrisponde alla ricerca.'
 L['Reload UI']         = 'Ricarica interfaccia'
 L['Reload UI::Desc']   = 'Applica e ricarica immediatamente |cfdE64750senza conferma.|r'
 L['Sync with Profile and Reload'] = 'Sincronizza con il profilo e ricarica'
@@ -123,4 +125,5 @@ L['Profile::HelpTip']           = 'Scegli qui il profilo da modificare'
 L['Favorite::HelpTip']          = 'Aggiungi questo profilo ai preferiti per il menu della minimappa'
 L['Reload::HelpTip']            = 'Ricarica per caricare gli addon selezionati'
 L['Check All::HelpTip']         = 'Seleziona o deseleziona tutti gli addon'
+L['Search::HelpTip']            = "Scrivi qui per filtrare l'elenco degli addon"
 L['Favorite Profiles::HelpTip'] = 'Scegli qui i tuoi profili preferiti'

@@ -25,6 +25,7 @@ local OptionsTitanPanelMixin = O.OptionsTitanPanelMixin
 local OptionsFavoritesMixin = O.OptionsFavoritesMixin
 local HelpTour = O.HelpTour
 local ActionLabel, FavoriteDropdown = O.ActionLabelWidget, O.FavoriteDropdownWidget
+local SearchBox = O.SearchBoxWidget
 
 local libName = M.OptionsAddonsMixin()
 local p, t = ns:log(libName)
@@ -37,6 +38,10 @@ local libPrefix = L['Lib:'] .. ' '
 local IsOptionsVisible = false
 
 local ADDON_ROW_ARG = 'AddonSuite.AddOnRow'
+local ADDON_LIST_TAB = 'addonList'
+
+--- Session only; `searchNeedle` is the trimmed, lowercased match key
+local searchQuery, searchNeedle = '', ''
 
 local fVersion = ns:ColorFn(BLUE_FONT_COLOR)
 local fDisabled = ns:ColorFn(LIGHTGRAY_FONT_COLOR)
@@ -70,6 +75,36 @@ local function GetSortedKeys(t)
   end
   table.sort(keys)
   return keys
+end
+
+--- @param text string?
+--- @return string
+local function StripColors(text)
+  local stripped = (text or ''):gsub('|c%x%x%x%x%x%x%x%x', ''):gsub('|r', '')
+  return stripped
+end
+
+--- @param info AddOnInfo
+--- @return string @Folder name and title, lowercased
+local function SearchTextFor(info) return (info.name .. ' ' .. StripColors(info.title)):lower() end
+
+--- @param searchText string
+--- @return boolean
+local function MatchesSearch(searchText)
+  return searchNeedle == '' or searchText:find(searchNeedle, 1, true) ~= nil
+end
+
+--- @param option AceConfigOption
+--- @return boolean
+local function IsAddOnRow(option) return option.type == 'toggle' and option.arg == ADDON_ROW_ARG end
+
+--- Re-selecting the list's tab rebuilds only the list,
+--- so the search box above it keeps focus
+--- @param widget AceGUIWidget @The search box
+local function RefreshAddOnList(widget)
+  for _, child in ipairs(widget.parent.children) do
+    if child.type == 'TabGroup' then return child:SelectTab(ADDON_LIST_TAB) end
+  end
 end
 
 --- @return ProfileSelect
@@ -299,14 +334,16 @@ function o:CreateAddOnsOptions()
       actions = { self:CreateEnableAllAction(), self:CreateDisableAllAction() },
       -- Onto the Add-Ons tab strip, next to the rows they act on
       actionsAnchor = 'below',
-      layout = { action = { x = -8, y = -7 } },
+      layout = { action = { x = -8, y = -11 } },
       helpTip = 'AddOnsHeader',
     } --[[@as ADS_Ace3WidgetArg]],
   })
+  options.addonsSearch = self:CreateSearchOption()
 
   --- @type table<string, AceConfigOption>
   local list = {}
-  options.addonList = { type = 'group', name = L['Add-Ons'], order = order:next(), args = list }
+  options[ADDON_LIST_TAB] =
+    { type = 'group', name = L['Add-Ons'], order = order:next(), args = list }
   self.addonsOptions = list
 
   if GetNumAddOns() <= 0 then
@@ -318,6 +355,12 @@ function o:CreateAddOnsOptions()
     return options
   end
 
+  list.noMatches = {
+    type = 'description',
+    name = L['Add-Ons::No Matches'],
+    order = order:next(),
+    hidden = function() return self:AnyAddOnRowShown() end,
+  }
   self:CreateAddOnCheckList()
 
   return options
@@ -443,18 +486,58 @@ function o:CreateAddOnCheckList()
 
   API:ForEachAddOn(function(info)
     local name = info.name
+    local searchText = SearchTextFor(info)
     options[name] = {
       order = order:next(),
       type = 'toggle',
       width = 1.3,
       arg = ADDON_ROW_ARG,
       get = o.CreateGetFn(name),
+      hidden = function() return not MatchesSearch(searchText) end,
     }
     local opt = options[name]
     opt.set = o.CreateSetFn(options, name)
     opt.name = o.GetAddOnNameFn(name)
     opt.desc = o.GetAddOnDescFn(name)
   end)
+end
+
+--- Sits under the header, hanging onto the Add-Ons tab strip
+--- @return AceConfigOption
+function o:CreateSearchOption()
+  return {
+    type = 'input',
+    name = L['Add-Ons::Search'],
+    width = 'full',
+    order = self.order:next(),
+    dialogControl = SearchBox.Type,
+    arg = {
+      search = {
+        onChange = function(query, widget) self:OnSearch(query, widget) end,
+        focusOnShow = true,
+      },
+      -- Left of the All/None icons
+      layout = { search = { x = -56, y = -7 } },
+      helpTip = 'AddOnsSearch',
+    } --[[@as ADS_Ace3WidgetArg]],
+    get = function() return searchQuery end,
+  }
+end
+
+--- @param query string
+--- @param widget AceGUIWidget
+function o:OnSearch(query, widget)
+  searchQuery, searchNeedle = query, strtrim(query):lower()
+  HelpTour:CompleteStep('AddOnsSearch')
+  RefreshAddOnList(widget)
+end
+
+--- @return boolean
+function o:AnyAddOnRowShown()
+  for _, option in pairs(self.addonsOptions) do
+    if IsAddOnRow(option) and not option.hidden() then return true end
+  end
+  return false
 end
 
 --- Binds the profile row's star to the current profile's favorite flag
@@ -524,14 +607,15 @@ end
 --- @param value boolean
 function o:SetAllToggles(value)
   HelpTour:CompleteStep('CheckAllNone')
-  self:ForEachToggle(function(opt) opt.set({ isBulkOperation = true }, value) end)
+  self:ForEachShownToggle(function(opt) opt.set({ isBulkOperation = true }, value) end)
   AceConfigRegistry:NotifyChange(ns.addon)
 end
 
+--- Rows hidden by the search are skipped
 --- @param applyFn fun(option:AceConfigOption) | "function(option) end"
-function o:ForEachToggle(applyFn)
+function o:ForEachShownToggle(applyFn)
   for _, option in pairs(self.addonsOptions) do
-    if option.type == 'toggle' and option.arg == ADDON_ROW_ARG then applyFn(option) end
+    if IsAddOnRow(option) and not option.hidden() then applyFn(option) end
   end
 end
 

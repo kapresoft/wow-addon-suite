@@ -14,6 +14,7 @@ Types
 --- @field tooltip? ADS_Ace3WidgetTooltipArg
 --- @field favorite? ADS_Ace3WidgetFavoriteArg
 --- @field reload? ADS_Ace3WidgetReloadArg
+--- @field search? ADS_Ace3WidgetSearchArg
 --- @field actions? ADS_Ace3WidgetActionArg[] @ActionLabel buttons, left to right
 --- @field actionsAnchor? 'right'|'below'     @ActionLabel buttons beside or under the text
 --- @field helpTip? string                     @Help tour finds this option's widget by it
@@ -29,6 +30,11 @@ Types
 --- @class ADS_Ace3WidgetReloadArg
 --- @field onClick fun()
 --- @field tooltip? fun(tooltip: GameTooltip)
+
+--- Receives a SearchBox's text as the user types
+--- @class ADS_Ace3WidgetSearchArg
+--- @field onChange fun(query: string, widget: AceGUIWidget)
+--- @field focusOnShow? boolean @Focuses the box when its view opens, not on rebuilds
 
 --- An ActionLabel icon button; `overlay` draws over `atlas`
 --- @class ADS_Ace3WidgetActionArg
@@ -62,6 +68,11 @@ Types
 --- @field x? number @px
 --- @field y? number @px
 
+--- Offsets move the box from under its row's right end
+--- @class ADS_Ace3WidgetSearch : ADS_Ace3WidgetSize
+--- @field x? number @px
+--- @field y? number @px
+
 --- Width excludes the value label
 --- @class ADS_Ace3WidgetSlider : ADS_Ace3WidgetSize
 
@@ -77,6 +88,7 @@ Types
 --- @field star? ADS_Ace3WidgetStar
 --- @field checkbox? ADS_Ace3WidgetCheckbox
 --- @field action? ADS_Ace3WidgetAction
+--- @field search? ADS_Ace3WidgetSearch
 --- @field slider? ADS_Ace3WidgetSlider
 --- @field tooltip? ADS_Ace3WidgetTooltip
 
@@ -91,6 +103,7 @@ local DEFAULT_LAYOUT = {
   star = { width = 18, height = 18 },
   checkbox = { width = 30, height = 30 },
   action = { width = 20, height = 20, x = 0, y = 0 },
+  search = { width = 160, height = 20, x = 0, y = 0 },
   slider = { width = 220, height = 19 },
   tooltip = { x = 20, y = 20 },
 }
@@ -146,6 +159,13 @@ end
 function o:ReloadArg(widget)
   local arg = ArgFor(widget)
   return type(arg) == 'table' and arg.reload or nil
+end
+
+--- @param widget AceGUIWidget
+--- @return ADS_Ace3WidgetSearchArg? @nil if the option sets none
+function o:SearchArg(widget)
+  local arg = ArgFor(widget)
+  return type(arg) == 'table' and arg.search or nil
 end
 
 --- @param widget AceGUIWidget

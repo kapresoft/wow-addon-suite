@@ -94,6 +94,11 @@ local tours = {
         end,
       },
       {
+        key = 'AddOnsSearch',
+        textKey = 'Search::HelpTip',
+        anchor = OptionPart('AddOnsSearch', 'editBox'),
+      },
+      {
         key = 'FavoritesTab',
         textKey = 'Favorite Profiles::HelpTip',
         anchor = function(dialog) return TabButton(dialog, 'favorites') end,

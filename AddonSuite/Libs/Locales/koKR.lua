@@ -27,12 +27,14 @@ L['Options']                  = '옵션'
 L['General Configuration']    = '일반 설정'
 
 L['General::Enable All::Button']           = ALL
-L['General::Enable All::Button::Desc']     = '아래의 모든 애드온을 체크합니다.'
+L['General::Enable All::Button::Desc']     = '아래에 표시된 모든 애드온을 체크합니다.'
 L['General::Disable All::Button']          = NONE
-L['General::Disable All::Button::Desc']    = '아래의 모든 애드온 체크를 해제합니다.'
+L['General::Disable All::Button::Desc']    = '아래에 표시된 모든 애드온 체크를 해제합니다.'
 
 L['Add-Ons']                  = '애드온'
 L['Add-Ons::Desc']            = '이 프로필에서 불러올 애드온을 선택한 다음 새로고침 버튼을 클릭하여 변경 사항을 적용하세요.'
+L['Add-Ons::Search']          = SEARCH
+L['Add-Ons::No Matches']      = '검색과 일치하는 애드온이 없습니다.'
 L['Reload UI']         = 'UI 새로고침'
 L['Reload UI::Desc']   = '|cfdE64750확인 없이|r 즉시 적용하고 새로고침합니다.'
 L['Sync with Profile and Reload'] = '프로필과 동기화 후 새로고침'
@@ -123,4 +125,5 @@ L['Profile::HelpTip']           = '여기에서 편집할 프로필을 선택하
 L['Favorite::HelpTip']          = '이 프로필을 즐겨찾기에 추가하면 미니맵 메뉴에 표시됩니다'
 L['Reload::HelpTip']            = '새로고침하여 선택한 애드온을 불러옵니다'
 L['Check All::HelpTip']         = '모든 애드온을 선택하거나 해제합니다'
+L['Search::HelpTip']            = '여기에 입력하여 애드온 목록을 필터링합니다'
 L['Favorite Profiles::HelpTip'] = '여기에서 즐겨찾는 프로필을 선택하세요'

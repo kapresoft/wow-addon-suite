@@ -27,12 +27,14 @@ L['Options']                  = 'Optionen'
 L['General Configuration']    = 'Allgemeine Einstellungen'
 
 L['General::Enable All::Button']           = ALL
-L['General::Enable All::Button::Desc']     = 'Aktiviert alle Add-Ons unten.'
+L['General::Enable All::Button::Desc']     = 'Aktiviert alle unten angezeigten Add-Ons.'
 L['General::Disable All::Button']          = NONE
-L['General::Disable All::Button::Desc']    = 'Deaktiviert alle Add-Ons unten.'
+L['General::Disable All::Button::Desc']    = 'Deaktiviert alle unten angezeigten Add-Ons.'
 
 L['Add-Ons']                  = 'Add-Ons'
 L['Add-Ons::Desc']            = 'Setze ein Häkchen bei den Add-Ons, die dieses Profil laden soll, und klicke dann auf die Schaltfläche zum Neuladen, um die Änderungen zu übernehmen.'
+L['Add-Ons::Search']          = SEARCH
+L['Add-Ons::No Matches']      = 'Keine Add-Ons entsprechen deiner Suche.'
 L['Reload UI']         = 'UI neu laden'
 L['Reload UI::Desc']   = 'Sofort übernehmen und neu laden |cfdE64750ohne Bestätigung.|r'
 L['Sync with Profile and Reload'] = 'Mit Profil synchronisieren und neu laden'
@@ -123,4 +125,5 @@ L['Profile::HelpTip']           = 'Wähle hier das Profil zum Bearbeiten'
 L['Favorite::HelpTip']          = 'Markiere dieses Profil, um es dem Minikarten-Menü hinzuzufügen'
 L['Reload::HelpTip']            = 'Neu laden, um die markierten Add-Ons zu laden'
 L['Check All::HelpTip']         = 'Alle Add-Ons markieren oder abwählen'
+L['Search::HelpTip']            = 'Tippe hier, um die Add-On-Liste zu filtern'
 L['Favorite Profiles::HelpTip'] = 'Wähle hier deine Favoritenprofile'
