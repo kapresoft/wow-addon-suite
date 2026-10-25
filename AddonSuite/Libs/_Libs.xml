@@ -25,7 +25,8 @@
     <Script file="Widgets\StepperSliderWidget.lua"/>
     <Script file="Widgets\ActionLabelWidget.lua"/>
     <Script file="Widgets\SearchBoxWidget.lua"/>
-    <Include file="Modules\HelpTips\HelpTips.xml"/>
+    <Script file="Modules\HelpTips\TourList.lua"/>
+    <Script file="Modules\HelpTips\HelpTour.lua"/>
 
     <Frame name="AddonSuiteFrame" parentKey="AddonSuite" parent="UIParent" />
 

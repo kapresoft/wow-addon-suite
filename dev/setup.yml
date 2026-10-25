@@ -29,6 +29,9 @@ externals:
   ThirdParty-Libs/LibTraceKit:
     url: https://github.com/kapresoft/wow-addon-LibTraceKit
     tag: latest
+  ThirdParty-Libs/LibHelpTour:
+    url: https://github.com/kapresoft/wow-addon-LibHelpTour
+    tag: latest
   ThirdParty-Libs/Kapresoft-LibUtil:
     url: https://github.com/kapresoft/wow-lib-util
     tag: latest
@@ -43,6 +46,10 @@ externals:
   ThirdParty-Libs/Annotations/LibPrettyPrint:
     url: https://github.com/kapresoft/wow-addon-LibPrettyPrint
     path: Libs/Annotations
+  # No Annotations folder; its classes live in Libs
+  ThirdParty-Libs/Annotations/LibHelpTour:
+    url: https://github.com/kapresoft/wow-addon-LibHelpTour
+    path: Libs
 
 ignore:
   - "*.sh"
@@ -73,6 +80,9 @@ ignore:
   - ThirdParty-Libs/LibTraceKit/Libs/Assets
   - ThirdParty-Libs/LibTraceKit/Libs/Developer.lua
   - ThirdParty-Libs/LibTraceKit/ThirdParty
+  - ThirdParty-Libs/LibHelpTour/dev
+  - ThirdParty-Libs/LibHelpTour/ThirdParty
+  - ThirdParty-Libs/LibHelpTour/LICENSE
   - ThirdParty-Libs/Ace3/LibStub/tests
   - ThirdParty-Libs/Ace3/CallbackHandler-1.0/CallbackHandler-1.0.xml
   - ThirdParty-Libs/Ace3/Ace3.lua

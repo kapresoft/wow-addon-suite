@@ -54,9 +54,9 @@ local M = {
   StepperDropdownWidget = {},
   --- @type ADS_StepperSliderWidget
   StepperSliderWidget = {},
-  --- @type ADS_HelpTour
+  --- @type LibHelpTour_Controller
   HelpTour = {},
-  --- @type ADS_HelpTourDef[]
+  --- @type LibHelpTour_Tour[]
   HelpTourList = {},
   --- @type DebuggingSettingsGroup
   DebuggingSettingsGroup = {},

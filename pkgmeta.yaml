@@ -11,6 +11,7 @@ embedded-libraries:
   - Ace3
   - LibUtil
   - LibPrettyPrint
+  - LibHelpTour
 
 tools-used:
   - DevSuite
@@ -24,6 +25,9 @@ externals:
     tag: latest
   AddonSuite/ThirdParty/Libs/LibTraceKit:
     url: https://github.com/kapresoft/wow-addon-LibTraceKit
+    tag: latest
+  AddonSuite/ThirdParty/Libs/LibHelpTour:
+    url: https://github.com/kapresoft/wow-addon-LibHelpTour
     tag: latest
   AddonSuite/ThirdParty/Libs/Ace3:
     url: https://github.com/WoWUIDev/Ace3
@@ -78,6 +82,9 @@ ignore:
   - AddonSuite/ThirdParty/Libs/LibTraceKit/ThirdParty
   - AddonSuite/ThirdParty/Libs/LibTraceKit/Libs/Assets
   - AddonSuite/ThirdParty/Libs/LibTraceKit/Libs/Developer.lua
+  - AddonSuite/ThirdParty/Libs/LibHelpTour/dev
+  - AddonSuite/ThirdParty/Libs/LibHelpTour/*.toc
+  - AddonSuite/ThirdParty/Libs/LibHelpTour/ThirdParty
 
 # REQUIRED for CurseForge packager (non-obvious):
 # The LEFT side MUST be <repo-folder>/<addon-folder>
