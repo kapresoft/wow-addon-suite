@@ -85,15 +85,6 @@ local function UnlockCategoryDividerOnOpen(_, appName)
   end)
 end
 
---- @type ADS_HelpTip?
-local helpTip
-
---- @return ADS_HelpTip
-local function HelpTip()
-  helpTip = helpTip or CreateFrame('Frame', nil, UIParent, 'ADS_HelpTipTemplate')
-  return helpTip
-end
-
 --- @return string? @Key of the General tab on screen
 local function SelectedGeneralTab()
   local status = AceConfigDialog:GetStatusTable(ns.addon, { 'general' })
@@ -111,7 +102,7 @@ local function ShowHelpTourOnOpen(_, appName)
     dialog:SetUserData('helpTourPending', nil)
     if AceConfigDialog.OpenFrames[appName] ~= dialog then return end
     if SelectedGeneralTab() == 'favorites' then HelpTour:CompleteStep('FavoritesTab') end
-    HelpTour:OnHostShown('Settings', dialog, HelpTip())
+    HelpTour:OnTargetShown('Settings', dialog)
   end)
 end
 
@@ -125,7 +116,7 @@ function o:InitOptions()
   hooksecurefunc(AceConfigDialog, 'Open', UnlockCategoryDividerOnOpen)
   hooksecurefunc(AceConfigDialog, 'Open', ShowHelpTourOnOpen)
   -- Closing releases the dialog; its widget is pooled and reused
-  hooksecurefunc(AceGUI, 'Release', function(_, widget) HelpTour:OnHostHidden(widget) end)
+  hooksecurefunc(AceGUI, 'Release', function(_, widget) HelpTour:OnTargetHidden(widget) end)
   if API:GetUIScale() > 1.0 then return end
 
   AceConfigDialog:SetDefaultSize(ns.addon, 950, 600)

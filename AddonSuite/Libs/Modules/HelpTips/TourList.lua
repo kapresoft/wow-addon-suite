@@ -5,7 +5,7 @@ Tours without `since` are always eligible (the welcome tour). Feature tours
 set `since` one past the highest in use, so only users who installed before
 it see them. Step keys must be unique across all tours.
 
-The host is the settings dialog's AceGUI frame. Its widgets are rebuilt on
+The target is the settings dialog's AceGUI frame. Its widgets are rebuilt on
 every refresh, so anchors look them up each time: an option tagged with
 `arg.helpTip` is found by that tag.
 @see HelpTour.lua
@@ -64,11 +64,11 @@ end
 --[[-----------------------------------------------------------------------------
 Tours
 -------------------------------------------------------------------------------]]
---- @type ADS_HelpTourDef[]
+--- @type LibHelpTour_Tour[]
 local tours = {
   {
     id = 'welcome',
-    host = 'Settings',
+    targetId = 'Settings',
     steps = {
       {
         key = 'ProfileDropdown',
