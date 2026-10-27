@@ -29,9 +29,7 @@ jobs:
     permissions:
       # write permission is required to create a github release
       contents: write
-      # write permission is required for autolabeler
-      # otherwise, read permission is required at least
-      pull-requests: write
+      pull-requests: read
     steps:
       ## ------------------------------------------------ ##
       ## See: https://github.com/actions/github-script
@@ -127,16 +125,6 @@ jobs:
           files: "${{ env.buildArtifact }}"
           fail: true
       ## ------------------------------------------------ ##
-      - name: "Verify: Supporting Scripts Exists"
-        uses: andstor/file-existence-action@v3
-        with:
-          files: "./dev/sha256.sh"
-          fail: true
-      ## ------------------------------------------------ ##
-      - name: "Setup Build Scripts"
-        run: |
-          chmod a+x ./dev/sha256.sh
-      ## ------------------------------------------------ ##
       ## Show Directory contents
       - name: "Setup Build Scripts"
         run: |
@@ -150,7 +138,7 @@ jobs:
       ## ------------------------------------------------ ##
       - name: Check Vars
         run: |
-          buildArtifactChecksum="$(./dev/sha256.sh $buildArtifact)"
+          buildArtifactChecksum="$(sha256sum "$buildArtifact" | cut -d' ' -f1)"
           echo buildArtifactChecksum="${buildArtifactChecksum}" >> $GITHUB_ENV
           echo "buildArtifact is $buildArtifact"
           echo "buildArtifactChecksum is $buildArtifactChecksum"
