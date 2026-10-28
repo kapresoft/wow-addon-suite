@@ -128,3 +128,4 @@ L['Reload::HelpTip']            = 'Reload to load the checked add-ons'
 L['Check All::HelpTip']         = 'Check or uncheck every add-on'
 L['Search::HelpTip']            = 'Type here to filter the add-on list'
 L['Favorite Profiles::HelpTip'] = 'Choose your favorite profiles here'
+L['Skip Tour']                  = true

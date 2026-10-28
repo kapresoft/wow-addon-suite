@@ -127,3 +127,4 @@ L['Reload::HelpTip']            = '새로고침하여 선택한 애드온을 불
 L['Check All::HelpTip']         = '모든 애드온을 선택하거나 해제합니다'
 L['Search::HelpTip']            = '여기에 입력하여 애드온 목록을 필터링합니다'
 L['Favorite Profiles::HelpTip'] = '여기에서 즐겨찾는 프로필을 선택하세요'
+L['Skip Tour']                  = '둘러보기 건너뛰기'

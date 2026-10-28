@@ -127,3 +127,4 @@ L['Reload::HelpTip']            = 'Neu laden, um die markierten Add-Ons zu laden
 L['Check All::HelpTip']         = 'Alle Add-Ons markieren oder abwählen'
 L['Search::HelpTip']            = 'Tippe hier, um die Add-On-Liste zu filtern'
 L['Favorite Profiles::HelpTip'] = 'Wähle hier deine Favoritenprofile'
+L['Skip Tour']                  = 'Tour überspringen'
