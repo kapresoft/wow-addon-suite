@@ -127,3 +127,4 @@ L['Reload::HelpTip']            = 'Ricarica per caricare gli addon selezionati'
 L['Check All::HelpTip']         = 'Seleziona o deseleziona tutti gli addon'
 L['Search::HelpTip']            = "Scrivi qui per filtrare l'elenco degli addon"
 L['Favorite Profiles::HelpTip'] = 'Scegli qui i tuoi profili preferiti'
+L['Skip Tour']                  = 'Salta il tour'

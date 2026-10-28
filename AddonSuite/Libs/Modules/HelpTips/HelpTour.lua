@@ -19,6 +19,7 @@ local o = HelpTourLib:New({
   getBaseline = function() return ns:g().tourBaseline end,
   setBaseline = function(baseline) ns:g().tourBaseline = baseline end,
   text = function(textKey) return L[textKey] end,
+  skipTextKey = 'Skip Tour',
   tipParent = function() return UIParent end,
   tipStrata = 'FULLSCREEN_DIALOG',
 })

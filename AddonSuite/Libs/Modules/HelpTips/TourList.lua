@@ -69,6 +69,7 @@ local tours = {
   {
     id = 'welcome',
     targetId = 'Settings',
+    skippable = true,
     steps = {
       {
         key = 'ProfileDropdown',
