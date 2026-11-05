@@ -33,6 +33,9 @@ externals:
   ThirdParty-Libs/LibHelpTour:
     url: https://github.com/kapresoft/wow-addon-LibHelpTour
     tag: latest
+  ThirdParty-Libs/LibAceOptionsKit:
+    url: https://github.com/kapresoft/wow-addon-LibAceOptionsKit
+    tag: latest
   ThirdParty-Libs/Kapresoft-LibUtil:
     url: https://github.com/kapresoft/wow-lib-util
     tag: latest
@@ -51,6 +54,9 @@ externals:
   ThirdParty-Libs/Annotations/LibHelpTour:
     url: https://github.com/kapresoft/wow-addon-LibHelpTour
     path: Libs
+  ThirdParty-Libs/Annotations/LibAceOptionsKit:
+    url: https://github.com/kapresoft/wow-addon-LibAceOptionsKit
+    path: Libs/Annotations
 
 ignore:
   - "*.sh"
@@ -84,6 +90,14 @@ ignore:
   - ThirdParty-Libs/LibHelpTour/dev
   - ThirdParty-Libs/LibHelpTour/ThirdParty
   - ThirdParty-Libs/LibHelpTour/LICENSE
+  - ThirdParty-Libs/LibAceOptionsKit/LICENSE
+  - ThirdParty-Libs/LibAceOptionsKit/dev
+  - ThirdParty-Libs/LibAceOptionsKit/doc
+  - ThirdParty-Libs/LibAceOptionsKit/Assets
+  - ThirdParty-Libs/LibAceOptionsKit/ThirdParty
+  - ThirdParty-Libs/LibAceOptionsKit/LibAceOptionsKit.xml
+  - ThirdParty-Libs/LibAceOptionsKit/Libs/Annotations
+  - ThirdParty-Libs/LibAceOptionsKit/Libs/Developer
   - ThirdParty-Libs/Ace3/LibStub/tests
   - ThirdParty-Libs/Ace3/CallbackHandler-1.0/CallbackHandler-1.0.xml
   - ThirdParty-Libs/Ace3/Ace3.lua

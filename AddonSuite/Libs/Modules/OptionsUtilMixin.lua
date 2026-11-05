@@ -4,10 +4,10 @@ Local Vars
 --- @type ADS_Namespace
 local ns = select(2, ...)
 local ACU = ns:ACU()
-local SettingsCheckbox = ns.O.SettingsCheckboxWidget
+local AOK = ns:LibAceOptionsKit()
 
 --- Shared label column so settings rows line up across tabs
---- @type ADS_Ace3WidgetArg
+--- @type LibAceOptionsKit_Arg
 local SETTINGS_ROW_ARG = { layout = { label = { width = 300 } } }
 
 --[[-----------------------------------------------------------------------------
@@ -58,7 +58,7 @@ end
 function o:SettingsCheckbox(localeKey, order, get, set)
   return self:SettingsRow(localeKey, {
     type = 'toggle',
-    dialogControl = SettingsCheckbox.Type,
+    dialogControl = AOK.SettingsCheckbox.Type,
     order = order,
     get = get,
     set = set,

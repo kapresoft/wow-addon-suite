@@ -131,6 +131,9 @@ function ns:GetLocale() return self.O.AceLib:AceLocale():GetLocale(self.addon, t
 --- @return Kapresoft-AceConfigUtil-2-0
 function ns:ACU() return self.O.AceConfigUtil:New(ns.addon, not ns:IsDev()) end
 
+--- @return LibAceOptionsKit-1.0
+function ns:LibAceOptionsKit() return LibStub('LibAceOptionsKit-1.0') end
+
 --[[-------------------------------------------------------------------
 Loggers/Tracers:: NoOp in Official Releases
                   This is overridden in DeveloperSetup

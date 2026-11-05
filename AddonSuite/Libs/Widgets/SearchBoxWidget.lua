@@ -63,9 +63,10 @@ local function EditBox_OnTextChanged(self)
   self.timer = C_Timer.NewTimer(DEBOUNCE_SECONDS, function() NotifyChange(self) end)
 end
 
---- Runs on each SetWidth; the option is only known by then
 --- @param self table
 local function ApplyLayout(self)
+  -- OnAcquire's SetWidth runs before the option is known
+  if not self:GetUserData('appName') then return end
   local size = CONFIG:Layout(self).search
   self.editBox:SetSize(size.width, size.height)
   self.editBox:ClearAllPoints()

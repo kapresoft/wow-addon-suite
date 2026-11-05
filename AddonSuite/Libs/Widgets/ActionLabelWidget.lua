@@ -10,7 +10,7 @@ Use via `dialogControl = O.ActionLabelWidget.Type` on a 'description' option.
 local ns = select(2, ...)
 local AceGUI = ns:AceGUI()
 local CONFIG = ns.O.Ace3WidgetConfig
-local Util = ns.O.Ace3WidgetUtil
+local AOK = ns:LibAceOptionsKit()
 
 local libName = ns.M.ActionLabelWidget()
 --- @class ADS_ActionLabelWidget
@@ -28,7 +28,7 @@ local function Button_OnEnter(widget, button)
   local tooltip = button.action.tooltip
   if not tooltip then return end
   GameTooltip:SetOwner(button, 'ANCHOR_NONE')
-  Util:AnchorTooltip(widget, GameTooltip, button)
+  AOK:AnchorTooltip(widget, GameTooltip, button)
   tooltip(GameTooltip)
   GameTooltip:Show()
 end
@@ -105,10 +105,11 @@ local function LayoutButtons(self)
   return used
 end
 
---- Runs on each SetWidth; the option is only known by then
 --- @param self table
 --- @param width number
 local function ApplyLayout(self, width)
+  -- OnAcquire's SetWidth runs before the option is known
+  if not self:GetUserData('appName') then return end
   local used = LayoutButtons(self)
   -- Buttons hung below take no room on the text's row
   if CONFIG:ActionsAnchor(self) == 'below' then

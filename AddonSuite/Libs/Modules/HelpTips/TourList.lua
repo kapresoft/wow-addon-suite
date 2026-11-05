@@ -79,12 +79,12 @@ local tours = {
       {
         key = 'FavoriteStar',
         textKey = 'Favorite::HelpTip',
-        anchor = OptionPart('Profile', 'star'),
+        anchor = OptionPart('Profile', 'icon'),
       },
       {
         key = 'ReloadButton',
         textKey = 'Reload::HelpTip',
-        anchor = OptionPart('Profile', 'reload'),
+        anchor = OptionPart('Profile', 'button'),
       },
       {
         key = 'CheckAllNone',
