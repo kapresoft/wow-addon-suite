@@ -230,8 +230,9 @@ end
 
 --- @param self MinimapIconController
 local function Hook_TitanPanelButton_OnShow(self)
-  ---@param frame Frame
-  hooksecurefunc('TitanPanelButton_OnShow', function(frame)
+  -- Titan's buttons call this, not the TitanPanelButton_OnShow alias
+  --- @param frame Frame
+  hooksecurefunc(Titan_G.plugins, 'OnShow', function(frame)
     local name, buttonName = frame:GetName(), ns.sformat('TitanPanel%sButton', minimapName)
     if not EqualsIgnoreCase(name, buttonName) then return end
 
