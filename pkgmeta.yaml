@@ -33,9 +33,10 @@ externals:
   AddonSuite/ThirdParty/Libs/LibAceOptionsKit:
     url: https://github.com/kapresoft/wow-addon-LibAceOptionsKit
     tag: latest
+  # r1424-alpha (Release-r1403 + 21), needed for WoW Forever
   AddonSuite/ThirdParty/Libs/Ace3:
     url: https://github.com/WoWUIDev/Ace3
-    tag: latest
+    commit: ac3d1225037e0dc74e025a72342c0f7824aae147
   AddonSuite/ThirdParty/Libs/LibDBIcon/LibDBIcon-1.0:
     url: https://repos.wowace.com/wow/libdbicon-1-0/trunk
     tag: latest
