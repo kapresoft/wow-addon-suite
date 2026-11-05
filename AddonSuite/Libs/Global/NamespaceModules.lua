@@ -40,20 +40,10 @@ local M = {
   AceConfigDialogUtil = {},
   --- @type ADS_Ace3WidgetConfig
   Ace3WidgetConfig = {},
-  --- @type ADS_Ace3WidgetUtil
-  Ace3WidgetUtil = {},
   --- @type ADS_ActionLabelWidget
   ActionLabelWidget = {},
-  --- @type ADS_FavoriteDropdownWidget
-  FavoriteDropdownWidget = {},
   --- @type ADS_SearchBoxWidget
   SearchBoxWidget = {},
-  --- @type ADS_SettingsCheckboxWidget
-  SettingsCheckboxWidget = {},
-  --- @type ADS_StepperDropdownWidget
-  StepperDropdownWidget = {},
-  --- @type ADS_StepperSliderWidget
-  StepperSliderWidget = {},
   --- @type LibHelpTour_Controller
   HelpTour = {},
   --- @type LibHelpTour_Tour[]

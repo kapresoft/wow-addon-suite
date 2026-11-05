@@ -24,7 +24,8 @@ local API, ACU, ADU = O.API, ns:ACU(), O.AddOnDependencyUtil
 local OptionsTitanPanelMixin = O.OptionsTitanPanelMixin
 local OptionsFavoritesMixin = O.OptionsFavoritesMixin
 local HelpTour = O.HelpTour
-local ActionLabel, FavoriteDropdown = O.ActionLabelWidget, O.FavoriteDropdownWidget
+local ActionLabel = O.ActionLabelWidget
+local AOK = ns:LibAceOptionsKit()
 local SearchBox = O.SearchBoxWidget
 
 local libName = M.OptionsAddonsMixin()
@@ -312,12 +313,12 @@ function o:CreateAddOnsOptions()
   local options = {
     profileSelection = ACU:CreateCharOption('Profile', {
       type = 'select',
-      dialogControl = FavoriteDropdown.Type,
+      dialogControl = AOK.StepperDropdown.Type,
       width = 'full',
       order = order:next(),
       arg = {
-        favorite = self:CreateFavoriteArg(),
-        reload = self:CreateReloadArg(),
+        icon = self:CreateFavoriteArg(),
+        button = self:CreateReloadArg(),
         helpTip = 'Profile',
       } --[[@as ADS_Ace3WidgetArg]],
       values = ps.kvPairs,
@@ -541,7 +542,7 @@ function o:AnyAddOnRowShown()
 end
 
 --- Binds the profile row's star to the current profile's favorite flag
---- @return ADS_Ace3WidgetFavoriteArg
+--- @return LibAceOptionsKit_IconArg
 function o:CreateFavoriteArg()
   local get, set = self.util:QuickProfileMenuGet(), self.util:QuickProfileMenuSet()
   return {
@@ -550,7 +551,7 @@ function o:CreateFavoriteArg()
       set(nil, value)
       HelpTour:CompleteStep('FavoriteStar')
     end,
-    isFavorite = function(profile) return ns:db().char.showInQuickProfileMenu[profile] == true end,
+    marks = function(profile) return ns:db().char.showInQuickProfileMenu[profile] == true end,
     tooltip = function(tooltip)
       tooltip:SetText(L['Add to Favorite'], NORMAL_FONT_COLOR:GetRGB())
       tooltip:AddLine(L['Add to Favorite::Desc'], 1, 1, 1, true)
@@ -559,7 +560,7 @@ function o:CreateFavoriteArg()
 end
 
 --- Binds the profile row's reload button to Reload UI
---- @return ADS_Ace3WidgetReloadArg
+--- @return LibAceOptionsKit_ButtonArg
 function o:CreateReloadArg()
   return {
     onClick = function()

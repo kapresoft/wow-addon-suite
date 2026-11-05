@@ -12,6 +12,7 @@ embedded-libraries:
   - LibUtil
   - LibPrettyPrint
   - LibHelpTour
+  - LibAceOptionsKit
 
 tools-used:
   - DevSuite
@@ -28,6 +29,9 @@ externals:
     tag: latest
   AddonSuite/ThirdParty/Libs/LibHelpTour:
     url: https://github.com/kapresoft/wow-addon-LibHelpTour
+    tag: latest
+  AddonSuite/ThirdParty/Libs/LibAceOptionsKit:
+    url: https://github.com/kapresoft/wow-addon-LibAceOptionsKit
     tag: latest
   AddonSuite/ThirdParty/Libs/Ace3:
     url: https://github.com/WoWUIDev/Ace3
@@ -85,6 +89,14 @@ ignore:
   - AddonSuite/ThirdParty/Libs/LibHelpTour/dev
   - AddonSuite/ThirdParty/Libs/LibHelpTour/*.toc
   - AddonSuite/ThirdParty/Libs/LibHelpTour/ThirdParty
+  - AddonSuite/ThirdParty/Libs/LibAceOptionsKit/dev
+  - AddonSuite/ThirdParty/Libs/LibAceOptionsKit/doc
+  - AddonSuite/ThirdParty/Libs/LibAceOptionsKit/*.toc
+  - AddonSuite/ThirdParty/Libs/LibAceOptionsKit/Assets
+  - AddonSuite/ThirdParty/Libs/LibAceOptionsKit/ThirdParty
+  - AddonSuite/ThirdParty/Libs/LibAceOptionsKit/LibAceOptionsKit.xml
+  - AddonSuite/ThirdParty/Libs/LibAceOptionsKit/Libs/Annotations
+  - AddonSuite/ThirdParty/Libs/LibAceOptionsKit/Libs/Developer
 
 # REQUIRED for CurseForge packager (non-obvious):
 # The LEFT side MUST be <repo-folder>/<addon-folder>

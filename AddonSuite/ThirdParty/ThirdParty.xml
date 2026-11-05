@@ -28,6 +28,12 @@
     <Include file="Ace3.xml"/>
     @end-non-debug@-->
 
+    <Script file="Libs\LibAceOptionsKit\Libs\LibAceOptionsKit.lua"/>
+    <Script file="Libs\LibAceOptionsKit\Libs\WidgetUtil.lua"/>
+    <Script file="Libs\LibAceOptionsKit\Libs\Widgets\SettingsCheckbox.lua"/>
+    <Script file="Libs\LibAceOptionsKit\Libs\Widgets\StepperSlider.lua"/>
+    <Script file="Libs\LibAceOptionsKit\Libs\Widgets\StepperDropdown.lua"/>
+
     <!-- Libraries for Minimap Icon -->
     <Script file="Libs\LibDBIcon\LibDBIcon-1.0\LibDataBroker-1.1\LibDataBroker-1.1.lua"/>
     <Script file="Libs\LibDBIcon\LibDBIcon-1.0\LibDBIcon-1.0\LibDBIcon-1.0.lua"/>

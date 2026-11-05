@@ -5,7 +5,7 @@ Local Vars
 local ns = select(2, ...)
 local M, MSG = ns.M, ns.GC.M
 local API = ns.O.API
-local StepperSlider = ns.O.StepperSliderWidget
+local AOK = ns:LibAceOptionsKit()
 local L = ns:GetLocale()
 
 --[[-----------------------------------------------------------------------------
@@ -104,7 +104,7 @@ function o:CreateMaxProfileName(order, disabled)
   return self.util:SettingsRow('Limit Profile Name Characters', {
     disabled = disabled,
     type = 'range',
-    dialogControl = StepperSlider.Type,
+    dialogControl = AOK.StepperSlider.Type,
     order = order,
     step = 1,
     min = 1,

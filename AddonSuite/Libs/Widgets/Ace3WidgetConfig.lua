@@ -3,33 +3,18 @@ Local Vars
 -------------------------------------------------------------------------------]]
 --- @type ADS_Namespace
 local ns = select(2, ...)
-local t_merge = ns.O.Table.MergeRecursive
+local AOK = ns:LibAceOptionsKit()
 
 --[[-----------------------------------------------------------------------------
-Types
+Types: AddonSuite's own `arg` fields, on top of LibAceOptionsKit's
 -------------------------------------------------------------------------------]]
---- Per-option override passed through AceConfig's `arg`
---- @class ADS_Ace3WidgetArg
+--- Per-option settings passed through AceConfig's `arg`
+--- @class ADS_Ace3WidgetArg : LibAceOptionsKit_Arg
 --- @field layout? ADS_Ace3WidgetLayout
---- @field tooltip? ADS_Ace3WidgetTooltipArg
---- @field favorite? ADS_Ace3WidgetFavoriteArg
---- @field reload? ADS_Ace3WidgetReloadArg
 --- @field search? ADS_Ace3WidgetSearchArg
 --- @field actions? ADS_Ace3WidgetActionArg[] @ActionLabel buttons, left to right
 --- @field actionsAnchor? 'right'|'below'     @ActionLabel buttons beside or under the text
 --- @field helpTip? string                     @Help tour finds this option's widget by it
-
---- Binds a FavoriteDropdown's star; separate from the option's get/set
---- @class ADS_Ace3WidgetFavoriteArg
---- @field get fun(): boolean
---- @field set fun(value: boolean)
---- @field tooltip? fun(tooltip: GameTooltip)
---- @field isFavorite? fun(key: any): boolean @Stars that entry in the menu
-
---- Shows a FavoriteDropdown's trailing reload button when set
---- @class ADS_Ace3WidgetReloadArg
---- @field onClick fun()
---- @field tooltip? fun(tooltip: GameTooltip)
 
 --- Receives a SearchBox's text as the user types
 --- @class ADS_Ace3WidgetSearchArg
@@ -43,76 +28,33 @@ Types
 --- @field onClick fun()
 --- @field tooltip? fun(tooltip: GameTooltip)
 
---- Tooltip content, keyed by the part it shows over
---- @class ADS_Ace3WidgetTooltipArg
---- @field dropdown? string|fun(tooltip:GameTooltip) @Shown over the dropdown, not its arrows
-
---- @class ADS_Ace3WidgetSize
---- @field width? number  @px
---- @field height? number @px
-
---- Only height is used; AceGUI sets the row width
---- @class ADS_Ace3WidgetRow : ADS_Ace3WidgetSize
-
---- @class ADS_Ace3WidgetLabel : ADS_Ace3WidgetSize
-
---- Width includes the stepper arrows
---- @class ADS_Ace3WidgetDropdown : ADS_Ace3WidgetSize
-
---- @class ADS_Ace3WidgetStar : ADS_Ace3WidgetSize
-
---- @class ADS_Ace3WidgetCheckbox : ADS_Ace3WidgetSize
-
 --- Offsets move the button group from its anchor
---- @class ADS_Ace3WidgetAction : ADS_Ace3WidgetSize
+--- @class ADS_Ace3WidgetAction : LibAceOptionsKit_Size
 --- @field x? number @px
 --- @field y? number @px
 
 --- Offsets move the box from under its row's right end
---- @class ADS_Ace3WidgetSearch : ADS_Ace3WidgetSize
+--- @class ADS_Ace3WidgetSearch : LibAceOptionsKit_Size
 --- @field x? number @px
 --- @field y? number @px
 
---- Width excludes the value label
---- @class ADS_Ace3WidgetSlider : ADS_Ace3WidgetSize
-
---- Tooltip BOTTOMLEFT offset from its context's TOPRIGHT
---- @class ADS_Ace3WidgetTooltip
---- @field x? number @px
---- @field y? number @px
-
---- @class ADS_Ace3WidgetLayout
---- @field row? ADS_Ace3WidgetRow
---- @field label? ADS_Ace3WidgetLabel
---- @field dropdown? ADS_Ace3WidgetDropdown
---- @field star? ADS_Ace3WidgetStar
---- @field checkbox? ADS_Ace3WidgetCheckbox
+--- @class ADS_Ace3WidgetLayout : LibAceOptionsKit_Layout
 --- @field action? ADS_Ace3WidgetAction
 --- @field search? ADS_Ace3WidgetSearch
---- @field slider? ADS_Ace3WidgetSlider
---- @field tooltip? ADS_Ace3WidgetTooltip
 
 --[[-----------------------------------------------------------------------------
-Defaults
+Defaults: AddonSuite's keys only; the library has the rest
 -------------------------------------------------------------------------------]]
---- @type ADS_Ace3WidgetLayout
-local DEFAULT_LAYOUT = {
-  row = { height = 30 },
-  label = { width = 150 },
-  dropdown = { width = 260, height = 30 },
-  star = { width = 18, height = 18 },
-  checkbox = { width = 30, height = 30 },
+AOK:SetDefaults(ns.addon, {
   action = { width = 20, height = 20, x = 0, y = 0 },
   search = { width = 160, height = 20, x = 0, y = 0 },
-  slider = { width = 220, height = 19 },
-  tooltip = { x = 20, y = 20 },
-}
+} --[[@as ADS_Ace3WidgetLayout]])
 
 --[[-----------------------------------------------------------------------------
 New Instance
 -------------------------------------------------------------------------------]]
 local libName = ns.M.Ace3WidgetConfig()
---- Shared by our AceGUI widgets so their rows line up
+--- Reads AddonSuite's own `arg` fields for ActionLabel and SearchBox
 --- @class ADS_Ace3WidgetConfig
 local o = {}; ns:Register(libName, o)
 
@@ -120,64 +62,34 @@ local o = {}; ns:Register(libName, o)
 Support Functions
 -------------------------------------------------------------------------------]]
 --- @param widget AceGUIWidget
---- @return ADS_Ace3WidgetArg? @The option's AceConfig `arg`; nil if unset
-local function ArgFor(widget)
-  local option = widget:GetUserData('option')
-  return option and option.arg
-end
+--- @return ADS_Ace3WidgetArg? @nil unless the option's `arg` is a table
+local function ArgFor(widget) return AOK:ArgFor(widget) --[[@as ADS_Ace3WidgetArg?]] end
 
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
---- The option's `arg.layout` merged over the defaults
+--- LibAceOptionsKit's merged layout, with AddonSuite's keys
 --- @param widget AceGUIWidget
 --- @return ADS_Ace3WidgetLayout
-function o:Layout(widget)
-  local arg = ArgFor(widget)
-  local override = type(arg) == 'table' and arg.layout or {}
-  -- Merge into a copy; arg tables are shared across options
-  return t_merge(DEFAULT_LAYOUT, t_merge(override, {}))
-end
-
---- @param widget AceGUIWidget
---- @return (string|fun(tooltip:GameTooltip))? @nil if the option sets none
-function o:DropdownTooltip(widget)
-  local arg = ArgFor(widget)
-  local tooltip = type(arg) == 'table' and arg.tooltip
-  return type(tooltip) == 'table' and tooltip.dropdown or nil
-end
-
---- @param widget AceGUIWidget
---- @return ADS_Ace3WidgetFavoriteArg? @nil if the option sets none
-function o:FavoriteArg(widget)
-  local arg = ArgFor(widget)
-  return type(arg) == 'table' and arg.favorite or nil
-end
-
---- @param widget AceGUIWidget
---- @return ADS_Ace3WidgetReloadArg? @nil if the option sets none
-function o:ReloadArg(widget)
-  local arg = ArgFor(widget)
-  return type(arg) == 'table' and arg.reload or nil
-end
+function o:Layout(widget) return AOK:Layout(widget) --[[@as ADS_Ace3WidgetLayout]] end
 
 --- @param widget AceGUIWidget
 --- @return ADS_Ace3WidgetSearchArg? @nil if the option sets none
 function o:SearchArg(widget)
   local arg = ArgFor(widget)
-  return type(arg) == 'table' and arg.search or nil
+  return arg and arg.search
 end
 
 --- @param widget AceGUIWidget
 --- @return ADS_Ace3WidgetActionArg[] @Empty if the option sets none
 function o:ActionsArg(widget)
   local arg = ArgFor(widget)
-  return type(arg) == 'table' and arg.actions or {}
+  return arg and arg.actions or {}
 end
 
 --- @param widget AceGUIWidget
 --- @return 'right'|'below'
 function o:ActionsAnchor(widget)
   local arg = ArgFor(widget)
-  return type(arg) == 'table' and arg.actionsAnchor or 'right'
+  return arg and arg.actionsAnchor or 'right'
 end
