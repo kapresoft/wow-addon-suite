@@ -54,7 +54,7 @@ local M = {
   EventMessagesMixin = {},
   --- @type EventToMessageRelay
   EventToMessageRelay = {},
-  --- @type Kapresoft-GameVersion-2-0
+  --- @type Kapresoft-GameVersionMixin-2-0
   GameVersionMixin = {},
   --- @type ConfigDialogController
   ConfigDialogController = {},
