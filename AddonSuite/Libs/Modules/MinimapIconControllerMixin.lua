@@ -83,24 +83,6 @@ local function IsShownInTP()
 end
 local function IsHideWhenInTP() return minimap().hide_when_titan_panel_added == true end
 
-local function _EasyMenu(menuList, frame, anchor, x, y, displayMode, autoHideDelay)
-  if not frame then return end
-  frame.displayMode = displayMode or 'MENU'
-  frame.point = x or -10
-  frame.relativePoint = y or -15
-  frame.menuList = menuList
-  frame.initialize = function(self, level)
-    if level == 1 then
-      for _, item in pairs(menuList) do
-        UIDropDownMenu_AddButton(item, level)
-      end
-    end
-  end
-  ToggleDropDownMenu(1, nil, frame, anchor or 'cursor', x or -10, y or -15)
-end
--- EasyMenu is not available in Retail
-local EasyMenu = EasyMenu or _EasyMenu
-
 ---@param tooltip _GameTooltip
 ---@param inSync boolean
 local function OutOfSyncMessage(tooltip, inSync)
@@ -200,18 +182,24 @@ local function OnTooltipShow(self, tooltip)
   checkedState:tooltipSummary(tooltip)
 end
 
+--- @param root RootMenuDescriptionProxy
+--- @param item MinimapIconProfilesMenuItem
+local function AddMenuItem(root, item)
+  if item.isTitle then return root:CreateTitle(item.text) end
+  if item.notClickable then return root:CreateDivider() end
+  root:CreateButton(item.text, item.func)
+end
+
+--- MenuUtil: a legacy dropdown item's reload is blocked
 --- @param self MinimapIconController
 local function ShowMenu(self)
   if self.tooltip then self.tooltip:Hide() end
   local menu = self:BuildProfilesMenu()
-  --- @class AddonSuiteDropdownMenu : Frame
-  local ddm = ns:pf().DropdownMenu
-  if not ddm then
-    --- @type Frame
-    ddm = CreateFrame('Frame', nil, ns:pf(), 'UIDropDownMenuTemplate')
-    ddm:SetParentKey('DropdownMenu')
-  end
-  EasyMenu(menu, ddm, 'cursor', -10, -15, 'MENU')
+  MenuUtil.CreateContextMenu(UIParent, function(_, root)
+    for _, item in ipairs(menu) do
+      AddMenuItem(root, item)
+    end
+  end)
 end
 
 --- @param self MinimapIconController
