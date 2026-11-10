@@ -204,39 +204,33 @@ function o:ForEachAddOnThatCanBeDisabled(callbackFn)
   end
 end
 
---- @param name Name The addOn name
---- @param charName Name|nil The character name. Defaults to current
-function o:EnableAddOnForCharacter(name, charName)
+--- @param name Name
+--- @param characterGUID WOWGUID? @Defaults to this character
+function o:EnableAddOnForCharacter(name, characterGUID)
   assert(name, 'AddOn name is required.')
-  charName = charName or UnitName('player')
-  EnableAddOn(name, charName)
+  EnableAddOn(name, characterGUID or UnitGUID('player'))
 end
 
---- @param name Name The addOn name
---- @param charName Name|nil The character name. Defaults to current
-function o:DisableAddOnForCharacter(name, charName)
+--- @param name Name
+--- @param characterGUID WOWGUID? @Defaults to this character
+function o:DisableAddOnForCharacter(name, characterGUID)
   assert(name, 'AddOn name is required.')
-  charName = charName or UnitName('player')
-  DisableAddOn(name, charName)
+  DisableAddOn(name, characterGUID or UnitGUID('player'))
 end
 
 --- @param addOnNames table<number, Name> The array of addOn names
 function o:EnableAddOnsForCharacter(addOnNames)
   assert(type(addOnNames) == 'table', 'AddOn names array are required.')
-  if #addOnNames <= 0 then return end
-  local charName = UnitName('player')
   for _, name in ipairs(addOnNames) do
-    self:EnableAddOnForCharacter(name, charName)
+    self:EnableAddOnForCharacter(name)
   end
 end
 
 --- @param addOnNames table<number, Name> The array of addOn names
 function o:DisableAddOnsForCharacter(addOnNames)
   assert(type(addOnNames) == 'table', 'AddOn names array are required.')
-  if #addOnNames <= 0 then return end
-  local charName = UnitName('player')
   for _, name in ipairs(addOnNames) do
-    self:DisableAddOnForCharacter(name, charName)
+    self:DisableAddOnForCharacter(name)
   end
 end
 
